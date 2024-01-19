@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="ImapNotesTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ImapNotesTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="ImapNotesTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

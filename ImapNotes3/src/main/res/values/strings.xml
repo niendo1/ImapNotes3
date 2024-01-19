@@ -138,4 +138,10 @@
                                   You can create such a password with your provider.
     </string>
     <string name="search_any_keyword">Search any keyword..</string>
+    <string name="title_activity_attachment">AttachmentActivity</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="attachments">Attachments</string>
+    <string name="add_attachment">add attachment</string>
+    <string name="attachment_title">attachment title</string>
 </resources>

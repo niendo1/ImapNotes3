@@ -49,6 +49,12 @@
         app:showAsAction="ifRoom"></item>
 
     <item
+        android:id="@+id/attachments"
+        android:icon="@drawable/ic_action_attachments"
+        android:title="@string/attachments"
+        app:showAsAction="ifRoom"></item>
+
+    <item
         android:id="@+id/color"
         android:icon="@drawable/ic_action_color"
         android:title="@string/color"

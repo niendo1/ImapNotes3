@@ -67,6 +67,7 @@ android {
     namespace 'de.niendo.ImapNotes3'
     buildFeatures {
         buildConfig true
+        viewBinding true
     }
 
     packagingOptions {

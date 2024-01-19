@@ -24,9 +24,12 @@
 
 package de.niendo.ImapNotes3;
 
+import static de.niendo.ImapNotes3.AccountConfigurationActivity.ACTION;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -671,7 +674,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 
     @SuppressLint("RestrictedApi")
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.detail, menu);
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
         MenuBuilder m = (MenuBuilder) menu;
         m.setOptionalIconsVisible(true);
         itemNext = menu.findItem(R.id.itemNext);
@@ -750,6 +753,14 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 return true;
             case R.id.share:
                 Share();
+                return true;
+            case R.id.attachments:
+                Intent res = new Intent();
+                String mPackage = Utilities.PackageName;
+                String mClass = ".AttachmentActivity";
+                res.setComponent(new ComponentName(mPackage, mPackage + mClass));
+                res.putExtra(ACTION, AttachmentActivity.ACTION);
+                startActivity(res);
                 return true;
             case android.R.id.home:
                 saveChangesDialog();

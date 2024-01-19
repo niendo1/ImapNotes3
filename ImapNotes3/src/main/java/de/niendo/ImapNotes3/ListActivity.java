@@ -478,7 +478,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         super.onCreateOptionsMenu(menu);
         actionMenu = menu;
-        getMenuInflater().inflate(R.menu.list, menu);
+        getMenuInflater().inflate(R.menu.menu_list, menu);
 
         MenuBuilder m = (MenuBuilder) menu;
         m.setOptionalIconsVisible(true);

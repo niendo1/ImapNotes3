@@ -137,4 +137,5 @@
     Einige Provider (gmail, gmx) verlangen ein app Passwort für die Anmeldung an einem Imap-Server. Dieses ist für die Aktivierung der Zwei-Faktor-Authentifizierung notwendig\n
         Ein solches Passwort muss beim Provider erstellt werden.</string>
     <string name="search_any_keyword">beliebiger Suchbegriff</string>
+    <string name="attachments">Attachments</string>
 </resources>
