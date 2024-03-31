@@ -140,4 +140,5 @@
     <string name="search_any_keyword">搜索任何关键词..</string>
     <string name="make_archive">创建备份</string>
     <string name="intent_import_note">导入笔记</string>
+    <string name="importing">正在导入 ...</string>
 </resources>
