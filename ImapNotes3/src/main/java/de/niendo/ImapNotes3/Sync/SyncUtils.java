@@ -383,6 +383,7 @@ public class SyncUtils {
     }
 
     AppendUID[] sendMessageToRemote(@NonNull Message[] message) throws MessagingException {
+        assert remoteIMAPNotesFolder != null;
         synchronized (myLock) {
             OpenRemoteIMAPNotesFolder(Folder.READ_WRITE);
             return (remoteIMAPNotesFolder.appendUIDMessages(message));
@@ -452,6 +453,7 @@ public class SyncUtils {
                                            @NonNull NotesDb storedNotes,
                                            @NonNull String accountName)
             throws MessagingException, IOException {
+        assert remoteIMAPNotesFolder != null;
         Log.d(TAG, "handleRemoteNotes: " + remoteIMAPNotesFolder.getFullName() + " " + accountName);
 
         Message notesMessage;
@@ -472,7 +474,6 @@ public class SyncUtils {
             // Add to local device, new notes added to remote
             Message[] notesMessages = remoteIMAPNotesFolder.getMessagesByUID(1, UIDFolder.LASTUID);
             for (int index = notesMessages.length - 1; index >= 0; index--) {
-                try {
                     notesMessage = notesMessages[index];
                     long uid = remoteIMAPNotesFolder.getUID(notesMessage);
                     // Get FLAGS
@@ -490,9 +491,6 @@ public class SyncUtils {
                         SaveNoteAndUpdateDatabase(rootFolderAccount, notesMessage, storedNotes, accountName, suid, bgColor);
                         result = true;
                     }
-                } catch (Exception e) {
-                    Log.d(TAG, "error " + e.getMessage());
-                }
             }
         }
 
@@ -524,16 +522,6 @@ public class SyncUtils {
         if (!remoteIMAPNotesFolder.isOpen()) {
             remoteIMAPNotesFolder.open(Folder.READ_WRITE);
         }
-       /*
-        if (remoteIMAPNotesFolder.isOpen()) {
-            if (remoteIMAPNotesFolder.getMode() != mode) {
-                remoteIMAPNotesFolder.close();
-                remoteIMAPNotesFolder.open(mode);
-            }
-        } else {
-            remoteIMAPNotesFolder.open(mode);
-        }
-        */
     }
 
     /* Copy all notes from the IMAP server to the local directory using the UID as the file name.
@@ -543,7 +531,7 @@ public class SyncUtils {
                                @NonNull Context applicationContext,
                                @NonNull NotesDb storedNotes) throws MessagingException, IOException {
         Log.d(TAG, "GetNotes: " + account.name);
-
+        assert remoteIMAPNotesFolder != null;
         synchronized (myLock) {
             OpenRemoteIMAPNotesFolder(Folder.READ_ONLY);
 
@@ -570,6 +558,7 @@ public class SyncUtils {
 
     void DeleteNote(String fileName) throws MessagingException {
         Log.d(TAG, "DeleteNote: " + fileName);
+        assert remoteIMAPNotesFolder != null;
         int numMessage = Integer.parseInt(Utilities.removeMailExt(fileName));
         synchronized (myLock) {
             OpenRemoteIMAPNotesFolder(Folder.READ_WRITE);

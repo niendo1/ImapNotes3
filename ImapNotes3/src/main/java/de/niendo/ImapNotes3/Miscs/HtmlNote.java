@@ -139,11 +139,11 @@ public class HtmlNote {
                 MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
                 stringres = getTextFromMimeMultipart(mimeMultipart);
             } else {
-                if ((contentType != null) && contentType.match("text/html")) {
+                if (contentType.match("text/html")) {
                     stringres = (String) message.getContent();
                 }
                 // import plain text notes
-                if ((contentType != null) && contentType.match("text/plain")) {
+                if (contentType.match("text/plain")) {
                     stringres = (String) message.getContent();
                     Spannable text = new SpannableString(stringres);
                     stringres = Html.toHtml(text, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
