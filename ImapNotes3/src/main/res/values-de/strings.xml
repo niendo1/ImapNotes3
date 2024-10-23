@@ -158,4 +158,9 @@
     <string name="success">erfolgreich</string>
     <string name="reading_archive_file">Einlesen der Archiv-Datei</string>
     <string name="imap_server_changed_new_password">Servername geändert, Passwort erneut eingeben!</string>
+    <string name="settings">Einstellungen</string>
+    <string name="appearance">Erscheinungsbild</string>
+    <string name="appearance_sum">Farben des Notizeditors usw.</string>
+    <string name="EditorBgColorDefault">Standardfarbe Hintergrund Editor</string>
+    <string name="EditorTxtColor">Textfarbe Editor</string>
 </resources>

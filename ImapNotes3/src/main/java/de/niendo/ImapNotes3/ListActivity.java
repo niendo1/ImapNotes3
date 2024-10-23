@@ -34,7 +34,6 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
@@ -45,13 +44,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -667,7 +664,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.newaccount:
+            case R.id.newaccount: {
                 Intent res = new Intent();
                 String mPackage = Utilities.PackageName;
                 String mClass = ".AccountConfigurationActivity";
@@ -675,6 +672,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 res.putExtra(ACTION, AccountConfigurationActivity.Actions.CREATE_ACCOUNT);
                 startActivityForResult(res, ListActivity.ADD_ACCOUNT);
                 return true;
+            }
             case R.id.refresh:
                 if (getSelectedAccountName().equals(""))
                     ImapNotes3.ShowMessage(R.string.select_one_account, accountSpinner, 3);
@@ -711,6 +709,11 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                         .neg(R.string.cancel)
                         .neut(R.string.reset_filter)
                         .show(this, DLG_FILTER_HASHTAG);
+                return true;
+            }
+            case R.id.settings: {
+                Intent res = new Intent(ListActivity.this, SettingsActivity.class);
+                startActivity(res);
                 return true;
             }
             case R.id.about:

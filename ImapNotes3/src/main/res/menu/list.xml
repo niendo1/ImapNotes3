@@ -92,6 +92,14 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_action_settings"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/about"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

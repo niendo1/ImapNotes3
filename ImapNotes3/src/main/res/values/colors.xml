@@ -28,6 +28,7 @@
 
     <color name="EditorMenuBgColor">#C7C49E</color>
     <color name="EditorTxtColor">#3C490D</color>
+    <color name="EditorBgColorDefault">@color/none</color>
 
     <color name="ShareActionBgColor">#3C490D</color>
     <color name="ShareActionTxtColor">#C7C49E</color>

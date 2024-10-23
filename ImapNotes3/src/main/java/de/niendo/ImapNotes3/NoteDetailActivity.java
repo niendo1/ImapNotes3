@@ -685,7 +685,9 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     // colour.
     private void ResetColors() {
         editText.setEditorFontColor(getColor(R.color.EditorTxtColor));
-        (findViewById(R.id.scrollView)).setBackgroundColor(Utilities.getColorByName(bgColor, getApplicationContext()));
+        int mybgColor = Utilities.getColorByName(bgColor, getApplicationContext());
+        if (bgColor.equals("none")) mybgColor = getColor(R.color.EditorBgColorDefault);
+        (findViewById(R.id.scrollView)).setBackgroundColor(mybgColor);
         lastTxtColor = getColor(R.color.EditorTxtColor);
         lastBgColor = Utilities.getColorByName(bgColor, getApplicationContext());
     }

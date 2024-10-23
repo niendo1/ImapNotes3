@@ -1,0 +1,43 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/appearance">
+
+        <Preference
+            app:key="EditorBgColorDefault"
+            app:summary="@string/appearance_sum"
+            app:title="@string/EditorBgColorDefault" />
+
+        <Preference
+            app:key="EditorTxtColor"
+            app:summary="@string/appearance_sum"
+            app:title="@string/EditorTxtColor" />
+
+        <!-- EditTextPreference
+            app:key="EditorBgColorDefault"
+            app:title="@string/EditorBgColorDefault"
+            app:useSimpleSummaryProvider="false" />
+
+        <EditTextPreference
+            app:key="EditorTxtColor"
+            app:title="@string/EditorTxtColor"
+            app:useSimpleSummaryProvider="true" / -->
+
+
+    </PreferenceCategory>
+
+    <!-- PreferenceCategory app:title="@string/sync_header">
+
+        <SwitchPreferenceCompat
+            app:key="sync"
+            app:title="@string/sync_title" />
+
+        <SwitchPreferenceCompat
+            app:dependency="sync"
+            app:key="attachment"
+            app:summaryOff="@string/attachment_summary_off"
+            app:summaryOn="@string/attachment_summary_on"
+            app:title="@string/attachment_title" />
+
+    </PreferenceCategory -->
+
+</PreferenceScreen>
