@@ -24,10 +24,12 @@ package de.niendo.ImapNotes3;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.StrictMode;
 import android.view.View;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.StringRes;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -35,6 +37,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+
+import de.niendo.ImapNotes3.Miscs.Utilities;
 
 public class ImapNotes3 extends Application {
     private static Context mContext;
@@ -145,6 +149,18 @@ public class ImapNotes3 extends Application {
         snackbar.setActionTextColor(mContext.getColor(R.color.ShareActionTxtColor));
 
         snackbar.show();
+    }
+
+
+    public static int loadPreferenceColor(String name, int defValue) {
+        SharedPreferences preferences = mContext.getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
+        return preferences.getInt(name, defValue);
+    }
+
+    public static void savePreferenceColor(String name, int value) {
+        SharedPreferences.Editor preferences = mContext.getSharedPreferences(Utilities.PackageName, MODE_PRIVATE).edit();
+        preferences.putInt(name, value);
+        preferences.apply();
     }
 
 }

@@ -22,3 +22,4 @@
 * Offline arbeiten möglich - die Synchronisation mit dem Server erfolgt im Hintergrund
 * Die App benötigt minimale Benutzerrechte
 * vollständig quelloffene Software - keine Werbung oder Tracker
+* Anpassbare Farben für Editor

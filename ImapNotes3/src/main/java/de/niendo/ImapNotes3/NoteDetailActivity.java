@@ -684,12 +684,14 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     // realColor is misnamed.  It is the ID of the radio button widget that chooses the background
     // colour.
     private void ResetColors() {
-        editText.setEditorFontColor(getColor(R.color.EditorTxtColor));
+        lastTxtColor = ImapNotes3.loadPreferenceColor("EditorTxtColor", getColor(R.color.EditorTxtColor));
+        editText.setEditorFontColor(lastTxtColor);
         int mybgColor = Utilities.getColorByName(bgColor, getApplicationContext());
-        if (bgColor.equals("none")) mybgColor = getColor(R.color.EditorBgColorDefault);
+        if (bgColor.equals("none")) {
+            mybgColor = ImapNotes3.loadPreferenceColor("EditorBgColorDefault", getColor(R.color.EditorBgColorDefault));
+        }
+        lastBgColor = mybgColor;
         (findViewById(R.id.scrollView)).setBackgroundColor(mybgColor);
-        lastTxtColor = getColor(R.color.EditorTxtColor);
-        lastBgColor = Utilities.getColorByName(bgColor, getApplicationContext());
     }
 
     @SuppressLint("RestrictedApi")

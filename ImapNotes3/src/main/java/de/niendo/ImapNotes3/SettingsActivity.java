@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -45,13 +44,14 @@ public class SettingsActivity extends AppCompatActivity {
                 SimpleColorDialog.build()
                         .colors(getContext(), SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK)
                         .title(getString(R.string.selectTextColor))
-                        .colorPreset(getResources().getColor(R.color.AccountBgColor))
+                        .colorPreset(ImapNotes3.loadPreferenceColor(DLG_PREF_EDITOR_BG_COLOR, getResources().getColor(R.color.EditorBgColorDefault)))
                         .setupColorWheelAlpha(false)
                         .allowCustom(true)
                         .neg(R.string.cancel)
                         .neut(R.string.default_color)
-                        .show((FragmentActivity) getContext(), DLG_PREF_EDITOR_BG_COLOR);
-                return false;
+                        //.show((FragmentActivity) getContext(), DLG_PREF_EDITOR_BG_COLOR);
+                        .show(this, DLG_PREF_EDITOR_BG_COLOR);
+                return true;
             });
 
             myPref = findPreference(DLG_PREF_EDITOR_TXT_COLOR);
@@ -59,13 +59,13 @@ public class SettingsActivity extends AppCompatActivity {
                 SimpleColorDialog.build()
                         .colors(getContext(), SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK)
                         .title(getString(R.string.selectTextColor))
-                        .colorPreset(getResources().getColor(R.color.AccountBgColor))
+                        .colorPreset(ImapNotes3.loadPreferenceColor(DLG_PREF_EDITOR_TXT_COLOR, getResources().getColor(R.color.EditorTxtColor)))
                         .setupColorWheelAlpha(false)
                         .allowCustom(true)
                         .neg(R.string.cancel)
                         .neut(R.string.default_color)
-                        .show((FragmentActivity) getContext(), DLG_PREF_EDITOR_TXT_COLOR);
-                return false;
+                        .show(this, DLG_PREF_EDITOR_TXT_COLOR);
+                return true;
             });
 
         }
@@ -75,11 +75,21 @@ public class SettingsActivity extends AppCompatActivity {
             if (which == BUTTON_NEGATIVE) return false;
             switch (dialogTag) {
                 case DLG_PREF_EDITOR_BG_COLOR: {
-
+                    if (which == BUTTON_POSITIVE) {
+                        ImapNotes3.savePreferenceColor(DLG_PREF_EDITOR_BG_COLOR, extras.getInt(SimpleColorDialog.COLOR));
+                    }
+                    if (which == BUTTON_NEUTRAL) {
+                        ImapNotes3.savePreferenceColor(DLG_PREF_EDITOR_BG_COLOR, getResources().getColor(R.color.EditorBgColorDefault));
+                    }
                     return true;
                 }
                 case DLG_PREF_EDITOR_TXT_COLOR: {
-
+                    if (which == BUTTON_POSITIVE) {
+                        ImapNotes3.savePreferenceColor(DLG_PREF_EDITOR_TXT_COLOR, extras.getInt(SimpleColorDialog.COLOR));
+                    }
+                    if (which == BUTTON_NEUTRAL) {
+                        ImapNotes3.savePreferenceColor(DLG_PREF_EDITOR_TXT_COLOR, getResources().getColor(R.color.EditorTxtColor));
+                    }
                     return true;
                 }
             }

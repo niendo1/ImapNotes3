@@ -22,4 +22,4 @@
 * works offline and sync is done in the background
 * only a minimum on user permissions required
 * fully open source - no tracker or advertising
-
+* customizable colors for the editor
