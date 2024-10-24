@@ -31,7 +31,6 @@ import android.accounts.OnAccountsUpdateListener;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -157,10 +156,8 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             ImapNotes3.ShowMessage(R.string.select_one_account, accountSpinner, 3);
             return;
         }
-        Intent res = new Intent();
-        String mPackage = Utilities.PackageName;
-        String mClass = ".AccountConfigurationActivity";
-        res.setComponent(new ComponentName(mPackage, mPackage + mClass));
+
+        Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
         res.putExtra(ACTION, AccountConfigurationActivity.Actions.EDIT_ACCOUNT);
         res.putExtra(AccountConfigurationActivity.ACCOUNTNAME, ListActivity.ImapNotesAccount.accountName);
         startActivityForResult(res, ListActivity.EDIT_ACCOUNT);
@@ -664,10 +661,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newaccount: {
-                Intent res = new Intent();
-                String mPackage = Utilities.PackageName;
-                String mClass = ".AccountConfigurationActivity";
-                res.setComponent(new ComponentName(mPackage, mPackage + mClass));
+                Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
                 res.putExtra(ACTION, AccountConfigurationActivity.Actions.CREATE_ACCOUNT);
                 startActivityForResult(res, ListActivity.ADD_ACCOUNT);
                 return true;
@@ -1035,10 +1029,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                         err.printStackTrace();
                     }
 
-                    Intent res = new Intent();
-                    String mPackage = Utilities.PackageName;
-                    String mClass = ".AccountConfigurationActivity";
-                    res.setComponent(new ComponentName(mPackage, mPackage + mClass));
+                    Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
                     startActivityForResult(res, ListActivity.ADD_ACCOUNT);
                 }
             }
