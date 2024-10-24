@@ -163,4 +163,5 @@
     <string name="appearance_sum">Farben des Notizeditors usw.</string>
     <string name="EditorBgColorDefault">Standardfarbe Hintergrund Editor</string>
     <string name="EditorTxtColor">Textfarbe Editor</string>
+    <string name="miscellaneous">Sonstiges</string>
 </resources>

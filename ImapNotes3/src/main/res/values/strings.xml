@@ -166,4 +166,5 @@
     <string name="appearance_sum">Colors of the editor etc.</string>
     <string name="EditorBgColorDefault">Default Background Color for Note Editor</string>
     <string name="EditorTxtColor">Default Text for Note Editor</string>
+    <string name="miscellaneous">Miscellaneous</string>
 </resources>

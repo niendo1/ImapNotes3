@@ -25,19 +25,20 @@
 
     </PreferenceCategory>
 
-    <!-- PreferenceCategory app:title="@string/sync_header">
+    <PreferenceCategory app:title="@string/miscellaneous">
 
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+        <Preference
+            app:icon="@drawable/ic_action_about"
+            app:key="about"
+            app:title="@string/about" />
 
-        <SwitchPreferenceCompat
+        <!-- SwitchPreferenceCompat
             app:dependency="sync"
             app:key="attachment"
             app:summaryOff="@string/attachment_summary_off"
             app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+            app:title="@string/attachment_title" / -->
 
-    </PreferenceCategory -->
+    </PreferenceCategory>
 
 </PreferenceScreen>

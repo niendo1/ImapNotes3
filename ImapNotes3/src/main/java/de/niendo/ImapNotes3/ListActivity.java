@@ -69,7 +69,6 @@ import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.Data.SyncInterval;
-import de.niendo.ImapNotes3.Miscs.AboutDialogFragment;
 import de.niendo.ImapNotes3.Miscs.BackupRestore;
 import de.niendo.ImapNotes3.Miscs.HtmlNote;
 import de.niendo.ImapNotes3.Miscs.SyncThread;
@@ -716,10 +715,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 startActivity(res);
                 return true;
             }
-            case R.id.about:
-                AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
-                aboutDialogFragment.show(getSupportFragmentManager(), "about_dialog");
-                return true;
             case R.id.send_debug_report:
                 SendLogcatMail();
                 return true;
