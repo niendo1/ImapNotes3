@@ -19,10 +19,6 @@
     <color name="ListTxtColor">#AB9C69</color>
     <color name="ListInfoTxtColor">#8B7E56</color>
 
-    <color name="StatusBgColor">#2F4F4F</color>
-    <color name="StatusBgErrColor">#713631</color>
-    <color name="StatusTxtColor">#AB9C69</color>
-
     <color name="AccountBgColor">#2F4F4F</color>
     <color name="AccountTxtColor">#AB9C69</color>
     <color name="AccountHintColor">#6B6A54</color>

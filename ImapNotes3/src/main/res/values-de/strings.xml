@@ -26,7 +26,6 @@
     <string name="imap_notes_server">Hostname IMAP-Server</string>
     <string name="server_port_number_to_use">Portnummer des IMAP-Dienstes</string>
     <string name="sync_interval">Abgleich-Intervall</string>
-    <string name="welcome">Willkommen</string>
     <string name="color">Farbe</string>
     <string name="blue">Blau</string>
     <string name="white">Weiß</string>

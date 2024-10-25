@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
-        android:id="@+id/main_layout"
+        android:id="@+id/account_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/AccountBgColor"
@@ -49,22 +49,6 @@
             android:contentDescription="@string/editAccount" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/StatusBgColor"
-        android:gravity="center|center_horizontal"
-        android:maxLines="1"
-        android:text="@string/welcome"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/StatusTxtColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_layout"
-        android:textAlignment="center"
-        android:textSize="15sp"
-        tools:ignore="TextContrastCheck" />
 
     <ListView
         android:id="@+id/notesList"
@@ -74,7 +58,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status" />
+        app:layout_constraintTop_toBottomOf="@+id/account_layout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,7 +28,6 @@
     <string name="sync_interval">Sync Interval</string>
     <string name="notes_folder_optional">Notes Folder on server (optional)</string>
     <string name="manually_set_full_imap_path_to_notes_folder">Notes</string>
-    <string name="welcome">Welcome</string>
     <string name="delete">Delete</string>
     <string name="color">Color</string>
     <string name="blue">Blue</string>

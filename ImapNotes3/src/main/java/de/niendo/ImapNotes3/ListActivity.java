@@ -150,7 +150,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     // Ensure that we never have to check for null by initializing reference.
     @NonNull
     private static Account[] accounts = new Account[0];
-    private static String OldStatus;
     private final OnClickListener clickListenerEditAccount = v -> {
         if (getSelectedAccountName().isEmpty()) {
             ImapNotes3.ShowMessage(R.string.select_one_account, accountSpinner, 3);
@@ -164,7 +163,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     };
     private static final String TAG = "IN_Listactivity";
     //@Nullable
-    private TextView status;
     private ListView listview;
     private AsyncTask updateThread;
 
@@ -205,8 +203,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         ListActivity.accountManager = AccountManager.get(getApplicationContext());
         ListActivity.accountManager.addOnAccountsUpdatedListener(
                 new AccountsUpdateListener(), null, true);
-
-        status = findViewById(R.id.status);
 
         spinnerList = new ArrayAdapter<>
                 (this, R.layout.account_spinner_item, ListActivity.accountList);
@@ -278,7 +274,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 SyncInterval syncInterval = SyncInterval.from(ImapNotes3.intent.getStringExtra(SYNCINTERVAL));
                 if ((ImapNotesAccount != null) && accountName.equals(ImapNotesAccount.accountName)) {
                     Log.d(TAG, "if " + accountName + " " + ImapNotesAccount.accountName);
-                    String statusText = OldStatus;
                     if (isSynced) {
                         Date date = new Date();
                         String sdate;
@@ -287,16 +282,11 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                         } catch (Exception e) {
                             sdate = "";
                         }
-
-                        statusText = getText(R.string.Last_sync) + sdate;
-                        statusText += " (" + getText(syncInterval.textID) + ")";
+                        ImapNotes3.ShowMessage(getText(R.string.Last_sync) + sdate + " (" + getText(syncInterval.textID) + ")", accountSpinner, 2);
                     }
-                    status.setBackgroundColor(getColor(R.color.StatusBgColor));
                     if (!errorMessage.isEmpty()) {
-                        statusText = errorMessage;
-                        status.setBackgroundColor(getColor(R.color.StatusBgErrColor));
+                        ImapNotes3.ShowMessage(errorMessage, accountSpinner, 5);
                     }
-                    status.setText(statusText);
                 }
                 if (isChanged) RefreshList();
             }
@@ -384,7 +374,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             return;
         }
         if (messageUris != null) {
-            status.setText(R.string.importing);
+            ImapNotes3.ShowMessage(R.string.importing, accountSpinner, 2);
             UpdateList(messageUris, accountName);
         }
     }
@@ -468,8 +458,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                     // FIXME: this. ?
                     getApplicationContext()).execute();
         }
-        status.setBackgroundColor(getColor(R.color.StatusBgColor));
-        status.setText(R.string.welcome);
     }
 
     private void UpdateList(
@@ -645,8 +633,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             return;
         }
 
-        OldStatus = status.getText().toString();
-        status.setText(R.string.syncing);
+        ImapNotes3.ShowMessage(R.string.syncing, accountSpinner, 2);
         Bundle settingsBundle = new Bundle();
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
