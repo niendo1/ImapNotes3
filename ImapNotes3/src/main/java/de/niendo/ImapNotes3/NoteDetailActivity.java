@@ -214,12 +214,10 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             editText.requestFocusFromTouch();
             switch (dialogTag) {
                 case DLG_HTML_TXT_COLOR:
-                    lastTxtColor = extras.getInt(SimpleColorDialog.COLOR);
-                    editText.setTextColor(lastTxtColor);
+                    editText.setTextColor(extras.getInt(SimpleColorDialog.COLOR));
                     return true;
                 case DLG_HTML_BG_COLOR:
-                    lastBgColor = extras.getInt(SimpleColorDialog.COLOR);
-                    editText.setTextBackgroundColor(lastBgColor);
+                    editText.setTextBackgroundColor(extras.getInt(SimpleColorDialog.COLOR));
                     return true;
                 case DLG_TABLE_DIMENSION:
                     editText.insertTable(Integer.valueOf(extras.getString(DLG_TABLE_DIMENSION_COL)), Integer.valueOf(extras.getString(DLG_TABLE_DIMENSION_ROW)));
@@ -383,7 +381,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 SimpleColorDialog.build()
                         .colors(this, SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK)
                         .title(getString(R.string.selectTextColor))
-                        .colorPreset(lastTxtColor)
+                        .colorPreset(ImapNotes3.loadPreferenceColor("EditorTxtColor", getColor(R.color.EditorTxtColor)))
                         .setupColorWheelAlpha(false)
                         .allowCustom(true)
                         .neg(R.string.cancel)
@@ -391,10 +389,16 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                         .show(this, DLG_HTML_TXT_COLOR);
                 break;
             case R.id.action_bg_color:
+                int mybgColor;
+                if (bgColor.equals("none")) {
+                    mybgColor = ImapNotes3.loadPreferenceColor("EditorBgColorDefault", getColor(R.color.EditorBgColorDefault));
+                } else {
+                    mybgColor = Utilities.getColorByName(bgColor, getApplicationContext());
+                }
                 SimpleColorDialog.build()
                         .colors(this, SimpleColorDialog.MATERIAL_COLOR_PALLET_LIGHT)
                         .title(getString(R.string.selectBgColor))
-                        .colorPreset(lastBgColor)
+                        .colorPreset(mybgColor)
                         .setupColorWheelAlpha(false)
                         .allowCustom(true)
                         .neg(R.string.cancel)
@@ -684,13 +688,13 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     // realColor is misnamed.  It is the ID of the radio button widget that chooses the background
     // colour.
     private void ResetColors() {
-        lastTxtColor = ImapNotes3.loadPreferenceColor("EditorTxtColor", getColor(R.color.EditorTxtColor));
-        editText.setEditorFontColor(lastTxtColor);
-        int mybgColor = Utilities.getColorByName(bgColor, getApplicationContext());
+        editText.setEditorFontColor(ImapNotes3.loadPreferenceColor("EditorTxtColor", getColor(R.color.EditorTxtColor)));
+        int mybgColor;
         if (bgColor.equals("none")) {
             mybgColor = ImapNotes3.loadPreferenceColor("EditorBgColorDefault", getColor(R.color.EditorBgColorDefault));
+        } else {
+            mybgColor = Utilities.getColorByName(bgColor, getApplicationContext());
         }
-        lastBgColor = mybgColor;
         (findViewById(R.id.scrollView)).setBackgroundColor(mybgColor);
     }
 
