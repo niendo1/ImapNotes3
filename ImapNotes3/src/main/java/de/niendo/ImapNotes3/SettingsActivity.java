@@ -19,7 +19,9 @@
 
 package de.niendo.ImapNotes3;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -28,13 +30,18 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import de.niendo.ImapNotes3.Miscs.AboutDialogFragment;
+import de.niendo.ImapNotes3.Miscs.Utilities;
 import eltos.simpledialogfragment.SimpleDialog;
 import eltos.simpledialogfragment.color.SimpleColorDialog;
 
 
 public class SettingsActivity extends AppCompatActivity {
-
+    private static final String TAG = "IN_SettingsActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +96,12 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
 
+            myPref = findPreference("send_debug_report");
+            myPref.setOnPreferenceClickListener(preference -> {
+                SendLogcatMail();
+                return true;
+            });
+
             myPref = findPreference("about");
             myPref.setOnPreferenceClickListener(preference -> {
                 AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
@@ -96,6 +109,37 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
 
+        }
+
+        // In case of necessary debug  with user approval
+        public void SendLogcatMail() {
+            Log.d(TAG, "SendLogcatMail");
+            String emailData = "";
+            try {
+                Process process = Runtime.getRuntime().exec("logcat -d");
+                BufferedReader bufferedReader = new BufferedReader(
+                        new InputStreamReader(process.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                emailData = sb.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //send file using email
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            String[] to = {""};
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+            // the attachment
+            emailIntent.putExtra(Intent.EXTRA_TEXT, emailData);
+            // the mail subject
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Logcat content for " + Utilities.FullApplicationName + " debugging");
+            emailIntent.setType("message/rfc822");
+            startActivity(Intent.createChooser(emailIntent, "Send email..."));
         }
 
         @Override

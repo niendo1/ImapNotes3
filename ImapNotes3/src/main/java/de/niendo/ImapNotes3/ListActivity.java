@@ -62,7 +62,6 @@ import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.Data.NotesDb;
@@ -81,10 +80,8 @@ import eltos.simpledialogfragment.list.SimpleListDialog;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -696,9 +693,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 startActivity(res);
                 return true;
             }
-            case R.id.send_debug_report:
-                SendLogcatMail();
-                return true;
             case R.id.make_archive:
                 BackupRestore.CreateArchive(this, getSelectedAccountName());
                 return true;
@@ -891,37 +885,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         // FIXME his place is not nice..but no other is working
         Check_Action_Send(null);
 
-    }
-
-    // In case of necessary debug  with user approval
-    public void SendLogcatMail() {
-        Log.d(TAG, "SendLogcatMail");
-        String emailData = "";
-        try {
-            Process process = Runtime.getRuntime().exec("logcat -d");
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-            emailData = sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //send file using email
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        String[] to = {""};
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-        // the attachment
-        emailIntent.putExtra(Intent.EXTRA_TEXT, emailData);
-        // the mail subject
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Logcat content for " + Utilities.FullApplicationName + " debugging");
-        emailIntent.setType("message/rfc822");
-        startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
 

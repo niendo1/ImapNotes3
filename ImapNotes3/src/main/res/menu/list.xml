@@ -68,14 +68,6 @@
         app:showAsAction="ifRoom|collapseActionView" />
 
     <item
-        android:id="@+id/send_debug_report"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@drawable/ic_action_send_debug_report"
-        android:title="@string/send_debug_report"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/make_archive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

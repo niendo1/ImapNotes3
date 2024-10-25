@@ -28,6 +28,11 @@
     <PreferenceCategory app:title="@string/miscellaneous">
 
         <Preference
+            app:icon="@drawable/ic_action_send_debug_report"
+            app:key="send_debug_report"
+            app:title="@string/send_debug_report" />
+
+        <Preference
             app:icon="@drawable/ic_action_about"
             app:key="about"
             app:title="@string/about" />
