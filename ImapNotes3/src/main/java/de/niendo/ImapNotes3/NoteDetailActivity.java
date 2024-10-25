@@ -119,8 +119,8 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     private String accountName = "";
     private String suid; // uid as string
     private RichEditor editText;
-    private @ColorInt int lastTxtColor = 0x80e9a11d;
-    private @ColorInt int lastBgColor = 0x80e9a11d;
+    //private @ColorInt int lastTxtColor = 0x80e9a11d;
+    //private @ColorInt int lastBgColor = 0x80e9a11d;
     private String lastTag = "#";
     private List<String> tagList;
     private MenuItem itemNext;

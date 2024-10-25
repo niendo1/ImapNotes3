@@ -154,12 +154,12 @@ public class ImapNotes3 extends Application {
 
     public static int loadPreferenceColor(String name, int defValue) {
         SharedPreferences preferences = mContext.getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
-        return preferences.getInt(name, defValue);
+        return preferences.getInt(name + "_" + mContext.getString(R.string.ColorMode), defValue);
     }
 
     public static void savePreferenceColor(String name, int value) {
         SharedPreferences.Editor preferences = mContext.getSharedPreferences(Utilities.PackageName, MODE_PRIVATE).edit();
-        preferences.putInt(name, value);
+        preferences.putInt(name + "_" + mContext.getString(R.string.ColorMode), value);
         preferences.apply();
     }
 

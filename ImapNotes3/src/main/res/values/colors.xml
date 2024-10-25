@@ -36,4 +36,6 @@
 
     <color name="transparent">#00000000</color>
 
+    <item name="ColorMode" translatable="false" type="string">light</item>>
+
 </resources>

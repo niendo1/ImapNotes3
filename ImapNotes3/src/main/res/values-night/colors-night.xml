@@ -36,4 +36,6 @@
     <color name="ShareActionActionColor">#2F7F7F</color>
 
     <color name="transparent">#00000000</color>
+
+    <item name="ColorMode" translatable="false" type="string">dark</item>>
 </resources>
