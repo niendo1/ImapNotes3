@@ -87,7 +87,7 @@ dependencies {
     implementation 'com.sun.mail:android-activation:1.6.7'
     implementation 'commons-io:commons-io:2.17.0'
     implementation 'com.github.niendo1:richeditor-android:3.0.2'
-    implementation 'org.jetbrains:annotations:25.0.0'
+    implementation 'org.jetbrains:annotations:26.0.1'
     implementation 'org.jsoup:jsoup:1.18.1'
     implementation 'io.github.eltos:simpledialogfragments:3.8.3'
 }
