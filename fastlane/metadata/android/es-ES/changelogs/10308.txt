@@ -1,3 +1,0 @@
-* agregar traducción al ruso (gracias a weblate)
-* agregar traducción al italiano (gracias a weblate)
-* agregar botón de acción flotante para nueva nota
