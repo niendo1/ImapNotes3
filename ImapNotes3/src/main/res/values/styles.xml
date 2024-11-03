@@ -3,7 +3,7 @@
 
 
     <style name="ImapNotesTheme" parent="Theme.AppCompat.DayNight">
-        <item name="android:windowBackground">@color/ListBgColor</item>
+        <item name="android:windowBackground">@color/ActionBgColor</item>
         <item name="android:colorBackground">@color/ActionBgColor</item>
         <item name="android:colorForeground">@color/ActionTxtColor</item>
         <!--item name="android:colorPrimary">@color/ActionTxtColor</item>

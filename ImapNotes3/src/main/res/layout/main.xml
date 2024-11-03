@@ -54,6 +54,7 @@
         android:id="@+id/notesList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:dividerHeight="0dp"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

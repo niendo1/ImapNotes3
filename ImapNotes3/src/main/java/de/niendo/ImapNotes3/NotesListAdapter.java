@@ -25,6 +25,7 @@ import android.net.Uri;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.ColorUtils;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -252,7 +253,13 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
                         // Note: keep the instanceof TextView check at the bottom of these
                         // ifs since a lot of views are TextViews (e.g. CheckBoxes).
                         setViewText((TextView) v, text);
-                        setTxtColor((TextView) v, txtColor);
+                        if (i == 0) {
+                            // note name
+                            setTxtColor((TextView) v, txtColor);
+                        } else {
+                            // time & date
+                            setTxtColor((TextView) v, ColorUtils.blendARGB(txtColor, bgColorNr, 0.5f));
+                        }
                         setBgColor((TextView) v, bgColorNr);
                         setBgColor((RelativeLayout) view, bgColorNr);
 

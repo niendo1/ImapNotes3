@@ -13,22 +13,18 @@
     <color name="none">@color/black</color>
 
     <color name="ActionBgColor">#2F2F2F</color>
-    <color name="ActionTxtColor">#AB9C69</color>
-
-    <color name="ListBgColor">#191C12</color>
-    <color name="ListTxtColor">#AB9C69</color>
-    <color name="ListInfoTxtColor">#8B7E56</color>
+    <color name="ActionTxtColor">#E8F5E9</color>
 
     <color name="AccountBgColor">#2F4F4F</color>
-    <color name="AccountTxtColor">#AB9C69</color>
-    <color name="AccountHintColor">#6B6A54</color>
+    <color name="AccountTxtColor">@color/ActionTxtColor</color>
+    <color name="AccountHintColor">@color/ActionTxtColor</color>
 
-    <color name="EditorMenuBgColor">#2F2F2F</color>
-    <color name="EditorTxtColor">#AB9C69</color>
+    <color name="EditorMenuBgColor">#3C3C3A</color>
+    <color name="EditorTxtColor">@color/ActionTxtColor</color>
     <color name="EditorBgColorDefault">@color/none</color>
 
     <color name="ShareActionBgColor">#2F2F2F</color>
-    <color name="ShareActionTxtColor">#FFFFFFCC</color>
+    <color name="ShareActionTxtColor">@color/ActionTxtColor</color>
     <color name="ShareActionActionColor">#2F7F7F</color>
 
     <color name="transparent">#00000000</color>

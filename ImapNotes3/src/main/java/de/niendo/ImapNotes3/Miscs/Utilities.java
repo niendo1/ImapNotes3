@@ -63,7 +63,7 @@ public final class Utilities {
     public static String HASHTAG_PATTERN = "(?<=(\\s|^))#[^\\s\\!\\@\\#\\$\\%\\^\\<\\>\\&\\*\\(\\)\\,\\;\\\"\\']+(?=(\\s|$))";
 
     public static int getColorIdByName(String name) {
-        int color = R.color.ListBgColor;
+        int color = R.color.ActionBgColor;
 
         if (name == null || name.isEmpty()) {
             name = "none";
