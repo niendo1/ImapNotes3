@@ -29,7 +29,6 @@ import android.net.Uri;
 import android.os.StrictMode;
 import android.view.View;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.StringRes;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;

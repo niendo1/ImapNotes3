@@ -728,10 +728,9 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     }
 
     private Integer getSpinnerPos(String accountName) {
-        ArrayAdapter adapter = (ArrayAdapter) accountSpinner.getAdapter();
-        int n = adapter.getCount();
+        int n = accountSpinner.getCount();
         for (int i = 1; i < n; i++) {
-            if (accountName.equals(adapter.getItem(i).toString())) {
+            if (accountName.equals(accountSpinner.getAdapter().getItem(i).toString())) {
                 return (i);
             }
         }
@@ -765,8 +764,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         }
         return ImapNotesAccount.accountName;
     }
-
-    ;
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -986,4 +983,3 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         }
     }
 }
-
