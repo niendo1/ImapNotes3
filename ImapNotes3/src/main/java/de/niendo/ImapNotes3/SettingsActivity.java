@@ -67,11 +67,13 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
+
             Preference myPref = findPreference(DLG_PREF_EDITOR_BG_COLOR);
             myPref.setOnPreferenceClickListener(preference -> {
+                int pallet = getString(R.string.ColorMode).equals("light") ? SimpleColorDialog.MATERIAL_COLOR_PALLET_LIGHT : SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK;
                 SimpleColorDialog.build()
-                        .colors(getContext(), SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK)
-                        .title(getString(R.string.selectTextColor))
+                        .colors(getContext(), pallet)
+                        .title(getString(R.string.selectBgColor))
                         .colorPreset(ImapNotes3.loadPreferenceColor(DLG_PREF_EDITOR_BG_COLOR, getResources().getColor(R.color.EditorBgColorDefault)))
                         .setupColorWheelAlpha(false)
                         .allowCustom(true)
@@ -84,8 +86,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             myPref = findPreference(DLG_PREF_EDITOR_TXT_COLOR);
             myPref.setOnPreferenceClickListener(preference -> {
+                int pallet = getString(R.string.ColorMode).equals("light") ? SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK : SimpleColorDialog.MATERIAL_COLOR_PALLET_LIGHT;
                 SimpleColorDialog.build()
-                        .colors(getContext(), SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK)
+                        .colors(getContext(), pallet)
                         .title(getString(R.string.selectTextColor))
                         .colorPreset(ImapNotes3.loadPreferenceColor(DLG_PREF_EDITOR_TXT_COLOR, getResources().getColor(R.color.EditorTxtColor)))
                         .setupColorWheelAlpha(false)

@@ -41,7 +41,6 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
@@ -119,8 +118,6 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     private String accountName = "";
     private String suid; // uid as string
     private RichEditor editText;
-    //private @ColorInt int lastTxtColor = 0x80e9a11d;
-    //private @ColorInt int lastBgColor = 0x80e9a11d;
     private String lastTag = "#";
     private List<String> tagList;
     private MenuItem itemNext;
@@ -240,8 +237,8 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     return true;
                 case DLG_INSERT_IMAGE: {
                     Boolean relative = extras.getBoolean(DLG_INSERT_LINK_IMAGE_RELATIVE);
-                    Boolean inline = extras.getBoolean(DLG_INSERT_IMAGE_INLINE);
-                    Integer scale = Integer.valueOf(extras.getString(DLG_INSERT_IMAGE_SHRINK_FACTOR));
+                    boolean inline = extras.getBoolean(DLG_INSERT_IMAGE_INLINE);
+                    int scale = Integer.parseInt(extras.getString(DLG_INSERT_IMAGE_SHRINK_FACTOR));
                     Uri uri = extras.getParcelable(Intent.EXTRA_STREAM);
                     double fileSize = extras.getDouble(DLG_INSERT_IMAGE_FILE_SIZE);
                     editText.insertHTML(extras.getString(DLG_INSERT_LINK_IMAGE_ALT));
@@ -377,9 +374,10 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             case R.id.action_heading6:
                 editText.setHeading(6);
                 break;
-            case R.id.action_txt_color:
+            case R.id.action_txt_color: {
+                int pallet = getString(R.string.ColorMode).equals("light") ? SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK : SimpleColorDialog.MATERIAL_COLOR_PALLET_LIGHT;
                 SimpleColorDialog.build()
-                        .colors(this, SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK)
+                        .colors(this, pallet)
                         .title(getString(R.string.selectTextColor))
                         .colorPreset(ImapNotes3.loadPreferenceColor("EditorTxtColor", getColor(R.color.EditorTxtColor)))
                         .setupColorWheelAlpha(false)
@@ -388,15 +386,17 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                         .neut(R.string.default_color)
                         .show(this, DLG_HTML_TXT_COLOR);
                 break;
-            case R.id.action_bg_color:
+            }
+            case R.id.action_bg_color: {
                 int mybgColor;
                 if (bgColor.equals("none")) {
                     mybgColor = ImapNotes3.loadPreferenceColor("EditorBgColorDefault", getColor(R.color.EditorBgColorDefault));
                 } else {
                     mybgColor = Utilities.getColorByName(bgColor, getApplicationContext());
                 }
+                int pallet = getString(R.string.ColorMode).equals("light") ? SimpleColorDialog.MATERIAL_COLOR_PALLET_LIGHT : SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK;
                 SimpleColorDialog.build()
-                        .colors(this, SimpleColorDialog.MATERIAL_COLOR_PALLET_LIGHT)
+                        .colors(this, pallet)
                         .title(getString(R.string.selectBgColor))
                         .colorPreset(mybgColor)
                         .setupColorWheelAlpha(false)
@@ -405,6 +405,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                         .neut(R.string.default_color)
                         .show(this, DLG_HTML_BG_COLOR);
                 break;
+            }
             case R.id.action_font_size_1:
                 editText.requestFocusFromTouch();
                 editText.setFontSize(1);
@@ -736,7 +737,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     public boolean onQueryTextChange(String query) {
                         // When the query length is greater
                         // than 0 we will perform the search
-                        if (query.length() > 0) {
+                        if (!query.isEmpty()) {
                             // findAllAsync finds all instances
                             // on the page and
                             // highlights them,asynchronously.
@@ -851,13 +852,11 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             Bundle extra = new Bundle();
             extra.putBoolean(DLG_SELECT_ACCOUNT_FINISH, finish);
 
-            ArrayList accounts = ListActivity.getAccountList();
-
             SimpleFormDialog.build()
                     .extra(extra)
                     .title(R.string.select_one_account)
                     .fields(
-                            Input.spinner(DLG_SELECT_ACCOUNT_ACCOUNT, accounts)
+                            Input.spinner(DLG_SELECT_ACCOUNT_ACCOUNT, (ArrayList<String>) ListActivity.getAccountList())
                                     .required()
                                     .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL))
 
@@ -932,7 +931,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
             if (subject == null) subject = "";
             Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-            if (uri != null) {
+            if (uri != null && type != null) {
                 if (type.startsWith("image/")) {
                     Bundle extra = new Bundle();
                     extra.putParcelable(Intent.EXTRA_STREAM, uri);
@@ -998,7 +997,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     if (!subject.isEmpty()) {
                         subject = "<b>" + subject + "</b><br>";
                     }
-                    if (sharedText != null) {
+                    if (sharedText != null && type != null) {
                         if (type.equals("text/html")) {
                             editText.insertHTML(subject + sharedText);
                         } else if (type.startsWith("text/")) {
