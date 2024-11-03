@@ -16,7 +16,7 @@
     <string name="account_added">Konto angelegt</string>
     <string name="add_account">Konto/Notizblock hinzufügen</string>
     <string name="account_name">Name des Notizbuchs bzw. Kontos</string>
-    <string name="account_name_description">Wenn leer, dann wird die Email-Adresse genutzt</string>
+    <string name="account_name_description">Wenn leer, dann wird die Email-Adresse verwendet</string>
     <string name="username">Benutzer / E-Mail</string>
     <string name="your_login_name">Login auf Mail-Server</string>
     <string name="password">Passwort</string>

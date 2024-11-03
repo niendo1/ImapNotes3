@@ -2,4 +2,8 @@
 * add italian translation (thanks to weblate)
 * add floating action button for new note
 * update for API 35
-* Settings page for text and background color
+* Customize text and background color for notes
+* simplify colors
+* replace status field with toast messages
+* gradle and lib updates
+* translation fixes
