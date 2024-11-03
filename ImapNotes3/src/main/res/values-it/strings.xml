@@ -23,7 +23,7 @@
     <string name="password">Password</string>
     <string name="server_port_number_to_use">Porta del server da utilizzare</string>
     <string name="port_number">Numero porta</string>
-    <string name="notes_folder_optional">Cartella delle note sul server (facoltativo)</string>
+    <string name="notes_folder">Cartella delle note sul server (facoltativo)</string>
     <string name="delete">Elimina</string>
     <string name="syncing">Sincronizzazione…</string>
     <string name="updating_notes_list">Aggiornamento lista delle note…</string>
@@ -54,7 +54,7 @@
     <string name="alignment">Allineamento</string>
     <string name="sync_wait_necessary">attendere che la sincronizzazione sia completata.</string>
     <string name="txt_color">Colore del testo</string>
-    <string name="manually_set_full_imap_path_to_notes_folder">Note</string>
+    <string name="notes_folder_description">Note</string>
     <string name="welcome">Benvenuto</string>
     <string name="gray">Grigio</string>
     <string name="bg_color">Colore dello sfondo</string>

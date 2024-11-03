@@ -64,7 +64,7 @@
     <string name="account_already_exists_or_is_null">Учетная запись уже существует или равна null</string>
     <string name="server_port_number_to_use">Номер порта сервера для использования</string>
     <string name="sync_interval">Интервал синхронизации</string>
-    <string name="notes_folder_optional">Папка для заметок на сервере (необязательно)</string>
+    <string name="notes_folder">Папка для заметок на сервере (необязательно)</string>
     <string name="refreshing_notes_list">Обновление списка заметок…</string>
     <string name="editAccount">Редактировать учетную запись</string>
     <string name="Waiting_for_sync">Ожидание завершения синхронизации</string>

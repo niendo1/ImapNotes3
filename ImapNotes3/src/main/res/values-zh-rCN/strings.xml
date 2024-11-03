@@ -26,8 +26,8 @@
     <string name="server_port_number_to_use">所用的服务器端口</string>
     <string name="port_number">端口号</string>
     <string name="sync_interval">同步间隔</string>
-    <string name="notes_folder_optional">服务器上的笔记文件夹 (可选)</string>
-    <string name="manually_set_full_imap_path_to_notes_folder">笔记</string>
+    <string name="notes_folder">服务器上的笔记文件夹 (可选)</string>
+    <string name="notes_folder_description">笔记</string>
     <string name="welcome">欢迎</string>
     <string name="delete">删除</string>
     <string name="color">颜色</string>

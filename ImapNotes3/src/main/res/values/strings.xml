@@ -15,8 +15,8 @@
     <string name="account_already_exists_or_is_null">Account already exists or is null</string>
     <string name="account_added">Account has been added</string>
     <string name="add_account">Add Account/Notepad</string>
-    <string name="account_name">Name for Local account/notepad (optional)</string>
-    <string name="account_name_description">Set a name for this notepad or account</string>
+    <string name="account_name">Name for the account or notepad</string>
+    <string name="account_name_description">Leave empty to use email address</string>
     <string name="username">User name / e-mail</string>
     <string name="your_login_name">Your login name for mail server</string>
     <string name="password">Password</string>
@@ -26,8 +26,8 @@
     <string name="server_port_number_to_use">Server port number to use</string>
     <string name="port_number">Port Number</string>
     <string name="sync_interval">Sync Interval</string>
-    <string name="notes_folder_optional">Notes Folder on server (optional)</string>
-    <string name="manually_set_full_imap_path_to_notes_folder">Notes</string>
+    <string name="notes_folder">Notes folder on server</string>
+    <string name="notes_folder_description">Leave empty to use \'Notes\'</string>
     <string name="delete">Delete</string>
     <string name="color">Color</string>
     <string name="blue">Blue</string>
@@ -162,8 +162,9 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="settings">Settings</string>
     <string name="appearance">Appearance</string>
-    <string name="appearance_sum">Colors of the editor etc.</string>
-    <string name="EditorBgColorDefault">Default Background Color for Note Editor</string>
-    <string name="EditorTxtColor">Default Text for Note Editor</string>
+    <string name="EditorBgColorDefault">Default background color for notes</string>
+    <string name="EditorBgColorDefault_sum">For dark and light mode a different value is saved.</string>
+    <string name="EditorTxtColor">Text color for notes</string>
+    <string name="EditorTxtColor_sum">For dark and light mode a different value is saved.</string>
     <string name="miscellaneous">Miscellaneous</string>
 </resources>

@@ -24,8 +24,8 @@
     <string name="server_port_number_to_use">Puerto del servidor utilizado</string>
     <string name="port_number">Número del puerto</string>
     <string name="sync_interval">Intervalo de sincronización</string>
-    <string name="notes_folder_optional">Carpeta de notas en el servidor (opcional)</string>
-    <string name="manually_set_full_imap_path_to_notes_folder">Notas</string>
+    <string name="notes_folder">Carpeta de notas en el servidor (opcional)</string>
+    <string name="notes_folder_description">Notas</string>
     <string name="delete">Borrar</string>
     <string name="color">Color</string>
     <string name="blue">Azul</string>

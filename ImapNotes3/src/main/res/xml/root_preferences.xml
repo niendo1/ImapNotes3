@@ -4,12 +4,12 @@
 
         <Preference
             app:key="EditorBgColorDefault"
-            app:summary="@string/appearance_sum"
+            app:summary="@string/EditorBgColorDefault_sum"
             app:title="@string/EditorBgColorDefault" />
 
         <Preference
             app:key="EditorTxtColor"
-            app:summary="@string/appearance_sum"
+            app:summary="@string/EditorTxtColor_sum"
             app:title="@string/EditorTxtColor" />
 
         <!-- EditTextPreference
