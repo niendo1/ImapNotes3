@@ -15,8 +15,8 @@
     <string name="account_already_exists_or_is_null">账户已存在或为空</string>
     <string name="account_added">已添加账户</string>
     <string name="add_account">添加账户、笔记本</string>
-    <string name="account_name">本地账户/笔记本的名称（可选）</string>
-    <string name="account_name_description">设置此笔记本或账户的名称</string>
+    <string name="account_name">账户或笔记本的名称</string>
+    <string name="account_name_description">留空使用电子邮箱</string>
     <string name="username">用户名/电子邮箱</string>
     <string name="your_login_name">邮件服务器的用户名</string>
     <string name="password">密码</string>
@@ -158,4 +158,11 @@
     <string name="success">成功了</string>
     <string name="reading_archive_file">正读取存档文件</string>
     <string name="imap_server_changed_new_password">服务器名称已更改，请重新输入密码！</string>
+    <string name="appearance">外观</string>
+    <string name="EditorBgColorDefault">笔记的默认背景色</string>
+    <string name="EditorTxtColor">笔记的文本颜色</string>
+    <string name="settings">设置</string>
+    <string name="EditorBgColorDefault_sum">深色和浅色模式保存的值不一样。</string>
+    <string name="EditorTxtColor_sum">深色和浅色模式保存的值不一样。</string>
+    <string name="miscellaneous">杂项</string>
 </resources>
