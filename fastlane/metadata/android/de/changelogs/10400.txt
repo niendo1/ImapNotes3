@@ -2,4 +2,7 @@
 * italienische Übersetzung hinzugefügt (Dank an weblate)
 * schwebender Button für Neue Note
 * Updates für API 35
-* Einstellungsseite für Vorder- und Hintergrundfarbe des Editors
+* Text- und Hintergrundfarbe der Notizen anpassbar
+* Statusfeld durch Einblendtexte ersetzt
+* Gradle und Bibliotheksupdates
+* Übersetzungskorrekturen
