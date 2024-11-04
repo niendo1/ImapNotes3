@@ -8,7 +8,7 @@
     <string name="search">Suche</string>
     <string name="account_removed">Konto wurde entfernt</string>
     <string name="quotation_marks_not_allowed">Konto/Notizbuch darf keine Anführungszeichen enthalten</string>
-    <string name="remove">Löschen</string>
+    <string name="remove">Entfernen</string>
     <string name="save">Speichern</string>
     <string name="check_and_create_account">Prüfen &amp; Konto anlegen</string>
     <string name="logging_in">Anmelden…</string>
@@ -90,7 +90,7 @@
     <string name="select_link_youtube">Link/URL eines Youtube-Videos markieren</string>
     <string name="open_link">Öffne Link in einem externen Browser</string>
     <string name="no_program_found">kein passendes Programm gefunden</string>
-    <string name="made_changes">Ungespeicherte Änderungen</string>
+    <string name="made_changes">Ungespeicherte Änderungen.</string>
     <string name="save_changes">Möchten Sie die Änderungen vor dem Beenden speichern?</string>
     <string name="off">Aus</string>
     <string name="t15min">Viertelstündlich</string>
