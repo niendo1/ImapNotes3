@@ -25,7 +25,7 @@
     <string name="port_number">Numero porta</string>
     <string name="notes_folder">Cartella delle note sul server (facoltativo)</string>
     <string name="delete">Elimina</string>
-    <string name="syncing">Sincronizzazione</string>
+    <string name="syncing">Sincronizzazione…</string>
     <string name="updating_notes_list">Aggiornamento lista delle note…</string>
     <string name="Waiting_for_sync">In attesa di completare la sincronizzazione</string>
     <string name="Invalid_Message">Dati del messaggio non valido</string>
@@ -55,15 +55,14 @@
     <string name="sync_wait_necessary">attendere che la sincronizzazione sia completata.</string>
     <string name="txt_color">Colore del testo</string>
     <string name="notes_folder_description">Note</string>
-    <string name="welcome">Benvenuto</string>
     <string name="gray">Grigio</string>
     <string name="bg_color">Colore dello sfondo</string>
     <string name="delete_note">Elimina nota</string>
     <string name="are_you_sure_you_wish_to_delete_the_note">Confermi di voler eliminare la nota?</string>
     <string name="placeholder">Inserisci il testo qui…</string>
-    <string name="Last_sync">"Ultima sincronizzazione: "</string>
-    <string name="account_modified">Il conto è stato modificato</string>
-    <string name="share_file_error">Errore di file di condivisione:</string>
+    <string name="Last_sync">Ultima sincronizzazione: </string>
+    <string name="account_modified">L\'account è stato modificato</string>
+    <string name="share_file_error">Errore condivisione file:</string>
     <string name="security">Sicurezza</string>
     <string name="note_title">Titolo</string>
     <string name="brown">Marrone</string>
@@ -132,12 +131,14 @@
     <string name="insert_image_as_inline">Incorpora immagine (no link)</string>
     <string name="select_one_account">Seleziona un account/raccolta</string>
     <string name="all_accounts">Tutte</string>
-    <string name="imap_help_text">Se si ottiene l\'errore di credenziali Invalid:\nAlcuni fornitori come gmail o gmx richiedono una password specifica app per accedere a IMAP. Il suo necessario per attivare due fattori di autenticazione.\nÈ possibile creare una tale password con il vostro fornitore.</string>
+    <string name="imap_help_text">Se ricevi l\'errore di credenziali non valide:
+\n Alcuni provider email come Gmail o GMX richiedono una password specifica per l\'applicazione per accedere a IMAP. Questo è necessario per attivare l\'autenticazione a due fattori.
+\n È possibile creare questo tipo di password presso il proprio provider email.</string>
     <string name="intent_import_note">Importa nota(i)</string>
     <string name="importing">Importazione…</string>
     <string name="enter_table_dimension">dimensioni della tabella</string>
-    <string name="count_table_col">Conta colonne</string>
-    <string name="STARTTLS">STARTTISTI</string>
+    <string name="count_table_col">Conteggio colonne</string>
+    <string name="STARTTLS">STARTTLS</string>
     <string name="link_title">Titolo del link</string>
     <string name="selectBgColor">Selezionare il colore di sfondo</string>
     <string name="count_table_row">Conteggio righe</string>

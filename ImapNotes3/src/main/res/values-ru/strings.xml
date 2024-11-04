@@ -13,7 +13,6 @@
     <string name="your_password">Ваш пароль для почтового сервера</string>
     <string name="imap_notes_server">Имя хоста IMAP-сервера</string>
     <string name="port_number">Номер порта</string>
-    <string name="welcome">Добро пожаловать</string>
     <string name="delete">Удалить</string>
     <string name="color">Цвет</string>
     <string name="blue">Синий</string>
