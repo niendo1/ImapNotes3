@@ -143,6 +143,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         if (action == null)
             action = "";
 
+
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -706,6 +707,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         m.setOptionalIconsVisible(true);
         itemNext = menu.findItem(R.id.itemNext);
         itemPrevious = menu.findItem(R.id.itemPrevious);
+        SetColorSelect(menu, bgColor);
         return true;
     }
 
@@ -715,6 +717,11 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         super.onPrepareOptionsMenu(menu);
         //depending on your conditions, either enable/disable
         return true;
+    }
+
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        return super.onMenuOpened(featureId, menu);
     }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -840,6 +847,44 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         return false;
     }
 
+    /**
+     * Set android:id="@+id/color" to the selected note color
+     */
+    private void SetColorSelect(Menu menu, String color) {
+        switch (color) {
+            case "":
+            case "none":
+                menu.findItem(R.id.none).setChecked(true);
+                break;
+            case "blue":
+                menu.findItem(R.id.blue).setChecked(true);
+                break;
+            case "white":
+                menu.findItem(R.id.white).setChecked(true);
+                break;
+            case "gray":
+                menu.findItem(R.id.gray).setChecked(true);
+                break;
+            case "black":
+                menu.findItem(R.id.black).setChecked(true);
+                break;
+            case "yellow":
+                menu.findItem(R.id.yellow).setChecked(true);
+                break;
+            case "pink":
+                menu.findItem(R.id.pink).setChecked(true);
+                break;
+            case "green":
+                menu.findItem(R.id.green).setChecked(true);
+                break;
+            case "brown":
+                menu.findItem(R.id.brown).setChecked(true);
+                break;
+            case "red":
+                menu.findItem(R.id.red).setChecked(true);
+                break;
+        }
+    }
 
     /**
      * Note that this function does not save the note to permanent storage it just passes it back to

@@ -7,3 +7,4 @@
 * replace status field with toast messages
 * gradle and lib updates
 * translation fixes
+* fix for note color selection

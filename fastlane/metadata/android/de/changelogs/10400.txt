@@ -6,3 +6,4 @@
 * Statusfeld durch Einblendtexte ersetzt
 * Gradle und Bibliotheksupdates
 * Übersetzungskorrekturen
+* Fix für Farbanwahl der Notiz
