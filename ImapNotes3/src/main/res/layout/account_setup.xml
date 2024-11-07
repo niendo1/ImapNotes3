@@ -35,7 +35,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
-                android:autofillHints="yes"
+                android:importantForAutofill="no"
                 android:hint="@string/account_name_description"
                 android:inputType="textEmailAddress">
 
@@ -59,7 +59,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
-                android:autofillHints="yes"
+                android:autofillHints="AUTOFILL_HINT_USERNAME"
                 android:hint="@string/your_login_name"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -81,7 +81,7 @@
                 android:id="@+id/passwordEdit"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="yes"
+                android:autofillHints="AUTOFILL_HINT_PASSWORD"
                 android:hint="@string/your_password"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -103,7 +103,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
-                android:autofillHints="yes"
                 android:hint="@string/imap_notes_server"
                 android:inputType="textNoSuggestions|text|textVisiblePassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -135,7 +134,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
-                android:autofillHints="yes"
                 android:ems="10"
                 android:hint="@string/server_port_number_to_use"
                 android:inputType="number" />
@@ -169,7 +167,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
-                android:autofillHints="yes"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 

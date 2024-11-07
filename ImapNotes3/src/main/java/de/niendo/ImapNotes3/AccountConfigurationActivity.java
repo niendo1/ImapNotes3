@@ -130,7 +130,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
   */
     //@Override
     public void onFinishPerformed(@NonNull Result<String> result) {
-
         if (result.succeeded) {
             Intent intent = new Intent();
             intent.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, GetTextViewText(accountnameTextView));
@@ -239,11 +238,15 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         Log.d(TAG, "clickListenerLogin  onClick");
         CheckNameAndLogIn();
     };
-    private final OnClickListener clickListenerEdit = v -> {
-        // Click on Edit Button
-        Log.d(TAG, "clickListenerEdit onClick");
+    private final OnClickListener clickListenerSave = v -> {
+        // Click on Save Button
+        Log.d(TAG, "clickListenerSave onClick");
         CheckNameAndLogIn();
-
+    };
+    private final OnClickListener clickListenerAbort = v -> {
+        // Click on Abort Button
+        Log.d(TAG, "clickListenerAbort onClick");
+        finish();
     };
 
     @SuppressLint("SetTextI18n")
@@ -352,16 +355,26 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             syncInterval = SyncInterval.from(GetConfigValue(ConfigurationFieldNames.SyncInterval));
             syncIntervalSpinner.setSelection(syncInterval.ordinal());
             folderTextView.setText(GetConfigValue(ConfigurationFieldNames.ImapFolder));
-            Button buttonEdit = new Button(this);
-            buttonEdit.setText(R.string.save);
-            Log.d(TAG, "Set onclick listener edit");
-            buttonEdit.setOnClickListener(clickListenerEdit);
-            layout.addView(buttonEdit);
+            Button buttonAbort = new Button(this);
+            buttonAbort.setText(R.string.cancel);
+            Log.d(TAG, "Set onclick listener abort");
+            buttonAbort.setOnClickListener(clickListenerAbort);
+            layout.addView(buttonAbort);
             Button buttonRemove = new Button(this);
             buttonRemove.setText(R.string.remove);
             buttonRemove.setOnClickListener(clickListenerRemove);
             layout.addView(buttonRemove);
+            Button buttonSave = new Button(this);
+            buttonSave.setText(R.string.save);
+            Log.d(TAG, "Set onclick listener save");
+            buttonSave.setOnClickListener(clickListenerSave);
+            layout.addView(buttonSave);
         } else {
+            Button buttonAbort = new Button(this);
+            buttonAbort.setText(R.string.cancel);
+            Log.d(TAG, "Set onclick listener abort");
+            buttonAbort.setOnClickListener(clickListenerAbort);
+            layout.addView(buttonAbort);
             // Here we have to create a new account
             Button buttonView = new Button(this);
             buttonView.setText(R.string.check_and_create_account);

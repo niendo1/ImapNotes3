@@ -104,7 +104,8 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     private static final int ADD_ACCOUNT = 7;
     private static final int SELECT_ARCHIVE_FOR_RESTORE = 8;
 
-    public static final int ResultCodeSuccess = 0;
+    public static final int ResultCodeSuccess = 1;
+    public static final int ResultCodeNeutral = 0;
     public static final int ResultCodeError = -1;
 
     public static final String EDIT_ITEM_NUM_IMAP = "EDIT_ITEM_NUM_IMAP";
@@ -719,8 +720,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 startActivityForResult(
                         Intent.createChooser(intent, "Select a ZIP file"),
                         SELECT_ARCHIVE_FOR_RESTORE);
-
-
             } catch (ActivityNotFoundException ex) {
                 ImapNotes3.ShowMessage("Please install a file manager.", listview, 3000);
             }
