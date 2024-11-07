@@ -159,4 +159,5 @@
     <string name="settings">Настройки</string>
     <string name="appearance">Внешность</string>
     <string name="miscellaneous">Другое</string>
+    <string name="account_name_description">Оставить пустым для использования адреса электронной почты</string>
 </resources>

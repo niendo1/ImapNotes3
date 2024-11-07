@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    </resources>
+    <string name="new_account">Nouveau compte</string>
+    <string name="about">Au Sujet de</string>
+    <string name="search">Chercher</string>
+</resources>

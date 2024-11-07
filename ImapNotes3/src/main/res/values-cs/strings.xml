@@ -50,7 +50,7 @@
     <string name="format">Formát</string>
     <string name="heading">Azimut</string>
     <string name="txt_color">Barva texta</string>
-    <string name="bg_color">Barva Pozadí</string>
+    <string name="bg_color">Barva pozadí</string>
     <string name="Waiting_for_sync">Čekání na synchronizační povrch</string>
     <string name="Invalid_Message">Neplatný údaje o zprávách</string>
     <string name="sort_date">Seřadit podle data</string>
