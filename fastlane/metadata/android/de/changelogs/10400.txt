@@ -1,9 +1,10 @@
 * russische Übersetzung hinzugefügt (Dank an weblate)
 * italienische Übersetzung hinzugefügt (Dank an weblate)
-* schwebender Button für Neue Note
+* schwebender Button für Anlegen neuer Notitz
 * Updates für API 35
 * Text- und Hintergrundfarbe der Notizen anpassbar
+* Farbgebung vereinfacht
 * Statusfeld durch Einblendtexte ersetzt
 * Gradle und Bibliotheksupdates
 * Übersetzungskorrekturen
-* Fix für Farbanwahl der Notiz
+* Fix für Farbwahl der Notiz

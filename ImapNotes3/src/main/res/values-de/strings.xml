@@ -138,7 +138,7 @@
     <string name="search_any_keyword">beliebiger Suchbegriff..</string>
     <string name="make_archive">Erstelle Sicherung</string>
     <string name="intent_import_note">Importiere Notiz(en)</string>
-    <string name="importing">Importiere …</string>
+    <string name="importing">Importiere…</string>
     <string name="appstore">App-Store:</string>
     <string name="appstorelink">https://f-droid.org/de/packages/de.niendo.ImapNotes3/</string>
     <string name="appstorename">F-Droid</string>
