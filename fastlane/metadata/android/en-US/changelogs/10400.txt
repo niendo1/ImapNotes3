@@ -8,3 +8,4 @@
 * gradle and lib updates
 * translation fixes
 * fix for note color selection
+* backup files to Documents/ImapNotes3 - create this directory, if not existing

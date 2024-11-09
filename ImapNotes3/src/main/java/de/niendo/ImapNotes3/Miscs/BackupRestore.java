@@ -112,11 +112,11 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
 
         if (accountname.isEmpty()) {
             directory = ImapNotes3.GetRootDir().toString();
-            title = Utilities.ApplicationName + "_" + context.getString(R.string.all_accounts);
+            title = context.getString(R.string.all_accounts);
             basePath = "";
         } else {
             directory = ImapNotes3.GetAccountDir(accountname).toString();
-            title = Utilities.ApplicationName + "_" + ImapNotes3.RemoveReservedChars(accountname);
+            title = ImapNotes3.RemoveReservedChars(accountname);
             basePath = ImapNotes3.RemoveReservedChars(accountname) + "/";
         }
 
@@ -125,7 +125,11 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
             title = title + "_" + currentDateTime.format(formatter);
         }
-        File extStorage = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS);
+        File extStorage = GetBackupDir();
+        boolean isPresent = true;
+        if (!extStorage.exists()) {
+            isPresent = extStorage.mkdir();
+        }
         File outfile = new File(extStorage, title + ".zip");
 
         if (!ZipUtils.checkPermissionStorage(context)) {
@@ -148,6 +152,10 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
         sd.msg(msg);
         sd.task(task, cancelable, autoDismiss);
         sd.show((FragmentActivity) activity, PROGRESS_DIALOG_BACKUP);
+    }
+
+    public static File GetBackupDir() {
+        return Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS + "/" + Utilities.ApplicationName);
     }
 
     private void SelectNotesDialog(String dir) {
