@@ -1,9 +1,10 @@
-* añadir traducción rusa (gracias a weblate)
+* añadir traducción al ruso (gracias a weblate)
 * añadir traducción al italiano (gracias a weblate)
-* añadir botón de acción flotante para nueva nota
-* Actualización de la API 35
-* personalizar el texto y el color de fondo de las notas
+* agregar botón de acción flotante para nueva nota
+* actualización para API 35
+* Personaliza el texto y el color de fondo de las notas.
 * simplificar colores
-* reemplazar campo de estado con mensajes toast
-* gradle y lib actualizaciones
-* correcciones de traducciones
+* reemplazar el campo de estado con mensajes de notificación
+* actualizaciones de gradle y lib
+*correcciones de traducción
+* Corrección de la selección de color de las notas

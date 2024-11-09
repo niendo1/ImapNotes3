@@ -60,7 +60,7 @@
     <string name="delete_note">Elimina nota</string>
     <string name="are_you_sure_you_wish_to_delete_the_note">Confermi di voler eliminare la nota?</string>
     <string name="placeholder">Inserisci il testo qui…</string>
-    <string name="Last_sync">Ultima sincronizzazione: </string>
+    <string name="Last_sync">"Ultima sincronizzazione: "</string>
     <string name="account_modified">L\'account è stato modificato</string>
     <string name="share_file_error">Errore condivisione file:</string>
     <string name="security">Sicurezza</string>

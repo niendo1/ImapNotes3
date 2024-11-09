@@ -1,7 +1,7 @@
 * Datum und Uhrzeit im Menü einfügen
 * Suche immer in allen Konten
 * Bearbeiten und Sortieren, wenn die Suche aktiv ist
-* empfangen geteilte Bilder
+* Empfangen geteilter Bilder
 * Auswahl in HTML-Code konvertieren
 * Auswahl in Text umwandeln
 * Vereinfachung der Synchron.-intervallauswahl

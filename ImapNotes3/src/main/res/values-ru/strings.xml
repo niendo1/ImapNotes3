@@ -2,7 +2,7 @@
 <resources>
     <string name="new_account">Новый счет</string>
     <string name="new_note">Новая записка</string>
-    <string name="refresh">Refresh</string>
+    <string name="refresh">Обновить</string>
     <string name="account_removed">Удалить аккаунт</string>
     <string name="quotation_marks_not_allowed">Кавычки в имени аккаунта не допускаются</string>
     <string name="save">Сохранить</string>
@@ -89,8 +89,8 @@
     <string name="content">Содержание</string>
     <string name="default_color">По умолчанию</string>
     <string name="sort">Сорт</string>
-    <string name="undo">UnDo</string>
-    <string name="redo">ReDo</string>
+    <string name="undo">Отмена</string>
+    <string name="redo">Повторить</string>
     <string name="heading">Направление</string>
     <string name="save_wait_necessary">пожалуйста, подождите, пока не закончится экономия.</string>
     <string name="note_title">Название</string>
@@ -112,7 +112,7 @@
     <string name="search_any_keyword">Поиск любого ключевого слова.</string>
     <string name="make_archive">Создание архива</string>
     <string name="intent_import_note">Импортная(ые) записка(ы)</string>
-    <string name="importing">Импорт..</string>
+    <string name="importing">Импорт…</string>
     <string name="appstore">App-Store:</string>
     <string name="appstorelink">https://f-droid.org/ru/packages/de.niendo.ImapNotes3/</string>
     <string name="appstorename">F-Droid</string>
@@ -124,7 +124,7 @@
     <string name="restore_more_then_one_account_found">Архив содержит более одного аккаунта / ноутбука</string>
     <string name="select_account_name_restore_import">Выберите учетную запись/ноутбук для восстановления</string>
     <string name="select_notes_for_restore">Выберите одну или несколько нот для восстановления от %s</string>
-    <string name="archiving">архивирование..</string>
+    <string name="archiving">архивирование…</string>
     <string name="success">успешно</string>
     <string name="reading_archive_file">Чтение архивного файла</string>
     <string name="imap_server_changed_new_password">Имя сервера изменено, пожалуйста, пароль рендера!</string>
@@ -154,10 +154,11 @@
     <string name="insert_image_as_inline">Изображение (без ссылки)</string>
     <string name="imap_help_text">Если вы получаете ошибку недействительными учетных данных:\nНекоторые провайдеры, такие как gmail или gmx, требуют определенного пароля приложения для входа в IMAP. Его необходимо для активации двухфакторной аутентификации.\nВы можете создать такой пароль с вашим провайдером.</string>
     <string name="EditorTxtColor">Текстовый цвет для заметок</string>
-    <string name="create_archive">Создать бэкап</string>
+    <string name="create_archive">Создать бэкап:</string>
     <string name="failed">Неудача</string>
     <string name="settings">Настройки</string>
     <string name="appearance">Внешность</string>
     <string name="miscellaneous">Другое</string>
     <string name="account_name_description">Оставить пустым для использования адреса электронной почты</string>
+    <string name="link_image_url">URL изображения</string>
 </resources>

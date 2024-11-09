@@ -24,11 +24,11 @@
     <string name="black">Preto</string>
     <string name="red">Vermelho</string>
     <string name="gray">Cinza</string>
-    <string name="updating_notes_list">Lista de notas actualizadas..</string>
+    <string name="updating_notes_list">Lista de notas actualizadas…</string>
     <string name="editAccount">Editar Conta</string>
     <string name="Waiting_for_sync">Esperando por acabamento sincronizado</string>
     <string name="sort">Tipo</string>
-    <string name="undo">Não</string>
+    <string name="undo">desfazer</string>
     <string name="redo">Refazer</string>
     <string name="format">Formato</string>
     <string name="heading">Rubrica</string>
@@ -38,7 +38,7 @@
     <string name="note_last_change">Última mudança</string>
     <string name="yes">Sim</string>
     <string name="note_title">Título da nota</string>
-    <string name="brown">Brown</string>
+    <string name="brown">Castanho</string>
     <string name="none">Nenhuma</string>
     <string name="sort_color">Ordenar por cor</string>
     <string name="license">Licença:</string>
@@ -84,22 +84,22 @@
     <string name="account_name_restore">Selecione a conta de destino / livro de notas</string>
     <string name="select_account_name_restore_import">Selecione uma conta / livro de notas para restaurar</string>
     <string name="select_notes_for_restore">Selecione uma ou mais notas para restaurar de %s</string>
-    <string name="archiving">arquivar..</string>
+    <string name="archiving">arquivar…</string>
     <string name="help">Ajuda</string>
     <string name="refresh">Atualizar</string>
     <string name="about">Sobre a</string>
     <string name="search">Pesquisar</string>
     <string name="account_name">Nome da conta/nota local (opcional)</string>
     <string name="your_password">Sua senha para servidor de email</string>
-    <string name="syncing">Sincronizar..</string>
-    <string name="refreshing_notes_list">Lista de notas refrescantes..</string>
+    <string name="syncing">Sincronizar…</string>
+    <string name="refreshing_notes_list">Lista de notas refrescantes…</string>
     <string name="sort_date">Ordenar por Data</string>
     <string name="intent_save_as_note">Salvar como nota</string>
     <string name="share_file_error">Compartilhar erro de arquivo:</string>
     <string name="insert_in_note">Insira dados compartilhados</string>
     <string name="no_program_found">Nenhum programa adequado encontrado</string>
     <string name="appstore">Aplicação:</string>
-    <string name="logging_in">Entrando em sua conta..</string>
+    <string name="logging_in">Entrando em sua conta…</string>
     <string name="your_login_name">Seu nome de login para servidor de email</string>
     <string name="password">Senha</string>
     <string name="pink">Rosa</string>
@@ -116,7 +116,7 @@
     <string name="Last_sync">"Última sincronização: "</string>
     <string name="shared_note_from">Nota partilhada</string>
     <string name="off">Descarga</string>
-    <string name="placeholder">Insira texto aqui..</string>
+    <string name="placeholder">Insira texto aqui…</string>
     <string name="AccountList">Lista de Contas</string>
     <string name="content">Conteúdo</string>
     <string name="select_link_audio">Selecione um link para um fluxo de áudio</string>
@@ -136,7 +136,7 @@
     <string name="select_one_account">Selecione uma conta / bloco de notas</string>
     <string name="select_all_notes_for_restore">todos</string>
     <string name="imap_server_changed_new_password">Nome do servidor alterado, por favor a senha do locador!</string>
-    <string name="importing">Importar..</string>
+    <string name="importing">Importar…</string>
     <string name="restore_more_then_one_account_found">O arquivo contém mais de uma conta / caderno de notas</string>
     <string name="success">com sucesso</string>
     <string name="notes_folder">Notas pasta no servidor</string>
@@ -158,7 +158,7 @@
     <string name="delete_note">Eliminar nota</string>
     <string name="failed">falhou</string>
     <string name="appearance">Aparência</string>
-    <string name="create_archive">Criar backup</string>
+    <string name="create_archive">Criar backup:</string>
     <string name="settings">Definições</string>
     <string name="miscellaneous">Diversos</string>
 </resources>
