@@ -371,9 +371,9 @@ typesafe.  Make them final to prevent accidental reuse.
         str.close();
     }
 
-    public Address UserNameToEmail(String name) {
+    public Address UserNameToEmail(@NonNull String name) {
         InternetAddress internetAddress = new InternetAddress();
-        internetAddress.setAddress(name);
+        internetAddress.setAddress(name.contains("@") ? name : name + "@" + Utilities.ApplicationName);
         return internetAddress;
     }
 
