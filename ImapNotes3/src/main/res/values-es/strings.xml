@@ -70,7 +70,6 @@
     <string name="remove">Quitar</string>
     <string name="yellow">Amarillo</string>
     <string name="server">Nombre del servidor IMAP</string>
-    <string name="welcome">Bienvenid@</string>
     <string name="AccountList">Lista de cuentas</string>
     <string name="Last_sync">"Última sincronización: "</string>
     <string name="share">Compartir</string>
