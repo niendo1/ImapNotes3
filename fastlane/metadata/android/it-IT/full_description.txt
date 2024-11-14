@@ -22,3 +22,4 @@
 * Lavora senza connessione e sincronizza in background
 * Richiede permessi minimi
 * Interamente open source - nessun tracciamento né pubblicità
+* Colori personalizzabili per l'editor
