@@ -8,3 +8,4 @@
 * actualizaciones de gradle y lib
 *correcciones de traducción
 * Corrección de la selección de color de las notas
+* copia de seguridad a Documents/ImapNotes3 - crear si no existe

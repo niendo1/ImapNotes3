@@ -16,11 +16,11 @@
     <string name="account_added">Cuenta añadida</string>
     <string name="add_account">Agregar cuenta/Bloc de notas</string>
     <string name="account_name">Nombre para la cuenta o bloc de notas</string>
-    <string name="username">Nombre de usuario/correo electrónico</string>
-    <string name="your_login_name">Iniciar sesión en el servidor de correo</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="your_login_name">Tu nombre de usuario para el servidor de correo</string>
     <string name="password">Contraseña</string>
     <string name="your_password">Contraseña para el servidor de correo</string>
-    <string name="imap_notes_server">Nombre del host del servidor IMAP</string>
+    <string name="imap_notes_server">Nombre del servidor de correo</string>
     <string name="server_port_number_to_use">Puerto del servidor utilizado</string>
     <string name="port_number">Número del puerto</string>
     <string name="sync_interval">Intervalo de sincronización</string>
@@ -69,7 +69,7 @@
     <string name="placeholder">Introducir el texto aquí…</string>
     <string name="remove">Quitar</string>
     <string name="yellow">Amarillo</string>
-    <string name="server">Nombre del servidor de correo</string>
+    <string name="server">Nombre del servidor IMAP</string>
     <string name="welcome">Bienvenid@</string>
     <string name="AccountList">Lista de cuentas</string>
     <string name="Last_sync">"Última sincronización: "</string>
@@ -132,7 +132,7 @@
     <string name="make_archive">Crear una copia de seguridad</string>
     <string name="intent_import_note">Importar nota(s)</string>
     <string name="importing">Importando…</string>
-    <string name="appstore">App-Store:</string>
+    <string name="appstore">Tienda de aplicaciones:</string>
     <string name="appstorelink">https://f-droid.org/en/packages/de.niendo.ImapNotes3/</string>
     <string name="appstorename">F-Droid</string>
     <string name="permission_required">permiso requerido</string>
@@ -153,7 +153,7 @@
     <string name="t15min">15 minutos</string>
     <string name="insert_link">Introducir un enlace</string>
     <string name="image_size_relative">El tamaño de la imagen es relativo al ancho de la página</string>
-    <string name="account_name_description">Déjelo en blanco para utilizar la dirección de correo electrónico</string>
+    <string name="account_name_description">Dejar vacío para utilizar el nombre del usuario</string>
     <string name="select_account_name_restore_import">Selecciona una cuenta/bloc de notas para restaurar</string>
     <string name="reading_archive_file">Leyendo el archivo comprimido</string>
     <string name="imap_server_changed_new_password">¡Se cambió el nombre del servidor, ingrese la contraseña nuevamente!</string>
