@@ -103,6 +103,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     private static final int EDIT_BUTTON = 6;
     private static final int ADD_ACCOUNT = 7;
     private static final int SELECT_ARCHIVE_FOR_RESTORE = 8;
+    public static final int EDIT_SETTINGS = 9;
 
     public static final int ResultCodeSuccess = 1;
     public static final int ResultCodeNeutral = 0;
@@ -691,7 +692,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             }
             case R.id.settings: {
                 Intent res = new Intent(ListActivity.this, SettingsActivity.class);
-                startActivity(res);
+                startActivityForResult(res, ListActivity.EDIT_SETTINGS);
                 return true;
             }
             case R.id.make_archive:
@@ -825,6 +826,10 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                         }
                     }
                 }
+                break;
+            case ListActivity.EDIT_SETTINGS:
+                RefreshList();
+                break;
             default:
                 Log.d(TAG, "onActivityResult: unknown result code");
         }
