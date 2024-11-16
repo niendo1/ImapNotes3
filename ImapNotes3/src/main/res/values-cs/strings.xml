@@ -4,12 +4,12 @@
     <string name="account_removed">Byl odstraněn účet</string>
     <string name="quotation_marks_not_allowed">Ochranné známky nejsou povoleny v názvu účtu</string>
     <string name="check_and_create_account">Kontrola a vytvoření účtu</string>
-    <string name="logging_in">Logging do vašeho účtu..</string>
+    <string name="logging_in">Logging do vašeho účtu…</string>
     <string name="account_already_exists_or_is_null">Účet již existuje nebo je null</string>
     <string name="account_added">Účet byl přidán</string>
     <string name="add_account">Přidat účet / Notepad</string>
-    <string name="username">Uživatelské jméno / e-mail</string>
-    <string name="your_login_name">Vaše přihlašovací jméno pro poštovní server</string>
+    <string name="username">Uživatelské jméno</string>
+    <string name="your_login_name">Přihlášení pro poštovní server</string>
     <string name="your_password">Vaše heslo pro poštovní server</string>
     <string name="server">Název poštovního serveru</string>
     <string name="imap_notes_server">Název hostitele serveru IMAP</string>
@@ -19,7 +19,7 @@
     <string name="notes_folder">Poznámky složka na serveru</string>
     <string name="notes_folder_description">Nechte prázdné použít \"Upozornění V</string>
     <string name="account_name">Jméno pro účet nebo poznámek</string>
-    <string name="account_name_description">Zanechte prázdné použít e-mailovou adresu</string>
+    <string name="account_name_description">Nechte prázdné použít uživatelské jméno</string>
     <string name="refresh">Оbnovit</string>
     <string name="about">O programu</string>
     <string name="search">Hledat</string>
@@ -39,8 +39,8 @@
     <string name="green">Zelená</string>
     <string name="red">Červená</string>
     <string name="gray">Šedá</string>
-    <string name="syncing">Synchronizace..</string>
-    <string name="refreshing_notes_list">Občerstvení poznámek..</string>
+    <string name="syncing">Synchronizace…</string>
+    <string name="refreshing_notes_list">Občerstvení poznámek…</string>
     <string name="updating_notes_list">Aktualizace poznámek seznam…</string>
     <string name="editAccount">Upravit účet</string>
     <string name="sort_title">Řadit podle názvu</string>
@@ -153,7 +153,7 @@
     <string name="success">úspěšně</string>
     <string name="EditorTxtColor">Barva textu pro poznámky</string>
     <string name="restore_more_then_one_account_found">Archiv obsahuje více než jeden účet/notebook</string>
-    <string name="archiving">archivace..</string>
+    <string name="archiving">archivace…</string>
     <string name="EditorBgColorDefault">Výchozí barva pozadí pro poznámky</string>
     <string name="imap_server_changed_new_password">Změna názvu serveru, prosím pronajměte heslo!</string>
     <string name="EditorTxtColor_sum">Pro tmavý a lehký režim je uložena jiná hodnota.</string>
