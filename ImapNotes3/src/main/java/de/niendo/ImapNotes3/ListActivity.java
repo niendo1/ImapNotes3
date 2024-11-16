@@ -425,7 +425,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     }
 
     private void savePreferences() {
-        SharedPreferences.Editor preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE).edit();
+        SharedPreferences.Editor preferences = getApplicationContext().getSharedPreferences(SettingsActivity.MAIN_PREFERENCE_NAME, MODE_PRIVATE).edit();
         preferences.putLong(ACCOUNTSPINNER_POS, accountSpinner.getSelectedItemId());
         if (actionMenu == null) return;
         preferences.putBoolean(SORT_BY_DATE, actionMenu.findItem(R.id.sort_date).isChecked());
@@ -436,7 +436,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
 
     private void setPreferences() {
         Log.d(TAG, "setPreferences:");
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(SettingsActivity.MAIN_PREFERENCE_NAME, MODE_PRIVATE);
         accountSpinner.setSelection((int) preferences.getLong(ACCOUNTSPINNER_POS, 0));
     }
 
@@ -576,7 +576,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
 
         searchView.setOnQueryTextListener(textChangeListener);
         // load values from disk
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(SettingsActivity.MAIN_PREFERENCE_NAME, MODE_PRIVATE);
 
         if (preferences.getBoolean(SORT_BY_TITLE, false))
             actionMenu.findItem(R.id.sort_title).setChecked(true);

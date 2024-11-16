@@ -24,7 +24,6 @@
 package de.niendo.ImapNotes3.Sync;
 
 import android.accounts.Account;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -32,7 +31,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import android.net.TrafficStats;
-import android.net.Uri;
 import android.util.Log;
 
 import de.niendo.ImapNotes3.Data.NotesDb;

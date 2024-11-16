@@ -42,6 +42,7 @@ import eltos.simpledialogfragment.color.SimpleColorDialog;
 
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = "IN_SettingsActivity";
+    public static final String MAIN_PREFERENCE_NAME = Utilities.PackageName + "_preferences";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

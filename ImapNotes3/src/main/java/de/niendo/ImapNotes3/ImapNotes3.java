@@ -21,11 +21,14 @@
 
 package de.niendo.ImapNotes3;
 
+import static android.os.Environment.DIRECTORY_DOCUMENTS;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.view.View;
 
@@ -152,14 +155,17 @@ public class ImapNotes3 extends Application {
 
 
     public static int loadPreferenceColor(String name, int defValue) {
-        SharedPreferences preferences = mContext.getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
+        SharedPreferences preferences = mContext.getSharedPreferences(SettingsActivity.MAIN_PREFERENCE_NAME, MODE_PRIVATE);
         return preferences.getInt(name + "_" + mContext.getString(R.string.ColorMode), defValue);
     }
 
     public static void savePreferenceColor(String name, int value) {
-        SharedPreferences.Editor preferences = mContext.getSharedPreferences(Utilities.PackageName, MODE_PRIVATE).edit();
+        SharedPreferences.Editor preferences = mContext.getSharedPreferences(SettingsActivity.MAIN_PREFERENCE_NAME, MODE_PRIVATE).edit();
         preferences.putInt(name + "_" + mContext.getString(R.string.ColorMode), value);
         preferences.apply();
     }
 
+    public static File GetDocumentDir() {
+        return Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS + "/" + Utilities.ApplicationName);
+    }
 }

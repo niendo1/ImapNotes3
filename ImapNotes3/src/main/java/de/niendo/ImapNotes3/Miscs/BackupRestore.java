@@ -1,6 +1,6 @@
 package de.niendo.ImapNotes3.Miscs;
 
-import static android.os.Environment.DIRECTORY_DOCUMENTS;
+import static de.niendo.ImapNotes3.ImapNotes3.GetDocumentDir;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,7 +9,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -125,7 +124,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
             title = title + "_" + currentDateTime.format(formatter);
         }
-        File extStorage = GetBackupDir();
+        File extStorage = GetDocumentDir();
         boolean isPresent = true;
         if (!extStorage.exists()) {
             isPresent = extStorage.mkdir();
@@ -152,10 +151,6 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
         sd.msg(msg);
         sd.task(task, cancelable, autoDismiss);
         sd.show((FragmentActivity) activity, PROGRESS_DIALOG_BACKUP);
-    }
-
-    public static File GetBackupDir() {
-        return Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS + "/" + Utilities.ApplicationName);
     }
 
     private void SelectNotesDialog(String dir) {
