@@ -1,0 +1,3 @@
+* italienische Übersetzung hinzugefügt (Dank an 77nnit)
+* Entferne DependencyInfoBlock
+* Sichern & Wiederherstellen auf Einstellungsseite verlegt

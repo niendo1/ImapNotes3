@@ -1,0 +1,3 @@
+* add italian translation (thanks to 77nnit)
+* Remove DependencyInfoBlock
+* move Backup & Restore to Settings
