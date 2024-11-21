@@ -106,6 +106,8 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     public static final int EDIT_SETTINGS = 9;
 
     public static final int ResultCodeSuccess = 1;
+    public static final int ResultCodeMakeArchive = 2;
+    public static final int ResultCodeRestoreArchive = 3;
     public static final int ResultCodeNeutral = 0;
     public static final int ResultCodeError = -1;
 
@@ -695,12 +697,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 startActivityForResult(res, ListActivity.EDIT_SETTINGS);
                 return true;
             }
-            case R.id.make_archive:
-                BackupRestore.CreateArchive(this, getSelectedAccountName());
-                return true;
-            case R.id.restore_archive:
-                openFileSelector();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -828,7 +824,16 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 }
                 break;
             case ListActivity.EDIT_SETTINGS:
-                RefreshList();
+                switch (resultCode) {
+                    case ResultCodeMakeArchive:
+                        BackupRestore.CreateArchive(this, getSelectedAccountName());
+                        break;
+                    case ResultCodeRestoreArchive:
+                        openFileSelector();
+                        break;
+                    default:
+                        RefreshList();
+                }
                 break;
             default:
                 Log.d(TAG, "onActivityResult: unknown result code");

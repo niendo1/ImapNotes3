@@ -165,4 +165,7 @@
     <string name="EditorTxtColor">Text color for notes</string>
     <string name="EditorTxtColor_sum">For dark and light mode a different value is saved.</string>
     <string name="miscellaneous">Miscellaneous</string>
+    <string name="backup">Backup</string>
+    <string name="CreateBackup_sum">Archive notes to a zip file.</string>
+    <string name="RestoreBackup_sum">Restore one or more notes from a zip file.</string>
 </resources>

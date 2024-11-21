@@ -22,7 +22,20 @@
             app:title="@string/EditorTxtColor"
             app:useSimpleSummaryProvider="true" / -->
 
+    </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/backup">
+        <Preference
+            app:icon="@drawable/ic_action_make_archive"
+            app:key="make_archive"
+            app:summary="@string/CreateBackup_sum"
+            app:title="@string/make_archive" />
+
+        <Preference
+            app:icon="@drawable/ic_action_restore_archive"
+            app:key="restore_archive"
+            app:summary="@string/RestoreBackup_sum"
+            app:title="@string/restore_archive" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/miscellaneous">

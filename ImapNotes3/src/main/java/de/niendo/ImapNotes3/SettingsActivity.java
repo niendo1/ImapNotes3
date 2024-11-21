@@ -43,14 +43,16 @@ import eltos.simpledialogfragment.color.SimpleColorDialog;
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = "IN_SettingsActivity";
     public static final String MAIN_PREFERENCE_NAME = Utilities.PackageName + "_preferences";
+    private final SettingsFragment settingsFragment = new SettingsFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
+        settingsFragment.setActivity(this);
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.settings, new SettingsFragment())
+                    .replace(R.id.settings, settingsFragment)
                     .commit();
         }
         ActionBar actionBar = getSupportActionBar();
@@ -64,7 +66,11 @@ public class SettingsActivity extends AppCompatActivity {
     public static class SettingsFragment extends PreferenceFragmentCompat implements SimpleDialog.OnDialogResultListener {
         public static final String DLG_PREF_EDITOR_BG_COLOR = "EditorBgColorDefault";
         public static final String DLG_PREF_EDITOR_TXT_COLOR = "EditorTxtColor";
+        public static SettingsActivity settingsActivity;
 
+        public void setActivity(SettingsActivity activity) {
+            settingsActivity = activity;
+        }
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
@@ -100,6 +106,23 @@ public class SettingsActivity extends AppCompatActivity {
                         .show(this, DLG_PREF_EDITOR_TXT_COLOR);
                 return true;
             });
+
+            myPref = findPreference("make_archive");
+            myPref.setOnPreferenceClickListener(preference -> {
+
+                settingsActivity.setResult(ListActivity.ResultCodeMakeArchive);
+                settingsActivity.finish();
+                return true;
+            });
+
+            myPref = findPreference("restore_archive");
+            myPref.setOnPreferenceClickListener(preference -> {
+
+                settingsActivity.setResult(ListActivity.ResultCodeRestoreArchive);
+                settingsActivity.finish();
+                return true;
+            });
+
 
             myPref = findPreference("send_debug_report");
             myPref.setOnPreferenceClickListener(preference -> {
