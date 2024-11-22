@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="ImapNotesTheme" parent="Theme.AppCompat.DayNight">
+        <item name="android:windowBackground">@color/ActionBgColor</item>
+        <item name="android:colorBackground">@color/ActionBgColor</item>
+        <item name="android:colorForeground">@color/ActionTxtColor</item>
+        <!--item name="android:colorPrimary">@color/ActionTxtColor</item>
+        <item name="android:textColorPrimary">@color/ActionTxtColor</item>
+        <item name="android:colorSecondary">@color/ActionTxtColor</item>
+        <item name="android:textColorTertiary">@color/ActionTxtColor</item>
+        <item name="android:textColorPrimaryInverse">@color/ActionTxtColor</item>
+        <item name="android:textColorSecondaryInverse">@color/ActionTxtColor</item>
+        <item name="android:textColorTertiaryInverse">@color/ActionTxtColor</item>
+        <item name="colorPrimaryDark">@color/ActionBgColor</item>
+        <item name="colorAccent">@color/ActionTxtColor</item>
+        <item name="android:background">@color/ActionBgColor</item>
+        <item name="actionMenuTextColor">@color/ActionTxtColor</item -->
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="android:textColorHint">@color/AccountHintColor</item>
         <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+
     </style>
 </resources>

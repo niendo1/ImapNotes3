@@ -19,7 +19,7 @@
     <color name="AccountTxtColor">@color/ActionTxtColor</color>
     <color name="AccountHintColor">@color/ActionTxtColor</color>
 
-    <color name="EditorMenuBgColor">#3C3C3A</color>
+    <color name="colorSurface">#3C3C3A</color>
     <color name="EditorTxtColor">@color/ActionTxtColor</color>
     <color name="EditorBgColorDefault">@color/none</color>
 
