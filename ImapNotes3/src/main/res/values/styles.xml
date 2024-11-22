@@ -20,6 +20,7 @@
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="colorSurface">@color/EditorMenuBgColor</item>
         <item name="android:textColorHint">@color/AccountHintColor</item>
+        <!-- Attribute windowOptOutEdgeToEdgeEnforcement is override in values-v35 -->
     </style>
 
     <!-- ActionBar styles -->
