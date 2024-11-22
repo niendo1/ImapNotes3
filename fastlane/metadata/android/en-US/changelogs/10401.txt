@@ -1,4 +1,4 @@
 * add italian translation (thanks to 77nnit)
 * Remove DependencyInfoBlock
 * move Backup & Restore to Settings
-* Compile SDK 35
+* layout fixes API 35
