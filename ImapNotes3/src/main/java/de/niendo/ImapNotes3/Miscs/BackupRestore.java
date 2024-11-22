@@ -1,6 +1,7 @@
 package de.niendo.ImapNotes3.Miscs;
 
 import static de.niendo.ImapNotes3.ImapNotes3.GetDocumentDir;
+import static de.niendo.ImapNotes3.ImapNotes3.getAppContext;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -47,7 +48,6 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
     private static final String DLG_BACKUP_RESTORE_DIALOG_ACCOUNT = "DLG_BACKUP_RESTORE_DIALOG_ACCOUNT";
     private static final String PROGRESS_DIALOG_RESTORE = "PROGRESS_DIALOG_RESTORE";
     private static final String PROGRESS_DIALOG_BACKUP = "PROGRESS_DIALOG_BACKUP";
-    private final Context context;
     private final Uri uri;
     private final List<String> accountList;
     private final List<String> allNotes = new ArrayList<>();
@@ -56,14 +56,12 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
 
 
     public BackupRestore(Uri uri, List<String> accountList) {
-        this.context = ImapNotes3.getAppContext();
         this.uri = uri;
         accountList.remove(0);
         this.accountList = accountList;
     }
 
     public BackupRestore() {
-        this.context = ImapNotes3.getAppContext();
         this.uri = null;
         this.accountList = null;
     }
@@ -78,7 +76,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
 
     public void RestoreArchive() {
         try {
-            List<String> dirsInZip = ZipUtils.listDirectories(context, uri);
+            List<String> dirsInZip = ZipUtils.listDirectories(getAppContext(), uri);
             if (dirsInZip.isEmpty()) dirsInZip.add(""); // old zip format, notes in root
             if (dirsInZip.size() == 1) {
                 SelectNotesDialog(dirsInZip.get(0));
@@ -139,7 +137,6 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
         BackupTask task = new BackupTask(directory,
                 outfile.toString(),
                 basePath,
-                context,
                 sd);
         task.execute();
 
@@ -158,8 +155,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
                 allNotes,
                 allMessages,
                 allMessageDates,
-                uri,
-                context);
+                uri);
         task.execute();
 
         boolean cancelable = true;
@@ -219,11 +215,9 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
                         .extra(extra)
                         .neg(R.string.cancel)
                         .neut(R.string.select_all_notes_for_restore)
-
                         .show(this, DLG_BACKUP_RESTORE_DIALOG);
                 return true;
             } else if (dialogTag.equals(PROGRESS_DIALOG_BACKUP)) {
-
                 return true;
             }
         }
@@ -240,7 +234,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
                 ArrayList<Uri> messageUris = new ArrayList<>();
                 for (String file : allNotes) {
                     if (bundle.getBoolean(file) || which == BUTTON_NEUTRAL) {
-                        String destDirectory = context.getCacheDir().toString() + "/Import/" + dir + "/";
+                        String destDirectory = getAppContext().getCacheDir().toString() + "/Import/" + dir + "/";
                         messageUris.add(Uri.fromFile(new File(destDirectory + file)));
                     }
                 }
@@ -255,22 +249,19 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
         void onSelectedData(ArrayList<Uri> messageUris, String accountName);
     }
 
-    static class RestoreTask extends SimpleProgressTask<Void, Integer, Void> {
+    static class RestoreTask extends SimpleProgressTask<Void, Integer, Integer> {
         private final List<String> allNotes;
         private final List<String> allMessages;
         private final List<String> allMessageDates;
         String dir;
-        Context context;
         Uri uri;
 
         public RestoreTask(String dir,
                            List<String> allNotes,
                            List<String> allMessages,
                            List<String> allMessagesDate,
-                           Uri uri,
-                           Context context) {
+                           Uri uri) {
             this.dir = dir;
-            this.context = context;
             this.uri = uri;
             this.allNotes = allNotes;
             this.allMessages = allMessages;
@@ -279,16 +270,16 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Integer doInBackground(Void... voids) {
             try {
-                List<String> allNotesTmp = ZipUtils.listFilesInDirectory(context, uri, dir);
-                String destDirectory = context.getCacheDir().toString() + "/Import/" + dir + "/";
+                List<String> allNotesTmp = ZipUtils.listFilesInDirectory(getAppContext(), uri, dir);
+                String destDirectory = getAppContext().getCacheDir().toString() + "/Import/" + dir + "/";
                 int i = 0;
                 for (String file : allNotesTmp) {
                     publishProgress(i, allNotesTmp.size());
                     if (isCancelled()) return null;
                     try {
-                        Message message = SyncUtils.ReadMailFromFile(new File(ZipUtils.extractFile(context, uri, file, destDirectory)));
+                        Message message = SyncUtils.ReadMailFromFile(new File(ZipUtils.extractFile(getAppContext(), uri, file, destDirectory)));
                         allNotes.add(file);
                         if (!(message == null)) {
                             allMessages.add(message.getSubject());
@@ -309,37 +300,40 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
         }
     }
 
-    static class BackupTask extends SimpleProgressTask<Void, Integer, Void> {
+    static class BackupTask extends SimpleProgressTask<Void, Integer, Integer> {
         private final String directory;
         private final String outfile;
         private final String basePath;
         private final SimpleProgressDialog sd;
-        private final Context context;
 
         public BackupTask(String directory,
                           String outfile,
                           String basePath,
-                          Context context,
                           SimpleProgressDialog sd) {
             this.directory = directory;
             this.outfile = outfile;
             this.basePath = basePath;
             this.sd = sd;
-            this.context = context;
-
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
-            sd.updateInfoText(context.getResources().getString(R.string.archiving));
+        protected Integer doInBackground(Void... voids) {
+            sd.updateInfoText(getAppContext().getResources().getString(R.string.archiving));
             try {
                 ZipUtils.zipDirectory(directory, outfile, basePath);
-                sd.updateInfoText(context.getResources().getString(R.string.success));
+                sd.updateInfoText(getAppContext().getResources().getString(R.string.success));
+                return 1;
             } catch (IOException e) {
-                sd.updateInfoText(context.getResources().getString(R.string.failed) + e.getMessage());
+                sd.updateInfoText(getAppContext().getResources().getString(R.string.failed) + e.getMessage());
             }
-            return null;
+            return -1;
         }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            super.onPostExecute(result);
+        }
+
     }
 
 }
