@@ -164,4 +164,7 @@
     <string name="EditorBgColorDefault_sum">深色和浅色模式保存的值不一样。</string>
     <string name="EditorTxtColor_sum">深色和浅色模式保存的值不一样。</string>
     <string name="miscellaneous">杂项</string>
+    <string name="backup">备份</string>
+    <string name="CreateBackup_sum">将笔记存档到 zip 文件。</string>
+    <string name="RestoreBackup_sum">从 zip 文件恢复一则或多则笔记。</string>
 </resources>
