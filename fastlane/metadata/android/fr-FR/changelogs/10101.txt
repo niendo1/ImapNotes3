@@ -1,0 +1,12 @@
+* utilise https://github.com/niendo1/richeditor-android
+* rajout des cases à cocher pour les listes ToDo
+* rajout du support des tableaux
+* rajout du support des sections pliables
+* utilisation de getHTML() comme callback. Grand gain de performance
+* rajout d'insertion de liens
+* rajout d'insertion d'images
+* rajout d'insertion d'audio, de vidéo et de vidéo YouTube 
+* rajout de support de fontFamily
+* ouvrir des liens avec des programmes externes
+* demande de sauvegarder les changements, lors de la fermeture de l'éditeur
+* corrections de bogues
