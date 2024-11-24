@@ -1,0 +1,5 @@
+- traduction en chinois (merci à sr093906)
+- traduction en russe (merci à goatli)
+- correction de l'icône xml sur les versions < v26
+- le nom du compte doit être une adresse email valide
+- éviter le crash lors de la suppression du dernier compte
