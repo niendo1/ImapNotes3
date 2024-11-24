@@ -1,4 +1,8 @@
-* italienische Übersetzung hinzugefügt (Dank an 77nnit)
+* Weblate: Italienische Übersetzung hinzugefügt (Dank an 77nnit)
+* Weblate: Französische Übersetzung hinzugefügt (Dank an z97febao, e2jk)
+* Weblate: Spanische Übersetzung hinzugefügt (Dank an gallegonovato)
+* Weblate: Russische Übersetzung hinzugefügt (Dank an pazengaz)
+* Weblate: Chinesische Übersetzung hinzugefügt (Dank an hamburger2048, pyccl, Xue Xuan)
 * Entferne DependencyInfoBlock
 * Sichern & Wiederherstellen auf Einstellungsseite verlegt
-* Aussehen für API 35 gefixt
+* Aussehen für API 35 (VanillaIceCream) gefixt
