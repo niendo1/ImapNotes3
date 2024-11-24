@@ -1,0 +1,4 @@
+* añadir traducción al italiano (gracias a 77nnit)
+* Eliminar DependencyInfoBlock
+* mover Copia de seguridad y restauración a Configuración
+* Compilar SDK 35
