@@ -167,4 +167,5 @@
     <string name="backup">Datensicherung</string>
     <string name="CreateBackup_sum">Notizen in eine Zip-Datei sichern.</string>
     <string name="RestoreBackup_sum">Einzelne Notizen aus einer Sicherung wiederherstellen.</string>
+    <string name="no_notes_in_file">Archiv enthält keine gültigen Notizen</string>
 </resources>

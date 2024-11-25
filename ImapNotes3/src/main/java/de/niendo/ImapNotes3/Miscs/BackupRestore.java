@@ -48,6 +48,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
     private static final String DLG_BACKUP_RESTORE_DIALOG_ACCOUNT = "DLG_BACKUP_RESTORE_DIALOG_ACCOUNT";
     private static final String PROGRESS_DIALOG_RESTORE = "PROGRESS_DIALOG_RESTORE";
     private static final String PROGRESS_DIALOG_BACKUP = "PROGRESS_DIALOG_BACKUP";
+    private static final String DIALOG_RESTORE_NO_FILES = "DIALOG_RESTORE_NO_FILES";
     private final Uri uri;
     private final List<String> accountList;
     private final List<String> allNotes = new ArrayList<>();
@@ -186,6 +187,13 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
     public boolean onResult(@NonNull String dialogTag, int which, @NonNull Bundle bundle) {
         if (which == SimpleProgressDialog.COMPLETED) {
             if (dialogTag.equals(PROGRESS_DIALOG_RESTORE)) {
+                if (allMessages.isEmpty()) {
+                    SimpleDialog.build()
+                            .title(R.string.restore_archive)
+                            .msg(R.string.no_notes_in_file)
+                            .show(this, DIALOG_RESTORE_NO_FILES);
+                    return false;
+                }
                 String dir = bundle.getString(DLG_DIR_ACCOUNTNAME);
 
                 FormElement<?, ?>[] formElements = new FormElement[(2 * allMessages.size()) + 1];
@@ -271,30 +279,34 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
 
         @Override
         protected Integer doInBackground(Void... voids) {
+            List<String> allNotesTmp;
             try {
-                List<String> allNotesTmp = ZipUtils.listFilesInDirectory(getAppContext(), uri, dir);
-                String destDirectory = getAppContext().getCacheDir().toString() + "/Import/" + dir + "/";
-                int i = 0;
-                for (String file : allNotesTmp) {
-                    publishProgress(i, allNotesTmp.size());
-                    if (isCancelled()) return null;
-                    try {
-                        Message message = SyncUtils.ReadMailFromFile(new File(ZipUtils.extractFile(getAppContext(), uri, file, destDirectory)));
-                        allNotes.add(file);
-                        if (!(message == null)) {
-                            allMessages.add(message.getSubject());
-                            allMessageDates.add(DateFormat.getDateTimeInstance().format(message.getSentDate()));
-                        } else {
-                            allMessages.add("Error reading: " + file);
-                            allMessageDates.add("");
-                        }
-                    } catch (IOException | MessagingException e) {
-                        e.printStackTrace();
-                    }
-                    i++;
-                }
+                allNotesTmp = ZipUtils.listFilesInDirectory(getAppContext(), uri, dir);
             } catch (IOException e) {
                 e.printStackTrace();
+                return null;
+            }
+            String destDirectory = getAppContext().getCacheDir().toString() + "/Import/" + dir + "/";
+            int i = 0;
+            for (String file : allNotesTmp) {
+                publishProgress(i, allNotesTmp.size());
+                if (isCancelled()) return null;
+                try {
+                    Message message = SyncUtils.ReadMailFromFile(new File(ZipUtils.extractFile(getAppContext(), uri, file, destDirectory)));
+                    allNotes.add(file);
+                    if (!(message == null)) {
+                        allMessages.add(message.getSubject());
+                        allMessageDates.add(DateFormat.getDateTimeInstance().format(message.getSentDate()));
+                    } else {
+                        allMessages.add("Error reading: " + file);
+                        allMessageDates.add("");
+                    }
+                } catch (IOException | MessagingException e) {
+                    allMessages.add("Error reading: " + file + " - " + e.getMessage());
+                    allMessageDates.add("");
+                    e.printStackTrace();
+                }
+                i++;
             }
             return null;
         }
