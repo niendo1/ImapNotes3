@@ -164,4 +164,7 @@
     <string name="EditorTxtColor">Textfarbe für Notizen</string>
     <string name="EditorTxtColor_sum">Für Hell- und Dunkelmodus wird ein separater Wert gespeichert.</string>
     <string name="miscellaneous">Sonstiges</string>
+    <string name="backup">Datensicherung</string>
+    <string name="CreateBackup_sum">Notizen in eine Zip-Datei sichern.</string>
+    <string name="RestoreBackup_sum">Einzelne Notizen aus einer Sicherung wiederherstellen.</string>
 </resources>

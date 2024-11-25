@@ -1,4 +1,8 @@
-* añadir traducción al italiano (gracias a 77nnit)
-* Eliminar DependencyInfoBlock
-* mover Copia de seguridad y restauración a Configuración
-* Compilar SDK 35
+* Weblate: añadir traducción al italiano (gracias a 77nnit)
+* Weblate: añadir traducción al francés (gracias a z97febao, e2jk)
+* Weblate: añadir traducción al español (gracias a gallegonovato)
+* Weblate: añadir traducción al ruso (gracias a pazengaz)
+* Weblate: Traducción al chino (gracias a hamburger2048, pyccl, Xue Xuan)
+*Eliminar DependencyInfoBlock
+* Mover ajustes de la copia seguridad/restauración
+* Arreglos de diseño API 35 (VanillaIceCream)
