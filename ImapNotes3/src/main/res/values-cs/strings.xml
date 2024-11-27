@@ -161,4 +161,7 @@
     <string name="select_all_notes_for_restore">vše</string>
     <string name="select_account_name_restore_import">Vyberte účet/notebook pro obnovení</string>
     <string name="select_notes_for_restore">Vyberte jednu nebo více poznámek k obnovení z %s</string>
+    <string name="backup">Záloha</string>
+    <string name="CreateBackup_sum">Archiv poznámky do souboru zip.</string>
+    <string name="RestoreBackup_sum">Obnovit jeden nebo více poznámek z zip souboru.</string>
 </resources>
