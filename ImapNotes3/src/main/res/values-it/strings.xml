@@ -163,4 +163,7 @@
     <string name="settings">Impostazioni</string>
     <string name="appearance">Aspetto</string>
     <string name="miscellaneous">Varie</string>
+    <string name="backup">Backup</string>
+    <string name="CreateBackup_sum">Archiviare le note su un file zip.</string>
+    <string name="RestoreBackup_sum">Ripristinare una o più note da un file zip.</string>
 </resources>
