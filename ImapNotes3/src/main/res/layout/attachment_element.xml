@@ -19,13 +19,11 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="-4dp"
         android:layout_marginEnd="40dp"
-        android:background="@color/ListBgColor"
         android:elevation="0dp"
         android:maxLines="1"
         android:scrollHorizontally="false"
         android:text="@string/attachment_title"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/ListTxtColor"
         android:textSize="22dp" />
 
     <!-- This text view is used to display the date and time of the most recent edit. -->
@@ -36,11 +34,9 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="0dp"
-        android:background="@color/ListBgColor"
         android:elevation="-1dp"
         android:text="@string/note_last_change"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/ListInfoTxtColor"
         android:textSize="14dp" />
 
     <ImageButton
