@@ -1,0 +1,8 @@
+* Weblate: aggiunta traduzione in italiano (grazie a 77nnit)
+* Weblate: aggiunta traduzione in francese (grazie a z97febao, e2jk)
+* Weblate: aggiunta traduzione in spagnolo (grazie a gallegonovato)
+* Weblate: aggiunta traduzione in russo (grazie a pazengaz)
+* Weblate: aggiunta traduzione in cinese (grazie a hamburger2048, pyccl, Xue Xuan)
+* Rimozione di DependencyInfoBlock
+* Spostamento di Backup e Rpristino sotto Impostazioni
+* Correzioni layout API 35 (VanillaIceCream)
