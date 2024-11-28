@@ -1,0 +1,12 @@
+* utiliza https://github.com/niendo1/richeditor-android
+* agregar casillas de verificación para las listas de tareas pendientes
+* agregar soporte de mesa
+* agregar soporte para la sección plegable
+* use getHTML() como devolución de llamada. Ganancia de alto rendimiento
+* agregar enlaces de inserción
+* agregar insertar imagen
+* agregar insertar audio, video y video de youtube
+* agregar soporte para fontFamily
+* enlaces abiertos con programas externos
+* pedir guardar los cambios al cerrar el editor
+* corrección de errores

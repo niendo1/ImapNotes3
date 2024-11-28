@@ -1,0 +1,7 @@
+* posibilidad de mostrar notas de todas las cuentas/blocs de notas
+* actualizar bibliotecas
+* agregue gris y rojo como colores de nota
+* cambios menores en el diseño
+* arreglar el diálogo SaveChanges
+* corregir algunos fallos relacionados con la sincronización
+* arreglar el intervalo de sincronización

@@ -1,0 +1,6 @@
+* ajouter des HashTags à vos notes
+* filtrer les notes par vos HashTags
+* rajout d'une boîte de dialogue pour insérer des images partagées
+* retravail de la synchronisation pour gérer des notes plus grandes
+* amélioration de la suggestion du serveur SMTP à partir de l'adresse email
+* activer et synchroniser les nouveaux comptes ajoutés

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
  * Copyright (C) ?   -2016 - Martin Carpella
  * Copyright (C) ?   -2015 - nb
  * and Contributors.
@@ -144,13 +144,18 @@ public class NotesDb extends SQLiteOpenHelper {
         }
     }
 
-    public synchronized void InsertANoteInDb(@NonNull OneNote noteElement) {
+    public synchronized void RemoveTempNumber(@NonNull OneNote noteElement) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         // delete DS with TempNumber
         db.execSQL("delete from notesTable where number = '" + noteElement.GetUid() +
                 "' and accountname = '" + noteElement.GetAccount() + "' and date = '" + noteElement.GetDate() + "'");
+        db.close();
+    }
 
+    public synchronized void InsertANoteInDb(@NonNull OneNote noteElement) {
+        RemoveTempNumber(noteElement);
+
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues tableRow = new ContentValues();
         tableRow.put(COL_TITLE_NOTE, noteElement.GetTitle());
         tableRow.put(COL_DATE, noteElement.GetDate());
@@ -175,7 +180,7 @@ public class NotesDb extends SQLiteOpenHelper {
         db.close();
     }
 
-    public synchronized void UpdateANote(@NonNull String tmpuid,
+    public synchronized void UpdateANote(@NonNull String olduid,
                                          @NonNull String newuid,
                                          @NonNull String accountname) {
         /* TODO: use sql template and placeholders instead of string concatenation.
@@ -183,7 +188,7 @@ public class NotesDb extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String req = "update notesTable set number='" + newuid + "' where number='-" + tmpuid + "' and accountname='" + accountname + "'";
+        String req = "update notesTable set number='" + newuid + "' where number='" + olduid + "' and accountname='" + accountname + "'";
         db.execSQL(req);
         db.close();
     }

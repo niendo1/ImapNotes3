@@ -1,0 +1,6 @@
+* HashTags zu Ihren Notizen hinzufügen
+* Filternoten Ihrer HashTags
+* Fügen Sie Dialog zum Einfügen von freigegebenen Bildern hinzu
+* Rework-Synchronisation mit größeren Noten
+* Verbesserung Vorschlag smtp Server per E-Mail-Adresse
+* Aktivieren und Synchronisieren neuer hinzugefügter Konten

@@ -1,0 +1,5 @@
+- traduzione in Cinese (grazie a sr093906)
+- traduzione in Russo (grazie a goatli)
+- fissata icona XML sulla versione < v26
+- il nome account deve essere un indirizzo email valido
+- evita un crash quando viene eliminato l'ultimo account

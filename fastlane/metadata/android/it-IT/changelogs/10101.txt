@@ -1,0 +1,12 @@
+* utilizza https://github.com/niendo1/richeditor-android
+* aggiunte caselle di controllo a liste ToDo
+* aggiunto supporto tabelle
+* aggiunto supporto sezioni a scomparsa
+* utilizza getHTML() come callback... netto miglioramento delle prestazioni
+* aggiunta collegamenti
+* aggiunta immagini
+* aggiunta audio, video e video Youtube
+* aggiunto supporto famiglia di font
+* apertura collegamenti con app esterne
+* conferma di salvataggio delle modifiche alla chiusura dell'editor
+* correzione di bug

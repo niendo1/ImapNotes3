@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ImapNotes3</string>
+    <string name="app_name" translatable="false">ImapNotes3</string>
     <string name="new_account">新账户</string>
     <string name="new_note">新笔记</string>
     <string name="refresh">刷新</string>
@@ -10,25 +10,24 @@
     <string name="quotation_marks_not_allowed">账户名称中不许含有引号</string>
     <string name="remove">删除</string>
     <string name="save">保存</string>
-    <string name="check_and_create_account"><![CDATA[检查并创建账户]]></string>
+    <string name="check_and_create_account">检查并创建账户</string>
     <string name="logging_in">正在登录到你的账户…</string>
     <string name="account_already_exists_or_is_null">账户已存在或为空</string>
     <string name="account_added">已添加账户</string>
     <string name="add_account">添加账户、笔记本</string>
-    <string name="account_name">本地账户/笔记本的名称（可选）</string>
-    <string name="account_name_description">我的笔记本</string>
-    <string name="username">用户名/电子邮箱</string>
-    <string name="your_login_name">邮件服务器的用户名</string>
+    <string name="account_name">账户或笔记本的名称</string>
+    <string name="account_name_description">留空使用用户名</string>
+    <string name="username">用户名</string>
+    <string name="your_login_name">邮件服务器的登录</string>
     <string name="password">密码</string>
     <string name="your_password">邮件服务器密码</string>
-    <string name="server">邮件服务器名</string>
-    <string name="imap_notes_server">IMAP 服务器主机名</string>
+    <string name="server">IMAP 服务器名</string>
+    <string name="imap_notes_server">邮件服务器主机名</string>
     <string name="server_port_number_to_use">所用的服务器端口</string>
     <string name="port_number">端口号</string>
     <string name="sync_interval">同步间隔</string>
-    <string name="notes_folder_optional">服务器上的笔记文件夹 (可选)</string>
-    <string name="manually_set_full_imap_path_to_notes_folder">笔记</string>
-    <string name="welcome">欢迎</string>
+    <string name="notes_folder">服务器上的笔记文件夹 (可选)</string>
+    <string name="notes_folder_description">笔记</string>
     <string name="delete">删除</string>
     <string name="color">颜色</string>
     <string name="blue">蓝</string>
@@ -68,13 +67,13 @@
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="sort_color">按颜色排序</string>
-    <string name="license">许可证： GPL v3.0</string>
-    <string name="internet">网页链接: github.com/niendo1/ImapNotes3/</string>
+    <string name="license">许可证：</string>
+    <string name="internet">互联网：</string>
     <string name="placeholder">在此插入文本…</string>
     <string name="AccountList">账户列表</string>
-    <string name="Last_sync">"最后同步："</string>
+    <string name="Last_sync">"最后同步： "</string>
     <string name="share">分享</string>
-    <string name="shared_note_from">Shared note from </string>
+    <string name="shared_note_from">笔记分享出处</string>
     <string name="account_modified">账户已被修改</string>
     <string name="intent_save_as_note">保存为笔记</string>
     <string name="share_file_error">分享文件出错：</string>
@@ -133,9 +132,39 @@
     <string name="select_one_account">选择一个账户/笔记本</string>
     <string name="all_accounts">全部</string>
     <string name="help">帮助</string>
-    <string name="imap_help_text">关于凭据无效错误：\n
-                                                         一些电子邮箱提供商，比如 gmail 或 gmx，需要设置应用密码才允许在第三方应用上登录 IMAP。你必须激活双因素身份验证。\n
-                                                         如有必要，你可以在提供商那里创建这样的一个密码。
-    </string>
+    <string name="imap_help_text">关于凭据无效错误：
+\n 一些电子邮箱提供商，比如 gmail 或 gmx，需要设置应用密码才允许在第三方应用上登录 IMAP。你必须激活双因素身份验证。
+\n 如有必要，你可以在提供商那里创建这样的一个密码。</string>
     <string name="search_any_keyword">搜索任何关键词..</string>
+    <string name="make_archive">创建备份</string>
+    <string name="intent_import_note">导入笔记</string>
+    <string name="importing">正在导入…</string>
+    <string name="appstore">应用商店：</string>
+    <string name="appstorelink">https://f-droid.org/en/packages/de.niendo.ImapNotes3/</string>
+    <string name="appstorename">F-Droid</string>
+    <string name="permission_required">需要权限</string>
+    <string name="permission_message">请授予权限，让应用将备份文件写入文档目录</string>
+    <string name="create_archive">创建备份：</string>
+    <string name="default_color">默认</string>
+    <string name="restore_archive">从存档恢复</string>
+    <string name="account_name_restore">选择目标账户/笔记本</string>
+    <string name="select_all_notes_for_restore">所有</string>
+    <string name="restore_more_then_one_account_found">该存档文件包含超过一个账户/笔记本</string>
+    <string name="select_account_name_restore_import">选择要恢复的账户/笔记本</string>
+    <string name="select_notes_for_restore">选择一则或几则笔记来从 %s 还原</string>
+    <string name="failed">失败了</string>
+    <string name="archiving">存档中…</string>
+    <string name="success">成功了</string>
+    <string name="reading_archive_file">正读取存档文件</string>
+    <string name="imap_server_changed_new_password">服务器名称已更改，请重新输入密码！</string>
+    <string name="appearance">外观</string>
+    <string name="EditorBgColorDefault">笔记的默认背景色</string>
+    <string name="EditorTxtColor">笔记的文本颜色</string>
+    <string name="settings">设置</string>
+    <string name="EditorBgColorDefault_sum">深色和浅色模式保存的值不一样。</string>
+    <string name="EditorTxtColor_sum">深色和浅色模式保存的值不一样。</string>
+    <string name="miscellaneous">杂项</string>
+    <string name="backup">备份</string>
+    <string name="CreateBackup_sum">将笔记存档到 zip 文件。</string>
+    <string name="RestoreBackup_sum">从 zip 文件恢复一则或多则笔记。</string>
 </resources>

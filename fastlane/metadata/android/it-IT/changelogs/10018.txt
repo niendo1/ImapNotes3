@@ -1,0 +1,8 @@
+* migliorata la condivisione
+* migliorata la ricezione di dati condivisi
+* i dati condivisi possono essere inseriti come una nuova nota o in una nota esistente
+* correzione STARTTLS (grazie a axmanA)
+* i dati di logcat possono essere inviati dall'utente
+* rese "thread-safe" le operazioni IMAP
+* aggiunta nuova icona (grazie a woheller69)
+* il nome dell'account e della raccolta di note non devono più seguire una sintassi

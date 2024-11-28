@@ -1,0 +1,5 @@
+* aggiuta traduzione con WebLate
+* ripristino di tutte le note, o anche solo di una, da un archivio .zip
+* nuovo thread per CreateArchive
+*aggiuta traduzione in spagnolo (grazie a gallegonovato)
+* la modifica del server IMAP richiede il reinserimento della password

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
  * Copyright (C)      2023 - woheller69
  * Copyright (C)         ? - kwhitefoot
  * Copyright (C)      2016 - Martin Carpella
@@ -29,8 +29,10 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
@@ -60,17 +62,17 @@ import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.Data.SyncInterval;
+import de.niendo.ImapNotes3.Miscs.BackupRestore;
 import de.niendo.ImapNotes3.Miscs.HtmlNote;
-import de.niendo.ImapNotes3.Miscs.Imaper;
 import de.niendo.ImapNotes3.Miscs.SyncThread;
 import de.niendo.ImapNotes3.Miscs.UpdateThread;
 import de.niendo.ImapNotes3.Miscs.Utilities;
+import de.niendo.ImapNotes3.Miscs.ZipUtils;
 import de.niendo.ImapNotes3.Sync.SyncUtils;
 import eltos.simpledialogfragment.SimpleDialog;
 import eltos.simpledialogfragment.list.SimpleListDialog;
@@ -78,10 +80,8 @@ import eltos.simpledialogfragment.list.SimpleListDialog;
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -93,38 +93,39 @@ import java.util.regex.PatternSyntaxException;
 
 import static de.niendo.ImapNotes3.AccountConfigurationActivity.ACTION;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ListActivity extends AppCompatActivity implements OnItemSelectedListener, Filterable, SimpleDialog.OnDialogResultListener, UpdateThread.FinishListener {
+public class ListActivity extends AppCompatActivity implements BackupRestore.INotesRestore, OnItemSelectedListener, Filterable, SimpleDialog.OnDialogResultListener, UpdateThread.FinishListener {
     private static final int SEE_DETAIL = 2;
     public static final int DELETE_BUTTON = 3;
     private static final int NEW_BUTTON = 4;
-    private static final int SAVE_BUTTON = 5;
+    private static final int EDIT_ACCOUNT = 5;
     private static final int EDIT_BUTTON = 6;
     private static final int ADD_ACCOUNT = 7;
+    private static final int SELECT_ARCHIVE_FOR_RESTORE = 8;
+    public static final int EDIT_SETTINGS = 9;
 
-    public static final int ResultCodeSuccess = 0;
+    public static final int ResultCodeSuccess = 1;
+    public static final int ResultCodeMakeArchive = 2;
+    public static final int ResultCodeRestoreArchive = 3;
+    public static final int ResultCodeNeutral = 0;
     public static final int ResultCodeError = -1;
 
-    //region Intent item names
     public static final String EDIT_ITEM_NUM_IMAP = "EDIT_ITEM_NUM_IMAP";
-    public static final String EDIT_ITEM_TXT = "EDIT_ITEM_TXT";
     public static final String EDIT_ITEM_COLOR = "EDIT_ITEM_COLOR";
     public static final String EDIT_ITEM_ACCOUNTNAME = "EDIT_ITEM_ACCOUNTNAME";
-    public static final String ACCOUNTNAME = "ACCOUNTNAME";
     public static final String SYNCINTERVAL = "SYNCINTERVAL";
     public static final String CHANGED = "CHANGED";
     public static final String SYNCED = "SYNCED";
     public static final String REFRESH_TAGS = "REFRESH_TAGS";
     public static final String SYNCED_ERR_MSG = "SYNCED_ERR_MSG";
-    private static final String SAVE_ITEM_COLOR = "SAVE_ITEM_COLOR";
-    private static final String SAVE_ITEM = "SAVE_ITEM";
     private static final String DELETE_ITEM_NUM_IMAP = "DELETE_ITEM_NUM_IMAP";
     private static final String ACCOUNTSPINNER_POS = "ACCOUNTSPINNER_POS";
     private static final String SORT_BY_DATE = "SORT_BY_DATE";
     private static final String SORT_BY_TITLE = "SORT_BY_TITLE";
     private static final String SORT_BY_COLOR = "SORT_BY_COLOR";
     private static final String DLG_FILTER_HASHTAG = "DLG_FILTER_HASHTAG";
-    //endregion
+
     private Intent intentActionSend;
     private ArrayList<OneNote> noteList;
     private NotesListAdapter listToView;
@@ -135,12 +136,11 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     private static AccountManager accountManager;
     @Nullable
     private static NotesDb storedNotes = null;
-    private static List<String> currentList;
+    private static List<String> accountList;
     private static Menu actionMenu;
     private static CharSequence mFilterString = "";
     static String[] hashFilter;
     private static ArrayList<String> hashFilterSelected = new ArrayList<>();
-    @NonNull
     private ContentObserver mObserver;
 
     // FIXME
@@ -151,23 +151,19 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     // Ensure that we never have to check for null by initializing reference.
     @NonNull
     private static Account[] accounts = new Account[0];
-    private static String OldStatus;
     private final OnClickListener clickListenerEditAccount = v -> {
-        if (getSelectedAccountName().equals("")) {
+        if (getSelectedAccountName().isEmpty()) {
             ImapNotes3.ShowMessage(R.string.select_one_account, accountSpinner, 3);
             return;
         }
-        Intent res = new Intent();
-        String mPackage = Utilities.PackageName;
-        String mClass = ".AccountConfigurationActivity";
-        res.setComponent(new ComponentName(mPackage, mPackage + mClass));
+
+        Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
         res.putExtra(ACTION, AccountConfigurationActivity.Actions.EDIT_ACCOUNT);
         res.putExtra(AccountConfigurationActivity.ACCOUNTNAME, ListActivity.ImapNotesAccount.accountName);
-        startActivity(res);
+        startActivityForResult(res, ListActivity.EDIT_ACCOUNT);
     };
     private static final String TAG = "IN_Listactivity";
     //@Nullable
-    private TextView status;
     private ListView listview;
     private AsyncTask updateThread;
 
@@ -199,7 +195,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.ActionBgColor)));
 
         this.accountSpinner = findViewById(R.id.accountSpinner);
-        ListActivity.currentList = new ArrayList<>();
+        ListActivity.accountList = new ArrayList<>();
 
         this.accountSpinner.setOnItemSelectedListener(this);
         ImapNotes3.setContent(findViewById(android.R.id.content));
@@ -209,10 +205,8 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         ListActivity.accountManager.addOnAccountsUpdatedListener(
                 new AccountsUpdateListener(), null, true);
 
-        status = findViewById(R.id.status);
-
         spinnerList = new ArrayAdapter<>
-                (this, R.layout.account_spinner_item, ListActivity.currentList);
+                (this, R.layout.account_spinner_item, ListActivity.accountList);
         accountSpinner.setAdapter(spinnerList);
 
         this.noteList = new ArrayList<>();
@@ -228,9 +222,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         listview.setAdapter(this.listToView);
 
         listview.setTextFilterEnabled(true);
-
-        Imaper imapFolder = new Imaper();
-        ((ImapNotes3) this.getApplicationContext()).SetImaper(imapFolder);
 
         storedNotes = NotesDb.getInstance(getApplicationContext());
 
@@ -248,6 +239,9 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             } else if (saveState.equals(OneNote.SAVE_STATE_SYNCING)) {
                 ImapNotes3.ShowMessage(R.string.sync_wait_necessary, listview, 3);
                 return;
+            } else if (saveState.equals(OneNote.SAVE_STATE_FAILED)) {
+                // message was not correctly saved, discard changes silently
+                // FIXME: inform user
             }
 
             if (intentActionSend != null)
@@ -274,14 +268,13 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             public void onChange(boolean selfChange) {
                 Log.d(TAG, "ContentObserver.OnChange");
                 if (selfChange || ImapNotes3.intent == null) return;
-                String accountName = ImapNotes3.intent.getStringExtra(ACCOUNTNAME);
+                String accountName = ImapNotes3.intent.getStringExtra(EDIT_ITEM_ACCOUNTNAME);
                 boolean isChanged = ImapNotes3.intent.getBooleanExtra(CHANGED, false);
                 boolean isSynced = ImapNotes3.intent.getBooleanExtra(SYNCED, false);
                 String errorMessage = ImapNotes3.intent.getStringExtra(SYNCED_ERR_MSG);
                 SyncInterval syncInterval = SyncInterval.from(ImapNotes3.intent.getStringExtra(SYNCINTERVAL));
                 if ((ImapNotesAccount != null) && accountName.equals(ImapNotesAccount.accountName)) {
                     Log.d(TAG, "if " + accountName + " " + ImapNotesAccount.accountName);
-                    String statusText = OldStatus;
                     if (isSynced) {
                         Date date = new Date();
                         String sdate;
@@ -290,17 +283,11 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                         } catch (Exception e) {
                             sdate = "";
                         }
-
-                        statusText = getText(R.string.Last_sync) + sdate;
-                        if (!syncInterval.equals("0"))
-                            statusText += " (" + getText(syncInterval.textID) + ")";
+                        ImapNotes3.ShowMessage(getText(R.string.Last_sync) + sdate + " (" + getText(syncInterval.textID) + ")", accountSpinner, 2);
                     }
-                    status.setBackgroundColor(getColor(R.color.StatusBgColor));
                     if (!errorMessage.isEmpty()) {
-                        statusText = errorMessage;
-                        status.setBackgroundColor(getColor(R.color.StatusBgErrColor));
+                        ImapNotes3.ShowMessage(errorMessage, accountSpinner, 5);
                     }
-                    status.setText(statusText);
                 }
                 if (isChanged) RefreshList();
             }
@@ -317,7 +304,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             case DLG_FILTER_HASHTAG:
                 if (which == BUTTON_POSITIVE) {
                     hashFilterSelected = extras.getStringArrayList(SimpleListDialog.SELECTED_LABELS);
-                    if (hashFilterSelected.size() == 0)
+                    if (hashFilterSelected.isEmpty())
                         hashFilter = null;
                     else {
                         hashFilter = new String[hashFilterSelected.size()];
@@ -355,7 +342,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             intentActionSend = (Intent) intent.clone();
             intentActionSend.setClass(this, NoteDetailActivity.class);
             intentActionSend.setFlags(0);
-            intentActionSend.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, ImapNotesAccount.accountName);
+            intentActionSend.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, getSelectedAccountName());
             intentActionSend.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAddShare);
 
             ImapNotes3.ShowAction(listview, R.string.insert_as_new_note, R.string.ok, 0,
@@ -363,6 +350,33 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                         startActivityForResult(intentActionSend, ListActivity.NEW_BUTTON);
                         intentActionSend = null;
                     });
+        } else if (action.equals(Intent.ACTION_SEND_MULTIPLE)) {
+            if (intent.getType().equals("message/rfc822")) {
+                Intent finalIntent = intent;
+                ImapNotes3.ShowAction(listview, R.string.insert_as_new_note, R.string.ok, 0,
+                        () -> {
+                            try {
+                                handleSendMultipleImages(finalIntent);
+                            } catch (Exception e) {
+                                Log.d(TAG, "Check_Action_Send: Exception Multiple");
+                            }
+                        });
+            }
+        }
+    }
+
+    void handleSendMultipleImages(Intent intent) {
+        Log.d(TAG, "handleSendMultipleImages");
+        ArrayList<Uri> messageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+        String accountName = getSelectedAccountName();
+        //Integer i=0;
+        if (accountName.isEmpty()) {
+            ImapNotes3.ShowMessage(R.string.select_one_account, accountSpinner, 3);
+            return;
+        }
+        if (messageUris != null) {
+            ImapNotes3.ShowMessage(R.string.importing, accountSpinner, 2);
+            UpdateList(messageUris, accountName);
         }
     }
 
@@ -413,7 +427,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
     }
 
     private void savePreferences() {
-        SharedPreferences.Editor preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE).edit();
+        SharedPreferences.Editor preferences = getApplicationContext().getSharedPreferences(SettingsActivity.MAIN_PREFERENCE_NAME, MODE_PRIVATE).edit();
         preferences.putLong(ACCOUNTSPINNER_POS, accountSpinner.getSelectedItemId());
         if (actionMenu == null) return;
         preferences.putBoolean(SORT_BY_DATE, actionMenu.findItem(R.id.sort_date).isChecked());
@@ -424,17 +438,18 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
     private void setPreferences() {
         Log.d(TAG, "setPreferences:");
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(SettingsActivity.MAIN_PREFERENCE_NAME, MODE_PRIVATE);
         accountSpinner.setSelection((int) preferences.getLong(ACCOUNTSPINNER_POS, 0));
     }
 
 
     private void RefreshList() {
         listToView.setSortOrder(getSortOrder());
-        listToView.setAccountName(getSelectedAccountName());
+        String accountName = getSelectedAccountName();
+        listToView.setAccountName(accountName);
         synchronized (this) {
             new SyncThread(
-                    getSelectedAccountName(),
+                    accountName,
                     noteList,
                     listToView,
                     R.string.refreshing_notes_list,
@@ -444,8 +459,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     // FIXME: this. ?
                     getApplicationContext()).execute();
         }
-        status.setBackgroundColor(getColor(R.color.StatusBgColor));
-        status.setText(R.string.welcome);
     }
 
     private void UpdateList(
@@ -467,6 +480,20 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                         getApplicationContext(),
                         action).execute();
             }
+    }
+
+    private void UpdateList(
+            ArrayList<Uri> uris,
+            String accountName) {
+        synchronized (this) {
+            updateThread = new UpdateThread(accountName,
+                    this,
+                    noteList,
+                    listToView,
+                    R.string.updating_notes_list,
+                    uris,
+                    getApplicationContext()).execute();
+        }
     }
 
     @Override
@@ -551,7 +578,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
         searchView.setOnQueryTextListener(textChangeListener);
         // load values from disk
-        SharedPreferences preferences = getApplicationContext().getSharedPreferences(Utilities.PackageName, MODE_PRIVATE);
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(SettingsActivity.MAIN_PREFERENCE_NAME, MODE_PRIVATE);
 
         if (preferences.getBoolean(SORT_BY_TITLE, false))
             actionMenu.findItem(R.id.sort_title).setChecked(true);
@@ -559,6 +586,12 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             actionMenu.findItem(R.id.sort_color).setChecked(true);
         else
             actionMenu.findItem(R.id.sort_date).setChecked(true);
+
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> newNote());
+
+
 
         return true;
     }
@@ -585,7 +618,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             pattern = Pattern.compile(Pattern.quote(searchTerm), Pattern.CASE_INSENSITIVE);
         }
 
-        String html = Jsoup.parse(HtmlNote.GetNoteFromMessage(SyncUtils.ReadMailFromFile(nameDir, uid)).text).text();
+        String html = Jsoup.parse(HtmlNote.GetNoteFromMessage(SyncUtils.ReadMailFromNoteFile(nameDir, uid)).text).text();
 
         Matcher matcher = pattern.matcher(html);
         while (matcher.find()) {
@@ -601,8 +634,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             return;
         }
 
-        OldStatus = status.getText().toString();
-        status.setText(R.string.syncing);
+        ImapNotes3.ShowMessage(R.string.syncing, accountSpinner, 2);
         Bundle settingsBundle = new Bundle();
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
@@ -616,14 +648,12 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.newaccount:
-                Intent res = new Intent();
-                String mPackage = Utilities.PackageName;
-                String mClass = ".AccountConfigurationActivity";
-                res.setComponent(new ComponentName(mPackage, mPackage + mClass));
+            case R.id.newaccount: {
+                Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
                 res.putExtra(ACTION, AccountConfigurationActivity.Actions.CREATE_ACCOUNT);
                 startActivityForResult(res, ListActivity.ADD_ACCOUNT);
                 return true;
+            }
             case R.id.refresh:
                 if (getSelectedAccountName().equals(""))
                     ImapNotes3.ShowMessage(R.string.select_one_account, accountSpinner, 3);
@@ -631,17 +661,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     TriggerSync(true);
                 return true;
             case R.id.newnote:
-                Intent toNew;
-                if (intentActionSend != null)
-                    toNew = intentActionSend;
-                else
-                    toNew = new Intent(this, NoteDetailActivity.class);
-                //toNew.putExtra(NoteDetailActivity.useSticky, ListActivity.ImapNotesAccount.usesticky);
-                toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
-                toNew.putExtra(ListActivity.ACCOUNTNAME, getSelectedAccountName());
-                startActivityForResult(toNew, ListActivity.NEW_BUTTON);
-                if (intentActionSend != null)
-                    intentActionSend.putExtra(NoteDetailActivity.ActivityTypeProcessed, true);
+                newNote();
                 return true;
             case R.id.sort_date:
             case R.id.sort_title:
@@ -672,33 +692,41 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                         .show(this, DLG_FILTER_HASHTAG);
                 return true;
             }
-            case R.id.about:
-                String about = getString(R.string.license) + "<br>";
-                about += "ID: " + BuildConfig.APPLICATION_ID + "<br>";
-                about += "Version: " + BuildConfig.VERSION_NAME + "<br>";
-                about += "Code: " + BuildConfig.VERSION_CODE + "<br>";
-                about += "DB-Version: " + NotesDb.NOTES_VERSION + "<br>";
-                about += "Build typ: " + BuildConfig.BUILD_TYPE + "<br>";
-                about += getString(R.string.internet) + "<br>";
-                SimpleDialog.build()
-                        .title(getString(R.string.about) + " " + BuildConfig.APPLICATION_NAME)
-                        .icon(R.mipmap.ic_launcher)
-                        .msgHtml(about)
-                        .show(this);
+            case R.id.settings: {
+                Intent res = new Intent(ListActivity.this, SettingsActivity.class);
+                startActivityForResult(res, ListActivity.EDIT_SETTINGS);
                 return true;
-            case R.id.send_debug_report:
-                SendLogcatMail();
-                return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+
+    public void openFileSelector() {
+        Context context = ImapNotes3.getAppContext();
+
+        if (!ZipUtils.checkPermissionStorage(context)) {
+            ZipUtils.requestPermission(this);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.setType("application/zip");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+            try {
+                startActivityForResult(
+                        Intent.createChooser(intent, "Select a ZIP file"),
+                        SELECT_ARCHIVE_FOR_RESTORE);
+            } catch (ActivityNotFoundException ex) {
+                ImapNotes3.ShowMessage("Please install a file manager.", listview, 3000);
+            }
+        }
+    }
+
     private Integer getSpinnerPos(String accountName) {
-        ArrayAdapter adapter = (ArrayAdapter) accountSpinner.getAdapter();
-        int n = adapter.getCount();
+        int n = accountSpinner.getCount();
         for (int i = 1; i < n; i++) {
-            if (accountName.equals(adapter.getItem(i).toString())) {
+            if (accountName.equals(accountSpinner.getAdapter().getItem(i).toString())) {
                 return (i);
             }
         }
@@ -733,8 +761,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         return ImapNotesAccount.accountName;
     }
 
-    ;
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult: " + requestCode + " " + resultCode);
@@ -754,8 +780,6 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                     String suid = data.getStringExtra(EDIT_ITEM_NUM_IMAP);
                     String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
                     String accountName = data.getStringExtra(EDIT_ITEM_ACCOUNTNAME);
-                    //Log.d(TAG,"Received request to edit message:"+suid);
-                    //Log.d(TAG,"Received request to replace message with:"+txt);
                     ListActivity.ImapNotesAccount = new ImapNotesAccount(getAccountFromName(accountName), getApplicationContext());
                     UpdateList(suid, txt, bgcolor, accountName, UpdateThread.Action.Update);
                 }
@@ -763,9 +787,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
             case ListActivity.NEW_BUTTON:
                 // Returning from NewNoteActivity
                 if (resultCode == ListActivity.EDIT_BUTTON) {
-                    //String res = data.getStringExtra(SAVE_ITEM);
                     String txt = ImapNotes3.AvoidLargeBundle; //data.getStringExtra(EDIT_ITEM_TXT);
-                    //Log.d(TAG,"Received request to save message:"+res);
                     String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
                     String accountName = data.getStringExtra(EDIT_ITEM_ACCOUNTNAME);
                     ListActivity.ImapNotesAccount = new ImapNotesAccount(getAccountFromName(accountName), getApplicationContext());
@@ -773,25 +795,48 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 }
                 break;
             case ListActivity.ADD_ACCOUNT:
-                Log.d(TAG, "onActivityResult AccountsUpdateListener");
-                // Hack! accountManager.addOnAccountsUpdatedListener
+            case ListActivity.EDIT_ACCOUNT:
+                // Returning from ADD
                 if (resultCode == ResultCodeSuccess) {
                     EnableAccountsUpdate = true;
                     ListActivity.accountManager.addOnAccountsUpdatedListener(
                             new AccountsUpdateListener(), null, true);
                     if (data != null) {
-                        Integer pos = getSpinnerPos(data.getStringExtra(ACCOUNTNAME));
+                        Integer pos = getSpinnerPos(data.getStringExtra(EDIT_ITEM_ACCOUNTNAME));
                         if (pos > 0) {
                             accountSpinner.setSelection(pos);
                             Account account = ListActivity.accounts[pos - 1];
                             ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
                         }
                     }
-                    ;
+                    TriggerSync(true);
+                }
+                break;
+            case ListActivity.SELECT_ARCHIVE_FOR_RESTORE:
+                if (resultCode == Activity.RESULT_OK) {
+                    if (data != null) {
+                        Uri uri = data.getData();
+                        if (uri != null) {
+                            BackupRestore backupRestore = new BackupRestore(uri, new ArrayList<>(accountList));
+                            backupRestore.show(getSupportFragmentManager(), "restore_dialog");
+                        }
+                    }
+                }
+                break;
+            case ListActivity.EDIT_SETTINGS:
+                switch (resultCode) {
+                    case ResultCodeMakeArchive:
+                        BackupRestore.CreateArchive(this, getSelectedAccountName());
+                        break;
+                    case ResultCodeRestoreArchive:
+                        openFileSelector();
+                        break;
+                    default:
+                        RefreshList();
                 }
                 break;
             default:
-                Log.d(TAG, "Received wrong request to save message");
+                Log.d(TAG, "onActivityResult: unknown result code");
         }
     }
 
@@ -808,6 +853,20 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
     ;
 
+    private void newNote() {
+        Intent toNew;
+        if (intentActionSend != null)
+            toNew = intentActionSend;
+        else
+            toNew = new Intent(this, NoteDetailActivity.class);
+        toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
+        toNew.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, getSelectedAccountName());
+        startActivityForResult(toNew, ListActivity.NEW_BUTTON);
+        if (intentActionSend != null)
+            intentActionSend.putExtra(NoteDetailActivity.ActivityTypeProcessed, true);
+
+    }
+
     private void updateAccountSpinner() {
         Log.d(TAG, "updateAccountSpinner");
         this.accountSpinner.setEnabled(true);
@@ -815,17 +874,17 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
         setPreferences();
         long id = this.accountSpinner.getSelectedItemId();
         // only one account active..disable selection
-        if (ListActivity.currentList.size() == 2) {
+        if (ListActivity.accountList.size() == 2) {
             this.accountSpinner.setEnabled(false);
             this.accountSpinner.setSelection(1);
             id = 1;
         }
-        if ((id == android.widget.AdapterView.INVALID_ROW_ID) || (id >= ListActivity.currentList.size())) {
+        if ((id == android.widget.AdapterView.INVALID_ROW_ID) || (id >= ListActivity.accountList.size())) {
             this.accountSpinner.setSelection(1);
             id = 1;
         }
 
-        if ((ListActivity.currentList.size() > 1) && (id >= 1)) {
+        if ((ListActivity.accountList.size() > 1) && (id >= 1)) {
             Account account = ListActivity.accounts[(int) id - 1];
             ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
         }
@@ -834,41 +893,16 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
 
     }
 
-    // In case of necessary debug  with user approval
-    public void SendLogcatMail() {
-        Log.d(TAG, "SendLogcatMail");
-        String emailData = "";
-        try {
-            Process process = Runtime.getRuntime().exec("logcat -d");
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-            emailData = sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //send file using email
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        String[] to = {""};
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-        // the attachment
-        emailIntent.putExtra(Intent.EXTRA_TEXT, emailData);
-        // the mail subject
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Logcat content for " + Utilities.FullApplicationName + " debugging");
-        emailIntent.setType("message/rfc822");
-        startActivity(Intent.createChooser(emailIntent, "Send email..."));
-    }
 
     @Nullable
     @Override
     public Filter getFilter() {
         return null;
+    }
+
+    @Override
+    public void onSelectedData(ArrayList<Uri> messageUris, String accountName) {
+        UpdateList(messageUris, accountName);
     }
 
     private class AccountsUpdateListener implements OnAccountsUpdateListener {
@@ -902,7 +936,7 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 if (newList.size() == 1) return;
 
                 boolean equalLists = true;
-                ListIterator<String> iter = ListActivity.currentList.listIterator();
+                ListIterator<String> iter = ListActivity.accountList.listIterator();
                 boolean first = true;
                 while (iter.hasNext()) {
                     // skip first entry (All)
@@ -924,8 +958,8 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                 }
                 first = true;
                 for (String accountName : newList) {
-                    if (!(ListActivity.currentList.contains(accountName))) {
-                        ListActivity.currentList.add(accountName);
+                    if (!(ListActivity.accountList.contains(accountName))) {
+                        ListActivity.accountList.add(accountName);
                         equalLists = false;
                         // skip first entry (All)
                         if (!first)
@@ -951,15 +985,10 @@ public class ListActivity extends AppCompatActivity implements OnItemSelectedLis
                         err.printStackTrace();
                     }
 
-                    Intent res = new Intent();
-                    String mPackage = Utilities.PackageName;
-                    String mClass = ".AccountConfigurationActivity";
-                    res.setComponent(new ComponentName(mPackage, mPackage + mClass));
-                    // Hack! accountManager.addOnAccountsUpdatedListener
+                    Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
                     startActivityForResult(res, ListActivity.ADD_ACCOUNT);
                 }
             }
         }
     }
 }
-

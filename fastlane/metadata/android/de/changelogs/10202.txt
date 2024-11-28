@@ -1,0 +1,17 @@
+* Datum und Uhrzeit im Menü einfügen
+* Suche immer in allen Konten
+* Bearbeiten und Sortieren, wenn die Suche aktiv ist
+* Empfangen geteilter Bilder
+* Auswahl in HTML-Code konvertieren
+* Auswahl in Text umwandeln
+* Vereinfachung der Synchron.-intervallauswahl
+* Multipart.Message einlesen
+* Update auf appcompat 1.6.1
+* html Format pre
+* Upgrade auf gradle 8.0
+* io.github.eltos:simpledialogfragmente
+* Verwenden Sie SimpleColorDialog, um Text- und Hintergrundfarbe im Editor auszuwählen
+* Dialog für Tabellenabmessungen hinzufügen
+* Dialog Link einfügen
+* Dialog zum Einfügen von Bild
+* viele Fehlerbehebungen

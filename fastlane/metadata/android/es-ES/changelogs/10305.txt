@@ -1,0 +1,9 @@
+* el usuario puede crear un archivo de copia de seguridad
+* guarda archivos internos como *.eml
+* guarde notas si la carpeta IMAP en el servidor se elimina o se cambia el nombre
+* editor enriquecido v3.0.1
+* importar archivos *.eml (a través de compartir)
+* traducción al chino actualizada (gracias sr093906)
+* gradle 8.3
+* reelaborar la sincronización de las operaciones imap
+* actualizar bibliotecas y crear herramientas

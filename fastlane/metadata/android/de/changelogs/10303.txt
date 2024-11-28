@@ -1,0 +1,7 @@
+* Möglichkeit, Notizen von allen Konten / Notizblöcken anzuzeigen
+* update libs
+* grau und rot als Notenfarben hinzufügen
+* kleinere Layoutänderungen
+* fix Speichern-Dialog
+* einige Crashs im Zusammenhang mit Sync beheben
+* Sync-Intervall festlegen

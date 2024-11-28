@@ -1,0 +1,6 @@
+- se la sincronizzazione fallisce, mostra un messaggio sullo stato
+- crea la cartella delle note sul server, se già non esiste
+- la sincronizzazione in background può essere disattivata
+- chiusura delle impostazioni dell'account dopo aver completato l'aggiunta
+- reso "thread-safe" l'accesso al database (grazie a woheller69)
+- migliorata la sincronizzazione in background

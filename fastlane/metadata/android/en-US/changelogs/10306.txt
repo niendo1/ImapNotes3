@@ -1,0 +1,9 @@
+* import multiple eml-files (message/rfc822) (closes #47)
+* Fix for certificate error reported when 'accept any certificate' selected (john-p-williams)
+* if Imap Folder is changed, use notes in this folder
+* sync after editing the account data
+* fix handling shared data with more then one account
+* rework about dialog
+* create archive in Documents instead of sharing (code is copied from woheller69)
+* fix color picker dialog behavior
+* text and background color can set to its default values in the color picker dialog

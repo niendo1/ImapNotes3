@@ -1,0 +1,6 @@
+- si la synchronisation a échoué, afficher un message dans le statut
+- créer un dossier de notes sur le serveur, s'il n'existe pas
+- la synchronisation en arrière-plan peut être désactivée
+- fermer les paramètres du compte après l'ajout d'un compte
+- rendre l'accès à la base de données "thread safe" (merci à woheller69)
+- améliorer la synchronisation en arrière-plan

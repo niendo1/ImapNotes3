@@ -29,6 +29,8 @@ import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -49,17 +51,19 @@ public final class Utilities {
     @NonNull
     public static final String FullApplicationName = ApplicationName + " " + BuildConfig.VERSION_NAME;
     @NonNull
+    public static final String EMAIL_FILE_EXT = "eml";
+    @NonNull
     public static String internalDateFormatString = "yyyy-MM-dd HH:mm:ss";
     @NonNull
     public static SimpleDateFormat internalDateFormat = new SimpleDateFormat(internalDateFormatString, Locale.ROOT);
-    public static String HASHTAG_PATTERN = "(?<=(\\s|^))#[^\\s\\!\\@\\#\\$\\%\\^\\<\\>\\&\\*\\(\\)\\,\\;\\\"\\']+(?=(\\s|$))";
     /**
      * The notes have a time stamp associated with time and this is stored as a string on the
      * server so we must define a fixed format for it.
      */
+    public static String HASHTAG_PATTERN = "(?<=(\\s|^))#[^\\s\\!\\@\\#\\$\\%\\^\\<\\>\\&\\*\\(\\)\\,\\;\\\"\\']+(?=(\\s|$))";
 
     public static int getColorIdByName(String name) {
-        int color = R.color.ListBgColor;
+        int color = R.color.ActionBgColor;
 
         if (name == null || name.isEmpty()) {
             name = "none";
@@ -106,6 +110,15 @@ public final class Utilities {
         return (uri.getScheme() != null);
     }
 
+    public static boolean IsUrl(String stringURL) {
+        try {
+            URL url = new URL(stringURL);
+        } catch (MalformedURLException e) {
+            return false;
+        }
+        return true;
+    }
+
     public static int getRealSizeFromUri(Context context, Uri uri) {
         // https://stackoverflow.com/questions/45589736/uri-file-size-is-always-0
 
@@ -123,4 +136,11 @@ public final class Utilities {
         }
     }
 
+    public static String addMailExt(String fileName) {
+        return fileName + "." + EMAIL_FILE_EXT;
+    }
+
+    public static String removeMailExt(String fileName) {
+        return fileName.replace("." + EMAIL_FILE_EXT, "");
+    }
 }

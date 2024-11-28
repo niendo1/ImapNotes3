@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
  * Copyright (C)      2016 - Axel Strübing
  * Copyright (C)      2016 - Martin Carpella
  * Copyright (C) 2015-2016 - nb
@@ -40,12 +40,13 @@ import de.niendo.ImapNotes3.ImapNotes3;
 import de.niendo.ImapNotes3.ListActivity;
 import de.niendo.ImapNotes3.Miscs.HtmlNote;
 import de.niendo.ImapNotes3.Miscs.ImapNotesResult;
-import de.niendo.ImapNotes3.Miscs.Imaper;
 
 import com.sun.mail.imap.AppendUID;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.util.MailSSLSocketFactory;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -55,7 +56,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -76,21 +76,33 @@ import de.niendo.ImapNotes3.Miscs.Utilities;
 public class SyncUtils {
 
     private static final String TAG = "IN_SyncUtils";
-    private static Store store;
+    private final Object myLock = new Object();
     // TODO: Why do we have two folder fields and why are they both nullable?
-
+    private Store store;
     @Nullable
-    private static IMAPFolder remoteIMAPNotesFolder = null;
-    private static Long UIDValidity;
+    private IMAPFolder remoteIMAPNotesFolder;
+    private Long UIDValidity;
+
+    /**
+     * Do we really need the Context argument or could we call getApplicationContext instead?
+     *
+     * @param rootDirAccount Name of the account as defined by the user, this is not the email address.
+     */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void CreateLocalDirectories(@NonNull File rootDirAccount) {
+        Log.d(TAG, "CreateDirs(String: " + rootDirAccount);
+        (new File(rootDirAccount, "new")).mkdirs();
+        (new File(rootDirAccount, "deleted")).mkdirs();
+    }
 
     @NonNull
-    static synchronized ImapNotesResult ConnectToRemote(@NonNull String username,
-                                                        @NonNull String password,
-                                                        @NonNull String server,
-                                                        String portnum,
-                                                        @NonNull Security security,
-                                                        @NonNull String ImapFolderName,
-                                                        int threadID
+    public ImapNotesResult ConnectToRemote(@NonNull String username,
+                                           @NonNull String password,
+                                           @NonNull String server,
+                                           String portnum,
+                                           @NonNull Security security,
+                                           @NonNull String ImapFolderName,
+                                           int threadID
     ) {
         Log.d(TAG, "ConnectToRemote: " + username);
 
@@ -113,7 +125,7 @@ public class SyncUtils {
             sf = new MailSSLSocketFactory();
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
-            return new ImapNotesResult(Imaper.ResultCodeCantConnect,
+            return new ImapNotesResult(ImapNotesResult.ResultCodeCantConnect,
                     "Can't connect to server: " + e.getMessage(), -1);
         }
         Properties props = new Properties();
@@ -123,7 +135,7 @@ public class SyncUtils {
         props.setProperty(String.format("mail.%s.port", proto), portnum);
         props.setProperty("mail.store.protocol", proto);
         if (security.acceptcrt) {
-            sf.setTrustedHosts(new String[]{server});
+            sf.setTrustedHosts(server);
             if (proto.equals("imap")) {
                 props.put("mail.imap.ssl.socketFactory", sf);
                 props.put("mail.imap.starttls.enable", "true");
@@ -150,7 +162,7 @@ public class SyncUtils {
         }
          */
         try {
-            Session session = Session.getDefaultInstance(props);
+            Session session = Session.getInstance(props, null);
             //session.setDebug(true);
             store = session.getStore(proto);
             store.connect(server, username, password);
@@ -162,9 +174,8 @@ public class SyncUtils {
             Log.d(TAG, "Personal Namespaces=" + rootFolder.getFullName());
             // TODO: this the wrong place to make decisions about the name of the notes folder, that
             // should be done where it is created.
-
             String sfolder = ImapFolderName;
-            if (rootFolder.getFullName().length() > 0) {
+            if (!rootFolder.getFullName().isEmpty()) {
                 char separator = rootFolder.getSeparator();
                 sfolder = rootFolder.getFullName() + separator + ImapFolderName;
             }
@@ -174,26 +185,27 @@ public class SyncUtils {
                 if (remoteIMAPNotesFolder.create(Folder.HOLDS_MESSAGES)) {
                     remoteIMAPNotesFolder.setSubscribed(true);
                     Log.d(TAG, "Folder was created successfully");
+                    return new ImapNotesResult(ImapNotesResult.ResultCodeImapFolderCreated,
+                            "", -1);
+                } else {
+                    Exception e = new Exception("ImapFolder on server not found and could not created");
+                    throw new RuntimeException(e);
                 }
             }
-            return new ImapNotesResult(Imaper.ResultCodeSuccess,
+            return new ImapNotesResult(ImapNotesResult.ResultCodeSuccess,
                     "",
                     remoteIMAPNotesFolder.getUIDValidity());
         } catch (Exception e) {
             Log.d(TAG, e.getMessage());
-            return new ImapNotesResult(Imaper.ResultCodeException,
+            return new ImapNotesResult(ImapNotesResult.ResultCodeException,
                     e.getMessage(),
                     -1);
         }
 
     }
 
-    synchronized private static boolean IsConnected() {
-        return store != null && store.isConnected();
-    }
-
     // Put values in shared preferences
-    synchronized static void SetUIDValidity(@NonNull Account account,
+    synchronized public static void SetUIDValidity(@NonNull Account account,
                                             Long UIDValidity,
                                             @NonNull Context ctx) {
         Log.d(TAG, "SetUIDValidity: " + account.name);
@@ -205,8 +217,12 @@ public class SyncUtils {
         editor.apply();
     }
 
+    synchronized private boolean IsConnected() {
+        return store != null && store.isConnected();
+    }
+
     // Retrieve values from shared preferences:
-    synchronized static Long GetUIDValidity(@NonNull Account account,
+    synchronized Long GetUIDValidity(@NonNull Account account,
                                             @NonNull Context ctx) {
         Log.d(TAG, "GetUIDValidity: " + account.name);
         UIDValidity = (long) -1;
@@ -217,17 +233,6 @@ public class SyncUtils {
             //Log.d(TAG, "UIDValidity got from shared_prefs:"+UIDValidity);
         }
         return UIDValidity;
-    }
-
-    synchronized static void DisconnectFromRemote() {
-        Log.d(TAG, "DisconnectFromRemote");
-        try {
-            store.close();
-        } catch (MessagingException e) {
-            // TODO Auto-generated catch block
-            Log.d(TAG, "DisconnectFromRemote Error:" + e.getMessage());
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -246,14 +251,7 @@ public class SyncUtils {
             uid = uid.substring(1);
             fileDir = new File(fileDir, "new");
         }
-        File mailFile = new File(fileDir, uid);
-
-        if (!mailFile.exists()) {
-            Log.d(TAG, "ReadMailFromFileRootAndNew: file not found.." + mailFile);
-            return null;
-        }
-
-        return ReadMailFromFile(fileDir, uid);
+        return ReadMailFromNoteFile(fileDir, uid);
     }
 
     /**
@@ -263,11 +261,33 @@ public class SyncUtils {
      * @return A Java mail message object.
      */
     @Nullable
-    public static Message ReadMailFromFile(@NonNull File nameDir,
-                                           @NonNull String uid) {
-        Log.d(TAG, "ReadMailFromFile: " + nameDir.getPath() + " " + uid);
-        File mailFile = new File(nameDir, uid);
+    public static Message ReadMailFromNoteFile(@NonNull File nameDir,
+                                               @NonNull String uid) {
+        Log.d(TAG, "ReadMailFromFile: " + nameDir.getPath() + " " + Utilities.addMailExt(uid));
 
+        File mailFile;
+        mailFile = new File(nameDir, Utilities.addMailExt(uid));
+        if (!mailFile.exists()) {
+            // old: only UID is used
+            mailFile = new File(nameDir, uid);
+            if (!mailFile.exists()) {
+                mailFile = new File(nameDir, uid);
+                if (!mailFile.exists()) {
+                    Log.d(TAG, "ReadMailFromFile: file not found.." + mailFile);
+                    return null;
+                }
+            }
+        }
+        return (ReadMailFromFile(mailFile));
+    }
+
+    /**
+     * @param mailFile Name of the account with which this message is associated, used to find the
+     *                 directory in which it is stored.
+     * @return A Java mail message object.
+     */
+    @Nullable
+    public static Message ReadMailFromFile(@NonNull File mailFile) {
         try (InputStream mailFileInputStream = new FileInputStream(mailFile)) {
             try {
                 Properties props = new Properties();
@@ -300,15 +320,30 @@ public class SyncUtils {
     }
 
     /**
-     * Do we really need the Context argument or could we call getApplicationContext instead?
-     *
-     * @param rootDirAccount Name of the account as defined by the user, this is not the email address.
+     * @param msgString
+     * @return A Java mail message object.
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    synchronized public static void CreateLocalDirectories(@NonNull File rootDirAccount) {
-        Log.d(TAG, "CreateDirs(String: " + rootDirAccount);
-        (new File(rootDirAccount, "new")).mkdirs();
-        (new File(rootDirAccount, "deleted")).mkdirs();
+    @Nullable
+    public static Message ReadMailFromString(String msgString) {
+            try {
+                Properties props = new Properties();
+                Session session = Session.getDefaultInstance(props);
+                return new MimeMessage(session, new ByteArrayInputStream(msgString.getBytes()));
+            } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    synchronized void DisconnectFromRemote() {
+        Log.d(TAG, "DisconnectFromRemote");
+        try {
+            store.close();
+        } catch (MessagingException e) {
+            // TODO Auto-generated catch block
+            Log.d(TAG, "DisconnectFromRemote Error:" + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -329,6 +364,7 @@ public class SyncUtils {
 
     synchronized static void RemoveAccount(@NonNull Context context, @NonNull Account account) {
         Log.d(TAG, "RemoveAccount: " + account.name);
+        // Delete account name entries in database
         NotesDb storedNotes = NotesDb.getInstance(context);
         storedNotes.ClearDb(account.name);
         // remove Shared Preference file
@@ -342,13 +378,14 @@ public class SyncUtils {
                 //noinspection ResultOfMethodCallIgnored
                 file.delete();
             }
-        // Delete account name entries in database
-
     }
 
-    synchronized AppendUID[] sendMessageToRemote(@NonNull Message[] message) throws MessagingException {
-        OpenRemoteIMAPNotesFolder(Folder.READ_WRITE);
-        return (remoteIMAPNotesFolder.appendUIDMessages(message));
+    AppendUID[] sendMessageToRemote(@NonNull Message[] message) throws MessagingException {
+        assert remoteIMAPNotesFolder != null;
+        synchronized (myLock) {
+            OpenRemoteIMAPNotesFolder(Folder.READ_WRITE);
+            return (remoteIMAPNotesFolder.appendUIDMessages(message));
+        }
     }
 
     synchronized private void SaveNoteAndUpdateDatabase(@NonNull File directory,
@@ -356,8 +393,8 @@ public class SyncUtils {
                                                         @NonNull NotesDb storedNotes,
                                                         @NonNull String accountName,
                                                         @NonNull String suid,
-                                                        @NonNull String bgColor) throws IOException, MessagingException {
-        File outfile = new File(directory, suid);
+                                                        @NonNull String bgColor) throws IOException {
+        File outfile = new File(directory, Utilities.addMailExt(suid));
         Log.d(TAG, "SaveNoteAndUpdateDatabase: " + outfile.getCanonicalPath() + " " + accountName);
         SaveNote(outfile, notesMessage);
 
@@ -390,7 +427,7 @@ public class SyncUtils {
         try {
             Date MessageInternaldate = notesMessage.getReceivedDate();
             internaldate = Utilities.internalDateFormat.format(MessageInternaldate);
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -414,49 +451,44 @@ public class SyncUtils {
                                            @NonNull NotesDb storedNotes,
                                            @NonNull String accountName)
             throws MessagingException, IOException {
+        assert remoteIMAPNotesFolder != null;
         Log.d(TAG, "handleRemoteNotes: " + remoteIMAPNotesFolder.getFullName() + " " + accountName);
 
         Message notesMessage;
         boolean result = false;
         ArrayList<Long> uids = new ArrayList<>();
         ArrayList<String> localListOfNotes = new ArrayList<>();
-        String remoteInternaldate;
-        String localInternaldate;
-
 
         // Get local list of notes uids
         File[] files = rootFolderAccount.listFiles();
         for (File file : files) {
             if (file.isFile() && (file.length() > 1)) {
-                localListOfNotes.add(file.getName());
+                localListOfNotes.add(Utilities.removeMailExt(file.getName()));
             }
         }
+        synchronized (myLock) {
+            OpenRemoteIMAPNotesFolder(Folder.READ_ONLY);
 
-        OpenRemoteIMAPNotesFolder(Folder.READ_ONLY);
-
-        // Add to local device, new notes added to remote
-        Message[] notesMessages = remoteIMAPNotesFolder.getMessagesByUID(1, UIDFolder.LASTUID);
-        for (int index = notesMessages.length - 1; index >= 0; index--) {
-            try {
-                notesMessage = notesMessages[index];
-                Long uid = remoteIMAPNotesFolder.getUID(notesMessage);
-                // Get FLAGS
-                //flags = notesMessage.getFlags();
-                boolean deleted = notesMessage.isSet(Flags.Flag.DELETED);
-                // Builds remote list while in the loop, but only if not deleted on remote
+            // Add to local device, new notes added to remote
+            Message[] notesMessages = remoteIMAPNotesFolder.getMessagesByUID(1, UIDFolder.LASTUID);
+            for (int index = notesMessages.length - 1; index >= 0; index--) {
+                    notesMessage = notesMessages[index];
+                    long uid = remoteIMAPNotesFolder.getUID(notesMessage);
+                    // Get FLAGS
+                    //flags = notesMessage.getFlags();
+                    boolean deleted = notesMessage.isSet(Flags.Flag.DELETED);
+                    // Builds remote list while in the loop, but only if not deleted on remote
 
 
-                if (!deleted) {
-                    uids.add(remoteIMAPNotesFolder.getUID(notesMessage));
-                }
-                String suid = uid.toString();
-                if (!(localListOfNotes.contains(suid))) {
-                    String bgColor = HtmlNote.GetNoteFromMessage(notesMessage).color;
-                    SaveNoteAndUpdateDatabase(rootFolderAccount, notesMessage, storedNotes, accountName, suid, bgColor);
-                    result = true;
-                }
-            } catch (Exception e) {
-                Log.d(TAG, "error " + e.getMessage());
+                    if (!deleted) {
+                        uids.add(remoteIMAPNotesFolder.getUID(notesMessage));
+                    }
+                    String suid = Long.toString(uid);
+                    if (!(localListOfNotes.contains(suid))) {
+                        String bgColor = HtmlNote.GetNoteFromMessage(notesMessage).color;
+                        SaveNoteAndUpdateDatabase(rootFolderAccount, notesMessage, storedNotes, accountName, suid, bgColor);
+                        result = true;
+                    }
             }
         }
 
@@ -467,7 +499,12 @@ public class SyncUtils {
                 // Remove note from database
                 storedNotes.DeleteANote(suid, accountName);
                 // remove file from deleted
-                File toDelete = new File(rootFolderAccount, suid);
+                File toDelete;
+                toDelete = new File(rootFolderAccount, Utilities.addMailExt(suid));
+                //noinspection ResultOfMethodCallIgnored
+                toDelete.delete();
+                // old: only SUID is used
+                toDelete = new File(rootFolderAccount, suid);
                 //noinspection ResultOfMethodCallIgnored
                 toDelete.delete();
                 result = true;
@@ -477,56 +514,57 @@ public class SyncUtils {
         return result;
     }
 
-    synchronized private void OpenRemoteIMAPNotesFolder(int mode) throws MessagingException {
-        if (remoteIMAPNotesFolder.isOpen()) {
-            if (remoteIMAPNotesFolder.getMode() != mode) {
-                remoteIMAPNotesFolder.close();
-                remoteIMAPNotesFolder.open(mode);
-            }
-        } else {
-            remoteIMAPNotesFolder.open(mode);
+    private void OpenRemoteIMAPNotesFolder(int mode) throws MessagingException {
+        // FIX for Race Condition..needs more work
+        // sendMessageToRemote sometime closes the working folder
+        if (!remoteIMAPNotesFolder.isOpen()) {
+            remoteIMAPNotesFolder.open(Folder.READ_WRITE);
         }
     }
 
     /* Copy all notes from the IMAP server to the local directory using the UID as the file name.
-
      */
-    synchronized void GetNotes(@NonNull Account account,
+    void GetNotes(@NonNull Account account,
                                @NonNull File RootDirAccount,
                                @NonNull Context applicationContext,
                                @NonNull NotesDb storedNotes) throws MessagingException, IOException {
         Log.d(TAG, "GetNotes: " + account.name);
-        //Long UIDM;
-        //Message notesMessage;
-        OpenRemoteIMAPNotesFolder(Folder.READ_ONLY);
+        assert remoteIMAPNotesFolder != null;
+        synchronized (myLock) {
+            OpenRemoteIMAPNotesFolder(Folder.READ_ONLY);
 
-        UIDValidity = GetUIDValidity(account, applicationContext);
-        SetUIDValidity(account, UIDValidity, applicationContext);
-        // From the docs: "Folder implementations are expected to provide light-weight Message
-        // objects, which get filled on demand. "
-        // This means that at this point we can ask for the subject without getting the rest of the
-        // message.
-        Message[] notesMessages = remoteIMAPNotesFolder.getMessages();
-        //Log.d(TAG,"number of messages in folder="+(notesMessages.length));
-        // TODO: explain why we enumerate the messages in descending order of index.
-        for (int index = notesMessages.length - 1; index >= 0; index--) {
-            Message notesMessage = notesMessages[index];
-            // write every message in files/{accountname} directory
-            // filename is the original message uid
-            Long UIDM = remoteIMAPNotesFolder.getUID(notesMessage);
-            String suid = UIDM.toString();
-            String bgColor = HtmlNote.GetNoteFromMessage(notesMessage).color;
-            SaveNoteAndUpdateDatabase(RootDirAccount, notesMessage, storedNotes, account.name, suid, bgColor);
+            UIDValidity = GetUIDValidity(account, applicationContext);
+            SetUIDValidity(account, UIDValidity, applicationContext);
+            // From the docs: "Folder implementations are expected to provide light-weight Message
+            // objects, which get filled on demand. "
+            // This means that at this point we can ask for the subject without getting the rest of the
+            // message.
+            Message[] notesMessages = remoteIMAPNotesFolder.getMessages();
+            //Log.d(TAG,"number of messages in folder="+(notesMessages.length));
+            // TODO: explain why we enumerate the messages in descending order of index.
+            for (int index = notesMessages.length - 1; index >= 0; index--) {
+                Message notesMessage = notesMessages[index];
+                // write every message in files/{accountname} directory
+                // filename is the original message uid
+                Long UIDM = remoteIMAPNotesFolder.getUID(notesMessage);
+                String suid = UIDM.toString();
+                String bgColor = HtmlNote.GetNoteFromMessage(notesMessage).color;
+                SaveNoteAndUpdateDatabase(RootDirAccount, notesMessage, storedNotes, account.name, suid, bgColor);
+            }
         }
     }
 
-    synchronized void DeleteNote(int numMessage) throws MessagingException {
-        Log.d(TAG, "DeleteNote: " + numMessage);
-        OpenRemoteIMAPNotesFolder(Folder.READ_WRITE);
-        //Log.d(TAG,"UID to remove:"+numMessage);
-        Message[] msgs = {((IMAPFolder) remoteIMAPNotesFolder).getMessageByUID(numMessage)};
-        remoteIMAPNotesFolder.setFlags(msgs, new Flags(Flags.Flag.DELETED), true);
-        remoteIMAPNotesFolder.expunge(msgs);
+    void DeleteNote(String fileName) throws MessagingException {
+        Log.d(TAG, "DeleteNote: " + fileName);
+        assert remoteIMAPNotesFolder != null;
+        int numMessage = Integer.parseInt(Utilities.removeMailExt(fileName));
+        synchronized (myLock) {
+            OpenRemoteIMAPNotesFolder(Folder.READ_WRITE);
+            //Log.d(TAG,"UID to remove:"+numMessage);
+            Message[] msgs = {(remoteIMAPNotesFolder).getMessageByUID(numMessage)};
+            remoteIMAPNotesFolder.setFlags(msgs, new Flags(Flags.Flag.DELETED), true);
+            remoteIMAPNotesFolder.expunge(msgs);
+        }
     }
 
     @Override

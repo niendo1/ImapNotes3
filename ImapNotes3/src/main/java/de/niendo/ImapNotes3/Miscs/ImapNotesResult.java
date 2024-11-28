@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
  * Copyright (C)      2016 - Axel Strübing
  * Copyright (C)      2016 - Martin Carpella
  * Copyright (C)      2015 - nb
@@ -26,6 +26,11 @@ package de.niendo.ImapNotes3.Miscs;
 import androidx.annotation.NonNull;
 
 public class ImapNotesResult {
+
+    public static final int ResultCodeSuccess = 0;
+    public static final int ResultCodeException = -2;
+    public static final int ResultCodeCantConnect = -1;
+    public static final int ResultCodeImapFolderCreated = 1;
 
     public final int returnCode;
     @NonNull

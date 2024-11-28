@@ -1,0 +1,6 @@
+* aggiunta HashTags alle note
+* filtraggio note per HashTag
+* aggiunta dialogo per inserimento immagini condivise
+* modificata routine di sincronia per gestire note di grandi dimensioni
+* migliorato il suggerimento del server SMTP in base all'indirizzo email
+* attivazione e sincronia degli account appena aggiunti

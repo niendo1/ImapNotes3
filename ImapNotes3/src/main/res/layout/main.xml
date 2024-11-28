@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="fill_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/StatusBgColor"
-        android:gravity="center|center_horizontal"
-        android:maxLines="1"
-        android:text="@string/welcome"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_marginTop="0px"
-        android:layout_marginBottom="0px"
-        android:textColor="@color/StatusTxtColor"
-        tools:ignore="TextContrastCheck" />
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/new_note"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/red"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
-        android:id="@+id/main_layout"
+        android:id="@+id/account_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/AccountBgColor"
         android:orientation="horizontal"
-        android:textColor="@color/AccountTxtColor">
+        android:textColor="@color/AccountTxtColor"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Spinner
             android:id="@+id/accountSpinner"
@@ -34,19 +39,26 @@
             android:layout_weight="2"
             android:contentDescription="@string/AccountList"
             android:popupBackground="@color/AccountBgColor" />
+
         <Button
             android:id="@+id/editAccountButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="@string/editAccount"
-            android:background="@drawable/ic_action_user_edit" />
-
+            android:background="@drawable/ic_action_user_edit"
+            android:contentDescription="@string/editAccount" />
     </LinearLayout>
+
 
     <ListView
         android:id="@+id/notesList"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="wrap_content"
+        android:dividerHeight="0dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/account_layout" />
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

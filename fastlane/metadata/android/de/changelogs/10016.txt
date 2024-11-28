@@ -1,0 +1,6 @@
+- wenn die Synchronisierung fehlgeschlagen ist, wird eine Meldung im Status angezeigt
+- erstellen des Notizen-Ordner auf dem Server, wenn er nicht existiert
+- Hintergrund-Sync kann deaktiviert werden
+- Kontoeinstellungen schließen, nachdem ein Konto hinzugefügt wurde
+- Datenbankzugriff threadsicher (dank woheller69)
+- Verbesserung der Synchronisation im Hintergrund

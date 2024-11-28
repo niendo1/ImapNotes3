@@ -1,0 +1,6 @@
+- si falla la sincronización, muestra un mensaje en el estado
+- crear una carpeta de notas en el servidor, si no existe
+- la sincronización en segundo plano se puede desactivar
+- cerrar la configuración de la cuenta después de agregar una cuenta
+- guardar el hilo de acceso a la base de datos (gracias a woheller69)
+- mejorar la sincronización en segundo plano

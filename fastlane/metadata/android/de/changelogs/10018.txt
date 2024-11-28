@@ -1,0 +1,8 @@
+* Verbesserung des Teilens
+* Verbesserung der empfangen gemeinsamen Daten
+* geteilte Daten können als neue Note oder in einer vorhandenen Note eingefügt werden
+* fix STARTTLS (Danke an axmanA)
+* Logcat-Daten können vom Benutzer gesendet werden
+* IMAP-Operation threadsicher
+* Neues Symbol hinzufügen (Danke zu woheller69)
+* Konto/Notepad-Name muss nicht mehr einer Syntax folgen

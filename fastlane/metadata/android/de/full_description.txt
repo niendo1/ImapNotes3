@@ -1,15 +1,25 @@
-* ermöglicht die Synchronisation von HTML-Notizen zwischen Android-Geräten und IMAP-Servern
+* Umfangreicher Editor für Ihre Notizen mit HTML-Funktionalität
+   - Schrifteigenschaften
+   - Tabellen
+   - Check-Boxen
+   - Listen
+   - Einfügen von Bildern, Links etc.
+   - Undo / Redo
+   - und vieles mehr
+* ermöglicht die Synchronisation von Notizen zwischen Android-Geräten und IMAP-Servern
 * kann für alle gängigen IMAP-fähigen Postfächer genutzt werden (Gmail, Yahoo, AOL, Posteo und viele andere)
-* umfangreicher HTML-Editor
 * auch für ToDo-Listen geeignet
 * Volltextsuche
 * Filtern und Organisieren der Notizen mit Hilfe von #HashTags
 * Hell- und Dunkelmodus
 * Jeder Notiz können Farben zugeordnet werden
 * Notizen auf dem Handy teilen
+* Notizen in ein lokales ZIP-Archive sichern
+* Wiederherstellen aller oder einzelner Notizen aus einem ZIP-Archiv
 * Notizen werden als normale E-Mails im HTML-Format gespeichert
 * verschiedene Verschlüsselungsarten werden unterstützt (Text, SSL/TLS oder STARTTLS)
 * mehrere IMAP-Konten bzw. Notizbücher können angelegt und verwaltet werden
 * Offline arbeiten möglich - die Synchronisation mit dem Server erfolgt im Hintergrund
 * Die App benötigt minimale Benutzerrechte
-* Quelloffene Software - keine Werbung oder Tracker
+* vollständig quelloffene Software - keine Werbung oder Tracker
+* Anpassbare Farben für Editor

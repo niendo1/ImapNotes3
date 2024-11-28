@@ -1,0 +1,11 @@
+* add russian translation (thanks to weblate)
+* add italian translation (thanks to weblate)
+* add floating action button for new note
+* update for API 35
+* Customize text and background color for notes
+* simplify colors
+* replace status field with toast messages
+* gradle and lib updates
+* translation fixes
+* fix for note color selection
+* backup files to Documents/ImapNotes3 - create this directory, if not existing

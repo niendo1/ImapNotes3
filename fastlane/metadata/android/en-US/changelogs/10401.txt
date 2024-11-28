@@ -1,0 +1,8 @@
+* Weblate: add Italian translation (thanks to 77nnit)
+* Weblate: add French translation (thanks to z97febao, e2jk)
+* Weblate: add Spanish translation (thanks to gallegonovato)
+* Weblate: add Russian translation (thanks to pazengaz)
+* Weblate: Chinese translation (thanks to hamburger2048, pyccl, Xue Xuan)
+* Remove DependencyInfoBlock
+* move Backup & Restore to Settings
+* layout fixes API 35 (VanillaIceCream)

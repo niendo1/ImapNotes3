@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
  * Copyright (C)           - kwhitefoot
  * and Contributors.
  *
@@ -28,7 +28,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.LayoutRes;
@@ -50,7 +49,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -59,7 +57,6 @@ import de.niendo.ImapNotes3.Data.ConfigurationFieldNames;
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.Data.Security;
 import de.niendo.ImapNotes3.Data.SyncInterval;
-import de.niendo.ImapNotes3.Miscs.Imaper;
 import de.niendo.ImapNotes3.Miscs.LoginThread;
 import de.niendo.ImapNotes3.Miscs.Result;
 import de.niendo.ImapNotes3.Miscs.SmtpServerNameFinder;
@@ -73,9 +70,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
      * Cannot be final or NonNull because it needs the application context which is not available
      * until onCreate.
      */
-    //private ConfigurationFile settings;
 
-    //region Intent item names and values.
     public static final String ACTION = "ACTION";
     public static final String ACCOUNTNAME = "ACCOUNTNAME";
     public static final int TO_REFRESH = 999;
@@ -96,7 +91,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         }
     };
     private AppCompatDelegate mDelegate;
-    public Imaper imapFolder;
     private TextView accountnameTextView;
     private TextView usernameTextView;
     private TextView passwordTextView;
@@ -136,17 +130,13 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
   */
     //@Override
     public void onFinishPerformed(@NonNull Result<String> result) {
-
         if (result.succeeded) {
             Intent intent = new Intent();
-            intent.putExtra(ListActivity.ACCOUNTNAME, GetTextViewText(accountnameTextView));
-            // Hack! accountManager.addOnAccountsUpdatedListener
+            intent.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, GetTextViewText(accountnameTextView));
             setResult(ListActivity.ResultCodeSuccess, intent);
             Clear();
             finish();
         } else {
-            //ImapNotes3.ShowMessage(result.result, accountConfigurationActivity.usernameTextView, 5);
-            // Hack! accountManager.addOnAccountsUpdatedListener
             setResult(ListActivity.ResultCodeError);
             new AlertDialog.Builder(this)
                     .setTitle(R.string.IMAP_operation_failed)
@@ -212,7 +202,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         getDelegate().onConfigurationChanged(newConfig);
     }
@@ -242,19 +232,21 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
 
     @Nullable
     private Actions action;
-    //    public static final String EDIT_ACCOUNT = "EDIT_ACCOUNT";
-//    public static final String CREATE_ACCOUNT = "CREATE_ACCOUNT";
-    //endregion
+
     private final OnClickListener clickListenerLogin = v -> {
         // Click on Login Button
         Log.d(TAG, "clickListenerLogin  onClick");
         CheckNameAndLogIn();
     };
-    private final OnClickListener clickListenerEdit = v -> {
-        // Click on Edit Button
-        Log.d(TAG, "clickListenerEdit onClick");
+    private final OnClickListener clickListenerSave = v -> {
+        // Click on Save Button
+        Log.d(TAG, "clickListenerSave onClick");
         CheckNameAndLogIn();
-
+    };
+    private final OnClickListener clickListenerAbort = v -> {
+        // Click on Abort Button
+        Log.d(TAG, "clickListenerAbort onClick");
+        finish();
     };
 
     @SuppressLint("SetTextI18n")
@@ -281,8 +273,8 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     private void CheckNameAndLogIn() {
         String name = accountnameTextView.getText().toString();
         if (name.isEmpty()) {
-            accountnameTextView.setText(R.string.account_name_description);
-            name = getString(R.string.account_name_description);
+            name = GetTextViewText(usernameTextView);
+            accountnameTextView.setText(name);
         }
         if (name.contains("'") || name.contains("\""))
             ImapNotes3.ShowMessage(R.string.quotation_marks_not_allowed, accountnameTextView, 3);
@@ -295,9 +287,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
-        //settings = new ConfigurationFile(getApplicationContext());
         setContentView(R.layout.account_setup);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.ActionBgColor)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView headingTextView = findTextViewById(R.id.heading);
         accountnameTextView = findTextViewById(R.id.accountnameEdit);
@@ -323,7 +313,6 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         securitySpinner.setAdapter(dataAdapter);
         securitySpinner.setOnItemSelectedListener(this);
         securitySpinner.setSelection(Security.SSL_TLS.ordinal());
-        imapFolder = ((ImapNotes3) getApplicationContext()).GetImaper();
 
         Bundle extras = getIntent().getExtras();
         // TODO: find out if extras can be null.
@@ -366,16 +355,26 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             syncInterval = SyncInterval.from(GetConfigValue(ConfigurationFieldNames.SyncInterval));
             syncIntervalSpinner.setSelection(syncInterval.ordinal());
             folderTextView.setText(GetConfigValue(ConfigurationFieldNames.ImapFolder));
-            Button buttonEdit = new Button(this);
-            buttonEdit.setText(R.string.save);
-            Log.d(TAG, "Set onclick listener edit");
-            buttonEdit.setOnClickListener(clickListenerEdit);
-            layout.addView(buttonEdit);
+            Button buttonAbort = new Button(this);
+            buttonAbort.setText(R.string.cancel);
+            Log.d(TAG, "Set onclick listener abort");
+            buttonAbort.setOnClickListener(clickListenerAbort);
+            layout.addView(buttonAbort);
             Button buttonRemove = new Button(this);
             buttonRemove.setText(R.string.remove);
             buttonRemove.setOnClickListener(clickListenerRemove);
             layout.addView(buttonRemove);
+            Button buttonSave = new Button(this);
+            buttonSave.setText(R.string.save);
+            Log.d(TAG, "Set onclick listener save");
+            buttonSave.setOnClickListener(clickListenerSave);
+            layout.addView(buttonSave);
         } else {
+            Button buttonAbort = new Button(this);
+            buttonAbort.setText(R.string.cancel);
+            Log.d(TAG, "Set onclick listener abort");
+            buttonAbort.setOnClickListener(clickListenerAbort);
+            layout.addView(buttonAbort);
             // Here we have to create a new account
             Button buttonView = new Button(this);
             buttonView.setText(R.string.check_and_create_account);
@@ -409,7 +408,13 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         //password will not shown if account is edit and have to be loaded;
         String password = GetTextViewText(passwordTextView);
         if ((action == Actions.EDIT_ACCOUNT) && (password.isEmpty())) {
-            password = accountManager.getPassword(myAccount);
+            // Server name edited: new password required (avoid password spoofing)
+            if (GetTextViewText(serverTextView).equals(GetConfigValue(ConfigurationFieldNames.Server))) {
+                password = accountManager.getPassword(myAccount);
+            } else {
+                ImapNotes3.ShowMessage(R.string.imap_server_changed_new_password, accountnameTextView, 3);
+                return;
+            }
         }
 
         final ImapNotesAccount ImapNotesAccount = new ImapNotesAccount(
@@ -425,14 +430,11 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         // possible to remove all characters which causes the program to crash.  The easiest fix is
         // to add a zero at the beginning so that we are guaranteed to be able to parse it but that
         // leaves us with a zero sync. interval.
-      /*  Result<Integer> synchronizationInterval = GetSynchronizationInterval();
-        if (synchronizationInterval.succeeded) {
-*/
+
         new LoginThread(
                 ImapNotesAccount,
                 this,
                 action).execute();
-        //  }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

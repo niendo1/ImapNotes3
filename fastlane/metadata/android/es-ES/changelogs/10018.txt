@@ -1,0 +1,8 @@
+* mejorar el intercambio
+* mejorar la recepción de datos compartidos
+* los datos compartidos se pueden insertar como una nota nueva o en una nota existente
+* arreglar STARTTLS (gracias a axmanA)
+* Los datos de Logcat pueden ser enviados por el usuario.
+* guardar el hilo de operaciones IMAP
+* agregar nuevo ícono (gracias a woheller69)
+* El nombre de cuenta/bloc de notas ya no tiene que seguir una sintaxis

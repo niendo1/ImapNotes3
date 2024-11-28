@@ -1,6 +1,6 @@
 /*
+ * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
  * Copyright (C)      2023 - Axel Strübing
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
  * Copyright (C) ?   -2022 - kwhitefoot
  * and Contributors.
  *
@@ -47,7 +47,7 @@ import de.niendo.ImapNotes3.R;
  * from method so the analyser cannot see that they are used
  */
 public enum Security {
-    None(R.string.noneSecurity, "", "imap", false),
+    None(R.string.noneSecurity, "143", "imap", false),
     @SuppressWarnings("unused")
     SSL_TLS(R.string.SSL_TLS, "993", "imaps", false),
     @SuppressWarnings("unused")

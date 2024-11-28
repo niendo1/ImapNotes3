@@ -1,0 +1,2 @@
+* TargetSdkVersion 33
+* minSdkVersion 25

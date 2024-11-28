@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 Peter Korf
+ * Copyright (C) 2024 Peter Korf
  * Copyright (C) 2016 Martin Carpella
  * Copyright (C) 2015 nb
  * Copyright (C) 2006 The Android Open Source Project
@@ -25,6 +25,7 @@ import android.net.Uri;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.ColorUtils;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -214,14 +215,21 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
         final int[] to = mTo;
         final int count = to.length;
 
-
+        int txtColor = ImapNotes3.loadPreferenceColor("EditorTxtColor", mContext.getColor(R.color.EditorTxtColor));
+        int bgColorDefault = ImapNotes3.loadPreferenceColor("EditorBgColorDefault", mContext.getColor(R.color.EditorBgColorDefault));
         for (int i = 0; i < count; i++) {
             final View v = view.findViewById(to[i]);
             if (v != null) {
                 final Object data = dataSet.get(mFrom[i]);
                 String text = data == null ? "" : data.toString();
-                String bgColor = dataSet.get(mBgColor).toString();
-                int bgColorNr = Utilities.getColorByName(bgColor, mContext);
+                String bgColor = dataSet.get(mBgColor) == null ? "none" : dataSet.get(mBgColor).toString();
+
+                int bgColorNr;
+                if (bgColor.equals("none")) {
+                    bgColorNr = bgColorDefault;
+                } else {
+                    bgColorNr = Utilities.getColorByName(bgColor, mContext);
+                }
 
                 boolean bound = false;
                 //if (binder != null) {
@@ -245,6 +253,13 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
                         // Note: keep the instanceof TextView check at the bottom of these
                         // ifs since a lot of views are TextViews (e.g. CheckBoxes).
                         setViewText((TextView) v, text);
+                        if (i == 0) {
+                            // note name
+                            setTxtColor((TextView) v, txtColor);
+                        } else {
+                            // time & date
+                            setTxtColor((TextView) v, ColorUtils.blendARGB(txtColor, bgColorNr, 0.5f));
+                        }
                         setBgColor((TextView) v, bgColorNr);
                         setBgColor((RelativeLayout) view, bgColorNr);
 
@@ -348,6 +363,9 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
         v.setBackgroundColor(bgColor);
     }
 
+    private void setTxtColor(@NonNull TextView v, @ColorInt int txtColor) {
+        v.setTextColor(txtColor);
+    }
 
     public Filter getFilter() {
         if (mFilter == null) {
@@ -399,7 +417,7 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
             pattern = Pattern.compile(Pattern.quote(searchTerm), Pattern.CASE_INSENSITIVE);
         }
 
-        String html = HtmlNote.GetNoteFromMessage(SyncUtils.ReadMailFromFile(nameDir, uid)).text;
+        String html = HtmlNote.GetNoteFromMessage(SyncUtils.ReadMailFromNoteFile(nameDir, uid)).text;
         Matcher matcher = pattern.matcher(html);
         return (matcher.find());
     }

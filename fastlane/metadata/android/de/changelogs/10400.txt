@@ -1,0 +1,11 @@
+* russische Übersetzung hinzugefügt (Dank an weblate)
+* italienische Übersetzung hinzugefügt (Dank an weblate)
+* schwebender Button für Anlegen neuer Notitz
+* Updates für API 35
+* Text- und Hintergrundfarbe der Notizen anpassbar
+* Farbgebung vereinfacht
+* Statusfeld durch Einblendtexte ersetzt
+* Gradle und Bibliotheksupdates
+* Übersetzungskorrekturen
+* Fix für Farbwahl der Notiz
+* Erstelle Sicherungen nach Documents/ImapNotes3 - Das Verzeichnis wird erstellt, wenn es nicht existiert

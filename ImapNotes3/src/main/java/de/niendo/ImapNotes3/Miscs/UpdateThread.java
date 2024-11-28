@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
  * Copyright (C)      2016 - Martin Carpella
  * Copyright (C) 2014-2015 - nb
  * and Contributors.
@@ -23,6 +23,7 @@ package de.niendo.ImapNotes3.Miscs;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,9 @@ import android.util.Log;
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
+import de.niendo.ImapNotes3.ImapNotes3;
 import de.niendo.ImapNotes3.NotesListAdapter;
+import de.niendo.ImapNotes3.Sync.SyncUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -61,7 +64,8 @@ import javax.mail.internet.MimeMultipart;
 public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
 
     //https://stackoverflow.com/questions/54346609/returning-boolean-from-onpostexecute-and-doinbackground
-    private FinishListener listener;
+    //https://fernandocejas.com/2014/09/03/architecting-android-the-clean-way/
+    private final FinishListener listener;
     private static final String TAG = "IN_UpdateThread";
     private final ImapNotesAccount ImapNotesAccount;
     private final @StringRes
@@ -78,6 +82,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private final NotesDb storedNotes;
     private OneNote currentNote;
     private int indexToDelete;
+    private final ArrayList<Uri> uris;
 
     /*
     Assign all fields in the constructor because we never reuse this object.  This makes the code
@@ -108,18 +113,48 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         this.action = action;
         this.storedNotes = NotesDb.getInstance(context);
         currentNote = null;
+        uris = null;
         indexToDelete = -1;
+    }
+
+
+    /*
+Assign all fields in the constructor because we never reuse this object.  This makes the code
+typesafe.  Make them final to prevent accidental reuse.
+*/
+    public UpdateThread(String accountName,
+                        FinishListener listener,
+                        ArrayList<OneNote> noteList,
+                        NotesListAdapter listToView,
+                        @StringRes int resId,
+                        ArrayList<Uri> uris,
+                        Context context) {
+        //ImapNotesAccount ImapNotesAccount
+        //Log.d(TAG, "UpdateThread: " + noteBody);
+        this.accountName = accountName;
+        Account account = new Account(accountName, Utilities.PackageName);
+        this.ImapNotesAccount = new ImapNotesAccount(account, context);
+        this.listener = listener;
+        this.notesList = noteList;
+        this.adapter = listToView;
+        this.resId = resId;
+        this.action = Action.InsertMultipleMessages;
+        this.storedNotes = NotesDb.getInstance(context);
+        this.noteBody = null;
+        this.bgColor = null;
+
+        currentNote = null;
+        indexToDelete = -1;
+        this.uris = uris;
     }
 
     @Override
     protected Boolean doInBackground(Object... stuffs) {
         Log.d(TAG, "doInBackground");
-        try {
             // Do we have a note to remove?
             if (action == Action.Delete) {
-                //Log.d(TAG,"Received request to delete message #"+suid);
+                Log.d(TAG, "Received request to delete message #" + suid);
                 // Here we delete the note from the local notes list
-                //Log.d(TAG,"Delete note in Listview");
                 indexToDelete = getIndexByNumber(suid);
                 storedNotes.DeleteANote(suid, accountName);
                 MoveMailToDeleted(suid);
@@ -131,18 +166,13 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 Log.d(TAG, "Action Insert/Update:" + suid);
                 String oldSuid = suid;
                 storedNotes.SetSaveState(suid, OneNote.SAVE_STATE_SAVING, accountName);
-                //Log.d(TAG, "Received request to add new message: " + noteBody + "===");
                 // Use the first line as the tile
-                String[] tok = Html.fromHtml(noteBody.substring(0, Math.min(noteBody.length(), 2000)), Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE).toString().split("\n", 2);
+                String[] tok = Html.fromHtml(noteBody.substring(0, Math.min(noteBody.length(), 500)), Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE).toString().split("\n", 2);
                 String title = tok[0];
-                //String position = "0 0 0 0";
-                String body = noteBody;
-
                 //"<html><head></head><body>" + noteBody + "</body></html>";
 
-                String DATE_FORMAT = Utilities.internalDateFormatString;
                 Date date = new Date();
-                SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.ROOT);
+                SimpleDateFormat sdf = new SimpleDateFormat(Utilities.internalDateFormatString, Locale.ROOT);
                 String stringDate = sdf.format(date);
                 currentNote = new OneNote(title, stringDate, "", accountName, bgColor, OneNote.SAVE_STATE_SAVING);
                 // Add note to database
@@ -155,7 +185,15 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 // Here we ask to add the new note to the new note folder
                 // Must be done AFTER uid has been set in currentNote
                 Log.d(TAG, "doInBackground body: ");
-                WriteMailToNew(currentNote, body);
+                try {
+                    WriteMailToNew(currentNote, noteBody);
+                } catch (MessagingException | IOException e) {
+                    // something went wrong; set new state for message
+                    // for now all changes are lost
+                    storedNotes.SetSaveState(oldSuid, OneNote.SAVE_STATE_FAILED, accountName);
+                    bool_to_return = false;
+                    return bool_to_return;
+                }
                 if ((action == Action.Update) && (!oldSuid.startsWith("-"))) {
                     MoveMailToDeleted(oldSuid);
                 }
@@ -171,11 +209,60 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                 bool_to_return = true;
             }
 
-        } catch (Exception e) {
-            Log.d(TAG, "Action: " + action);
-            e.printStackTrace();
-            bool_to_return = false;
-        }
+        // Do we have multiple notes to add?
+            if ((action == Action.InsertMultipleMessages)) {
+                Message message;
+                for (Uri uri : uris) {
+                    Log.d(TAG, "Action InsertMultipleMessages:");
+                    message = SyncUtils.ReadMailFromString(ImapNotes3.UriToString(uri));
+                    if (message != null) {
+                        HtmlNote htmlNote = HtmlNote.GetNoteFromMessage(message);
+                        //storedNotes.SetSaveState("", OneNote.SAVE_STATE_SAVING, accountName);
+
+                        Date date;
+                        try {
+                            date = message.getSentDate();
+                        } catch (MessagingException e) {
+                            date = new Date();
+                        }
+                        SimpleDateFormat sdf = new SimpleDateFormat(Utilities.internalDateFormatString, Locale.ROOT);
+                        String stringDate = sdf.format(date);
+
+                        String subject;
+                        try {
+                            subject = message.getSubject();
+                        } catch (MessagingException e) {
+                            subject = "subject not found: " + e;
+                        }
+
+                        currentNote = new OneNote(subject, stringDate, "", accountName, htmlNote.color, OneNote.SAVE_STATE_SAVING);
+                        // Add note to database
+
+                        suid = storedNotes.GetTempNumber(currentNote);
+                        storedNotes.SetSaveState(suid, OneNote.SAVE_STATE_SAVING, accountName);
+                        currentNote.SetUid(suid);
+                        // Here we ask to add the new note to the new note folder
+                        // Must be done AFTER uid has been set in currentNote
+                        Log.d(TAG, "doInBackground body: ");
+                        try {
+                            WriteMailToNew(currentNote, htmlNote.text);
+                        } catch (MessagingException | IOException e) {
+                            // something went wrong; undo all actions in database
+                            storedNotes.RemoveTempNumber(currentNote);
+                            continue;
+                        }
+                        currentNote.SetState(OneNote.SAVE_STATE_OK);
+                        storedNotes.InsertANoteInDb(currentNote);
+
+                        // Add note to noteList but change date format before
+                        //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext);
+                        String sdate = DateFormat.getDateTimeInstance().format(date);
+                        currentNote.SetDate(sdate);
+                        bool_to_return = true;
+                        indexToDelete = -1;
+                    }
+                }
+            }
         return bool_to_return;
     }
 
@@ -204,15 +291,15 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private void MoveMailToDeleted(@NonNull String suid) {
         File directory = ImapNotesAccount.GetRootDirAccount();
         // TODO: Explain why we need to omit the first character of the UID
-        File from = new File(directory, suid);
+        File from = new File(directory, Utilities.addMailExt(suid));
         if (!from.exists()) {
             String positiveUid = suid.substring(1);
-            from = new File(directory + "/new", positiveUid);
+            from = new File(directory + "/new", Utilities.addMailExt(positiveUid));
             // TODO: Explain why it is safe to ignore the result of delete.
             //noinspection ResultOfMethodCallIgnored
             from.delete();
         } else {
-            File to = new File(directory + "/deleted/" + suid);
+            File to = new File(directory + "/deleted/" + Utilities.addMailExt(suid));
             // TODO: Explain why it is safe to ignore the result of rename.
             //noinspection ResultOfMethodCallIgnored
             from.renameTo(to);
@@ -273,10 +360,10 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         File accountDirectory = ImapNotesAccount.GetRootDirAccount();
         File directory = new File(accountDirectory, "new");
         message.setFrom(UserNameToEmail(ImapNotesAccount.username));
-        File outfile = new File(directory, uid);
+        File outfile = new File(directory, Utilities.addMailExt(uid));
         try {
             outfile.delete();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         OutputStream str = new FileOutputStream(outfile, false);
@@ -284,9 +371,9 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
         str.close();
     }
 
-    public Address UserNameToEmail(String name) {
+    public Address UserNameToEmail(@NonNull String name) {
         InternetAddress internetAddress = new InternetAddress();
-        internetAddress.setAddress(name);
+        internetAddress.setAddress(name.contains("@") ? name : name + "@" + Utilities.ApplicationName);
         return internetAddress;
     }
 
@@ -297,7 +384,8 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     public enum Action {
         Update,
         Insert,
-        Delete
+        Delete,
+        InsertMultipleMessages
     }
 
 }

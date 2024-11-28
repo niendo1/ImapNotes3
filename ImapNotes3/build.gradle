@@ -10,13 +10,13 @@ android {
         }
     }
 
-    compileSdk 34
+    compileSdk 35
     // buildToolsVersion "34.0.0"
 
     //noinspection GroovyMissingReturnStatement
     defaultConfig {
         applicationId "de.niendo.ImapNotes3"
-        targetSdkVersion 34
+        targetSdkVersion 35
         minSdkVersion 25
         signingConfig signingConfigs.release
         buildConfigField 'String', 'APPLICATION_NAME', '"ImapNotes3"'
@@ -42,13 +42,13 @@ android {
 
         }
         debug {
-            // signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             debuggable true
         }
     }
 
-    applicationVariants.all { variant ->
-        variant.outputs.all {
+    applicationVariants.configureEach { variant ->
+        variant.outputs.configureEach {
             outputFileName = "${project.name}-${variant.versionName}-${variant.buildType.name}.apk"
         }
     }
@@ -74,23 +74,30 @@ android {
         resources.excludes.add("META-INF/*")
     }
 
+    dependenciesInfo {
+        // Disables dependency metadata when building APKs.
+        includeInApk = false
+        // Disables dependency metadata when building Android App Bundles.
+        includeInBundle = false
+    }
+
     //lint {
     //    baseline = file("lint-baseline.xml")
     //}
 
-
 }
 
 dependencies {
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.appcompat:appcompat:1.7.0-alpha03'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.preference:preference:1.2.1'
     implementation 'com.sun.mail:android-mail:1.6.7'
     implementation 'com.sun.mail:android-activation:1.6.7'
-    implementation 'commons-io:commons-io:2.13.0'
-    implementation 'com.github.niendo1:richeditor-android:3.0.0'
-    implementation 'org.jetbrains:annotations:24.0.1'
-    implementation 'org.jsoup:jsoup:1.16.1'
-    implementation 'io.github.eltos:simpledialogfragments:3.7'
+    implementation 'commons-io:commons-io:2.18.0'
+    implementation 'com.github.niendo1:richeditor-android:3.0.2'
+    implementation 'org.jetbrains:annotations:26.0.1'
+    implementation 'org.jsoup:jsoup:1.18.1'
+    implementation 'io.github.eltos:simpledialogfragments:3.8.3'
 }
 
 // ToDo

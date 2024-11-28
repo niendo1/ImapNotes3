@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
  * Copyright (C)           - kwhitefoot
  * and Contributors.
  *
@@ -36,6 +36,7 @@ import de.niendo.ImapNotes3.AccountConfigurationActivity;
 import de.niendo.ImapNotes3.Data.ConfigurationFieldNames;
 import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.R;
+import de.niendo.ImapNotes3.Sync.SyncUtils;
 
 public class LoginThread extends AsyncTask<Void, Void, Result<String>> {
     private static final String TAG = "LoginThread";
@@ -45,33 +46,35 @@ public class LoginThread extends AsyncTask<Void, Void, Result<String>> {
     private final AccountConfigurationActivity accountConfigurationActivity;
 
     private final AccountConfigurationActivity.Actions action;
-    private FinishListener listener;
+    private final FinishListener listener;
 
     public LoginThread(ImapNotesAccount ImapNotesAccount,
                        AccountConfigurationActivity accountConfigurationActivity,
                        AccountConfigurationActivity.Actions action) {
         this.ImapNotesAccount = ImapNotesAccount;
-        this.listener = (LoginThread.FinishListener) accountConfigurationActivity;
+        this.listener = accountConfigurationActivity;
         this.accountConfigurationActivity = accountConfigurationActivity;
         this.action = action;
-        //ImapNotes3.ShowMessage(R.string.logging_in, accountnameTextView, 3);
     }
 
     @NonNull
     protected Result<String> doInBackground(Void... none) {
         Log.d(TAG, "doInBackground");
+        boolean newFolder = false;
         try {
-
-            ImapNotesResult res = accountConfigurationActivity.imapFolder.ConnectToProvider(
+            SyncUtils syncUtils = new SyncUtils();
+            ImapNotesResult res = syncUtils.ConnectToRemote(
                     ImapNotesAccount.username,
                     ImapNotesAccount.password,
                     ImapNotesAccount.server,
                     ImapNotesAccount.portnum,
                     ImapNotesAccount.security,
+                    ImapNotesAccount.GetImapFolder(),
                     THREAD_ID
             );
-            //accountConfigurationActivity = accountConfigurationActivity;
-            if (res.returnCode != Imaper.ResultCodeSuccess) {
+            if (res.returnCode == ImapNotesResult.ResultCodeImapFolderCreated) {
+                newFolder = true;
+            } else if (res.returnCode != ImapNotesResult.ResultCodeSuccess) {
                 Log.d(TAG, "doInBackground IMAP Failed");
                 return new Result<>(res.errorMessage, false);
             }
@@ -79,6 +82,10 @@ public class LoginThread extends AsyncTask<Void, Void, Result<String>> {
             final Account account = new Account(ImapNotesAccount.accountName, Utilities.PackageName);
             final AccountManager am = AccountManager.get(accountConfigurationActivity);
             accountConfigurationActivity.setResult(AccountConfigurationActivity.TO_REFRESH);
+            if (newFolder) {
+                // Database and folder not valid..get Data from new directory
+                SyncUtils.SetUIDValidity(account, -1L, accountConfigurationActivity);
+            }
             int resultTxtId;
             if (action == AccountConfigurationActivity.Actions.EDIT_ACCOUNT) {
                 resultTxtId = R.string.account_modified;
@@ -95,11 +102,11 @@ public class LoginThread extends AsyncTask<Void, Void, Result<String>> {
             accountConfigurationActivity.setAccountAuthenticatorResult(result);
             setUserData(am, account);
             // Run the Sync Adapter Periodically
-            ContentResolver.setIsSyncable(account, accountConfigurationActivity.AUTHORITY, 1);
-            ContentResolver.setSyncAutomatically(account, accountConfigurationActivity.AUTHORITY, true);
+            ContentResolver.setIsSyncable(account, AccountConfigurationActivity.AUTHORITY, 1);
+            ContentResolver.setSyncAutomatically(account, AccountConfigurationActivity.AUTHORITY, true);
             // we can enable inexact timers in our periodic sync
-            SyncRequest request = new SyncRequest.Builder().syncPeriodic(ImapNotesAccount.syncInterval.time * 60, ImapNotesAccount.syncInterval.time * 60)
-                    .setSyncAdapter(account, accountConfigurationActivity.AUTHORITY).setExtras(new Bundle()).build();
+            SyncRequest request = new SyncRequest.Builder().syncPeriodic(ImapNotesAccount.syncInterval.time * 60L, ImapNotesAccount.syncInterval.time * 60L)
+                    .setSyncAdapter(account, AccountConfigurationActivity.AUTHORITY).setExtras(new Bundle()).build();
             if (ImapNotesAccount.syncInterval.time > 0) {
                 ContentResolver.requestSync(request);
             } else {

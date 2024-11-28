@@ -1,0 +1,5 @@
+- Chinesische Übersetzung (dank sr093906)
+- Russische Übersetzung (dank to goatli)
+- fix xml-Symbol auf Version < v26
+- Kontoname muss eine gültige E-Mail-Adresse sein
+- vermeiden Sie Absturz, wenn das letzte Konto gelöscht wird

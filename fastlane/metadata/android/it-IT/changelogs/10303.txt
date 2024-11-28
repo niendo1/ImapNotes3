@@ -1,0 +1,7 @@
+* possibilità di visualizzare le note di tutti gli account/raccolte di note
+* aggiornamento librerie
+* aggiunto grigio e rosso ai colori delle note
+* modifiche minori alla disposizione degli elementi dell'interfaccia
+* correzione dialogo SaveChangesDialog
+* correzione crash dovuti alla sincronia
+* correzione intervallo di sincronia

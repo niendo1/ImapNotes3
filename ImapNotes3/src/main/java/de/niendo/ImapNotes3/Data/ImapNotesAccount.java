@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
  * Copyright (C) ?   -2022 - Axel Strübing
  * Copyright (C) ?   -2016 - Martin Carpella
  * Copyright (C) ?   -2015 - nb
@@ -63,7 +63,6 @@ public class ImapNotesAccount {
     private final Account account;
     private File dirForNewFiles;
     private File dirForDeletedFiles;
-    private File rootDir;
     private File rootDirAccount;
 
     public ImapNotesAccount(@NonNull String accountName,
@@ -88,7 +87,6 @@ public class ImapNotesAccount {
     public ImapNotesAccount(@NonNull Account account,
                             @NonNull Context applicationContext) {
         this.accountName = account.name;
-        rootDir = ImapNotes3.GetRootDir();
         rootDirAccount = ImapNotes3.GetAccountDir(accountName);
         dirForNewFiles = new File(rootDirAccount, "new");
         dirForDeletedFiles = new File(rootDirAccount, "deleted");
@@ -117,16 +115,11 @@ public class ImapNotesAccount {
     public void ClearHomeDir() {
         try {
             FileUtils.deleteDirectory(rootDirAccount);
-        } catch (IOException e) {
+        } catch (IOException | Error e) {
+            // for anbox - otherwise it will crash
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        // for anbox - otherwise it will crash
-        catch (Error e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-
     }
 
 
@@ -238,14 +231,14 @@ public class ImapNotesAccount {
 */
 
 
-    @Nullable
+    @NonNull
     public String GetImapFolder() {
         if (this.imapfolder.isEmpty())
             return DEFAULT_FOLDER_NAME;
         return this.imapfolder;
     }
 
-    @Nullable
+    @NonNull
     public File GetRootDirAccount() {
         return rootDirAccount;
     }

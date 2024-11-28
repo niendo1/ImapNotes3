@@ -1,0 +1,5 @@
+* Sticky-Unterstützung entfernen
+* Suche innerhalb von Notizen im Editor
+* geteilte URL als Link einfügen
+* Dialog zum Bilder einfügen verbessern
+* Update auf die neueste Version (3.0.0) von Richeditor

@@ -33,6 +33,7 @@ public class OneNote extends HashMap<String, String> {
     public static final String SAVE_STATE_OK = "";
     public static final String SAVE_STATE_SAVING = "SAVE_STATE_SAVING";
     public static final String SAVE_STATE_SYNCING = "SAVE_STATE_SYNCING";
+    public static final String SAVE_STATE_FAILED = "SAVE_STATE_FAILED";
     public static final String TITLE = "title";
     public static final String DATE = "date";
     public static final String BGCOLOR = "bgColor";

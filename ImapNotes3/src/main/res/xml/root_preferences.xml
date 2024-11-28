@@ -1,0 +1,62 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/appearance">
+
+        <Preference
+            app:key="EditorBgColorDefault"
+            app:summary="@string/EditorBgColorDefault_sum"
+            app:title="@string/EditorBgColorDefault" />
+
+        <Preference
+            app:key="EditorTxtColor"
+            app:summary="@string/EditorTxtColor_sum"
+            app:title="@string/EditorTxtColor" />
+
+        <!-- EditTextPreference
+            app:key="EditorBgColorDefault"
+            app:title="@string/EditorBgColorDefault"
+            app:useSimpleSummaryProvider="false" />
+
+        <EditTextPreference
+            app:key="EditorTxtColor"
+            app:title="@string/EditorTxtColor"
+            app:useSimpleSummaryProvider="true" / -->
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/backup">
+        <Preference
+            app:icon="@drawable/ic_action_make_archive"
+            app:key="make_archive"
+            app:summary="@string/CreateBackup_sum"
+            app:title="@string/make_archive" />
+
+        <Preference
+            app:icon="@drawable/ic_action_restore_archive"
+            app:key="restore_archive"
+            app:summary="@string/RestoreBackup_sum"
+            app:title="@string/restore_archive" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/miscellaneous">
+
+        <Preference
+            app:icon="@drawable/ic_action_send_debug_report"
+            app:key="send_debug_report"
+            app:title="@string/send_debug_report" />
+
+        <Preference
+            app:icon="@drawable/ic_action_about"
+            app:key="about"
+            app:title="@string/about" />
+
+        <!-- SwitchPreferenceCompat
+            app:dependency="sync"
+            app:key="attachment"
+            app:summaryOff="@string/attachment_summary_off"
+            app:summaryOn="@string/attachment_summary_on"
+            app:title="@string/attachment_title" / -->
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

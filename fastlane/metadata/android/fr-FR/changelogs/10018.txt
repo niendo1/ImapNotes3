@@ -1,0 +1,8 @@
+* amélioration du partage
+* amélioration de la réception des données partagées
+* les données partagées peuvent être insérées dans une nouvelle note ou dans une note existante
+* correction de STARTTLS (merci à axmanA)
+* les données de logcat peuvent être envoyées par l'utilisateur
+* opérations IMAP rendues "thread safe"
+* ajout d'une nouvelle icône (merci à woheller69)
+* le nom du compte/notepad n'a plus à suivre une syntaxe précise

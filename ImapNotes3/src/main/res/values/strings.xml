@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ImapNotes3</string>
+    <string name="app_name" translatable="false">ImapNotes3</string>
     <string name="new_account">New Account</string>
     <string name="new_note">New Note</string>
     <string name="refresh">Refresh</string>
@@ -10,25 +10,24 @@
     <string name="quotation_marks_not_allowed">Quotation marks are not allowed in account name</string>
     <string name="remove">Remove</string>
     <string name="save">Save</string>
-    <string name="check_and_create_account"><![CDATA[Check & Create Account]]></string>
+    <string name="check_and_create_account">Check &amp; Create Account</string>
     <string name="logging_in">Logging into your account…</string>
     <string name="account_already_exists_or_is_null">Account already exists or is null</string>
     <string name="account_added">Account has been added</string>
     <string name="add_account">Add Account/Notepad</string>
-    <string name="account_name">Name for Local account/notepad (optional)</string>
-    <string name="account_name_description">MyNotepad</string>
-    <string name="username">User name / e-mail</string>
-    <string name="your_login_name">Your login name for mail server</string>
+    <string name="account_name">Name for the account or notepad</string>
+    <string name="account_name_description">Leave empty to use the User name</string>
+    <string name="username">User name</string>
+    <string name="your_login_name">Your login for mail server</string>
     <string name="password">Password</string>
     <string name="your_password">Your password for mail server</string>
-    <string name="server">Mail server name</string>
-    <string name="imap_notes_server">Host name IMAP server</string>
+    <string name="server">IMAP Server name</string>
+    <string name="imap_notes_server">Host name for mail server</string>
     <string name="server_port_number_to_use">Server port number to use</string>
     <string name="port_number">Port Number</string>
     <string name="sync_interval">Sync Interval</string>
-    <string name="notes_folder_optional">Notes Folder on server (optional)</string>
-    <string name="manually_set_full_imap_path_to_notes_folder">Notes</string>
-    <string name="welcome">Welcome</string>
+    <string name="notes_folder">Notes folder on server</string>
+    <string name="notes_folder_description">Leave empty to use \'Notes\'</string>
     <string name="delete">Delete</string>
     <string name="color">Color</string>
     <string name="blue">Blue</string>
@@ -39,7 +38,7 @@
     <string name="green">Green</string>
     <string name="red">Red</string>
     <string name="gray">Gray</string>
-    <string name="syncing">Synchronising…</string>
+    <string name="syncing">Synchronizing…</string>
     <string name="refreshing_notes_list">Refreshing notes list…</string>
     <string name="updating_notes_list">Updating notes list…</string>
     <string name="editAccount">Edit Account</string>
@@ -68,8 +67,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="sort_color">Sort by Color</string>
-    <string name="license">License: GPL v3.0</string>
-    <string name="internet">Internet: github.com/niendo1/ImapNotes3/</string>
+    <string name="license">License:</string>
+    <string name="internet">Internet:</string>
     <string name="placeholder">Insert text here…</string>
     <string name="AccountList">Account List</string>
     <string name="Last_sync">"Last sync: "</string>
@@ -138,8 +137,39 @@
                                   You can create such a password with your provider.
     </string>
     <string name="search_any_keyword">Search any keyword..</string>
+    <string name="make_archive">Create Backup</string>
+    <string name="intent_import_note">Import Note(s)</string>
+    <string name="importing">Importing…</string>
+    <string name="appstore">App-Store:</string>
+    <string name="appstorelink">https://f-droid.org/en/packages/de.niendo.ImapNotes3/</string>
+    <string name="appstorename">F-Droid</string>
+    <string name="permission_required">permission required</string>
+    <string name="permission_message">please grant permission to write backup to documents directory</string>
+    <string name="create_archive">Create backup: </string>
+    <string name="default_color">Default</string>
+    <string name="restore_archive">Restore from Archive</string>
+    <string name="account_name_restore">Select target account/notebook</string>
+    <string name="select_all_notes_for_restore">all</string>
+    <string name="restore_more_then_one_account_found">The archive contains more than one account/notebook</string>
+    <string name="select_account_name_restore_import">Select an account/notebook for restore</string>
+    <string name="select_notes_for_restore">Select one or more notes to restore from %s</string>
+    <string name="failed">failed</string>
+    <string name="archiving">archiving…</string>
+    <string name="success">successfully</string>
+    <string name="reading_archive_file">Reading archive file</string>
+    <string name="imap_server_changed_new_password">Server name changed, please renter password!</string>
+    <string name="settings">Settings</string>
+    <string name="appearance">Appearance</string>
+    <string name="EditorBgColorDefault">Default background color for notes</string>
+    <string name="EditorBgColorDefault_sum">For dark and light mode a different value is saved.</string>
+    <string name="EditorTxtColor">Text color for notes</string>
+    <string name="EditorTxtColor_sum">For dark and light mode a different value is saved.</string>
+    <string name="miscellaneous">Miscellaneous</string>
+    <string name="backup">Backup</string>
+    <string name="CreateBackup_sum">Archive notes to a zip file.</string>
+    <string name="RestoreBackup_sum">Restore one or more notes from a zip file.</string>
+    <string name="no_notes_in_file">Archive contains no valid notes</string>
     <string name="title_activity_attachment">AttachmentActivity</string>
-
     <string name="action_settings">Settings</string>
     <string name="attachments">Attachments</string>
     <string name="add_attachment">add attachment</string>

@@ -1,0 +1,5 @@
+- Traducción al chino (gracias a sr093906)
+- Traducción al ruso (gracias a cabrali)
+- corrige el icono xml en la versión <v26
+- el nombre de la cuenta debe ser una dirección de correo electrónico válida
+- evitar fallos cuando se elimina la última cuenta

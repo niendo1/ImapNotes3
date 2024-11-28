@@ -1,0 +1,5 @@
+* eliminar soporte fijado
+* buscar dentro de las notas en el editor
+* insertar URL compartida como enlace
+* mejorar la inserción de imágenes
+* actualización a la última versión (3.0.0) de richeditor

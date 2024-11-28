@@ -1,0 +1,9 @@
+* importar múltiples archivos eml (message/rfc822) (closes #47)
+* Corrección del error de certificado informado cuando se selecciona "aceptar cualquier certificado" (john-p-williams)
+* si se cambia la carpeta Imap, use notas en esta carpeta
+* sincronización después de editar los datos de la cuenta
+* corregir el manejo de datos compartidos con más de una cuenta
+* reelaboración sobre el diálogo
+* crear un archivo en Documentos en lugar de compartirlo (el código se copia de woheller69)
+* corrige el comportamiento del diálogo del selector de color
+* El texto y el color de fondo se pueden establecer en sus valores predeterminados en el cuadro de diálogo del selector de color

@@ -55,13 +55,14 @@ public class EditorMenuAdapter extends ArrayAdapter<String> {
 
     @Override
     public View getDropDownView(int position, View convertView,
-                                ViewGroup parent) {
+                                @NonNull ViewGroup parent) {
 // TODO Auto-generated method stub
         return getCustomView(position, convertView, parent);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 // TODO Auto-generated method stub
         return getCustomView(position, convertView, parent);
     }

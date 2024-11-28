@@ -1,0 +1,9 @@
+* importazione multipla di file .eml (message/rfc822) (chiude #47)
+* correzione errore certificato restituito quando l'impostazione 'accetta qualunque certificato' è selezionata (john-p-williams)
+* se la cartella IMAP viene cambiata, carica le note dalla nuova posizione
+* sincronizzazione dopo la modifica delle impostazioni dell'account
+* correzione della gestione dei dati condivisi in presenza di più account
+* modificato dialogo 'about'
+* creazione archivio in 'Documents' invece della condivisione (codice copiato da woheller69)
+* correzione comportamento del dialogo di selezione colore
+* il colore del testo e sfondo può essere reimpostato ai valori iniziali nel dialogo di selezione colore

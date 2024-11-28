@@ -9,30 +9,26 @@
     <color name="gray">#B7B6B6</color>
     <color name="black">#000000</color>
     <color name="red">#FA8C82</color>
-    <color name="none">@color/yellow</color>
+    <color name="none">@color/white</color>
 
-    <color name="ActionBgColor">#C7C49E</color>
-    <color name="ActionTxtColor">#3C490D</color>
+    <color name="ActionBgColor">@color/white</color>
+    <color name="ActionTxtColor">@color/black</color>
 
-    <color name="ListBgColor">#FFFFAE</color>
-    <color name="ListTxtColor">#3C490D</color>
-    <color name="ListInfoTxtColor">#6F6E5A</color>
+    <color name="AccountBgColor">#F9FBE7</color>
+    <color name="AccountTxtColor">@color/ActionTxtColor</color>
+    <color name="AccountHintColor">@color/ActionTxtColor</color>
 
-    <color name="StatusBgColor">#FFFFAE</color>
-    <color name="StatusBgErrColor">#FE877C</color>
-    <color name="StatusTxtColor">#C7C49E</color>
+    <color name="EditorMenuBgColor">#3C3C3A</color>
+    <color name="EditorTxtColor">@color/ActionTxtColor</color>
+    <color name="EditorBgColorDefault">@color/none</color>
 
-    <color name="AccountBgColor">#FFFFAE</color>
-    <color name="AccountTxtColor">#3C490D</color>
-    <color name="AccountHintColor">#C7C49E</color>
-
-    <color name="EditorMenuBgColor">#C7C49E</color>
-    <color name="EditorTxtColor">#3C490D</color>
-
-    <color name="ShareActionBgColor">#3C490D</color>
-    <color name="ShareActionTxtColor">#C7C49E</color>
+    <color name="ShareActionBgColor">#F9FBE7</color>>
+    <color name="ShareActionTxtColor">@color/ActionTxtColor</color>
     <color name="ShareActionActionColor">#2F7F7F</color>
 
     <color name="transparent">#00000000</color>
+    <color name="colorSurface">#AAAAAA</color>
+
+    <item name="ColorMode" translatable="false" type="string">light</item>>
 
 </resources>

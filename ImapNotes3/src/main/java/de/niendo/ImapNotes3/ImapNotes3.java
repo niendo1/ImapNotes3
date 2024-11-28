@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
  * Copyright (C)         ? - kwhitefoot
  * and Contributors.
  *
@@ -21,9 +21,14 @@
 
 package de.niendo.ImapNotes3;
 
+import static android.os.Environment.DIRECTORY_DOCUMENTS;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.view.View;
 
@@ -32,14 +37,14 @@ import androidx.annotation.StringRes;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
-import de.niendo.ImapNotes3.Miscs.Imaper;
-
+import java.io.BufferedInputStream;
 import java.io.File;
+
+import de.niendo.ImapNotes3.Miscs.Utilities;
 
 public class ImapNotes3 extends Application {
     private static Context mContext;
     private static View mContent;
-    private Imaper thisSessionImapFolder;
     public static Intent intent; // For Data-Exchange SyncAdapater
     private static final String ReservedChars = "[\\\\/:*?\"<>|'!]";
 
@@ -68,18 +73,26 @@ public class ImapNotes3 extends Application {
         mContext = getApplicationContext();
     }
 
+    public static String UriToString(Uri uri) {
+        StringBuilder sharedData = new StringBuilder();
+        BufferedInputStream bufferedInputStream;
+        try {
+            bufferedInputStream =
+                    new BufferedInputStream(mContext.getContentResolver().openInputStream(uri));
+            byte[] contents = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = bufferedInputStream.read(contents)) != -1) {
+                sharedData.append(new String(contents, 0, bytesRead));
+            }
+            bufferedInputStream.close();
+            return (sharedData.toString());
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
     public static void setContent(View content) {
         mContent = content;
-    }
-
-    // ?
-    public void SetImaper(Imaper currentImaper) {
-        this.thisSessionImapFolder = currentImaper;
-    }
-
-    // ?
-    public Imaper GetImaper() {
-        return this.thisSessionImapFolder;
     }
 
     public ImapNotes3() {
@@ -140,4 +153,19 @@ public class ImapNotes3 extends Application {
         snackbar.show();
     }
 
+
+    public static int loadPreferenceColor(String name, int defValue) {
+        SharedPreferences preferences = mContext.getSharedPreferences(SettingsActivity.MAIN_PREFERENCE_NAME, MODE_PRIVATE);
+        return preferences.getInt(name + "_" + mContext.getString(R.string.ColorMode), defValue);
+    }
+
+    public static void savePreferenceColor(String name, int value) {
+        SharedPreferences.Editor preferences = mContext.getSharedPreferences(SettingsActivity.MAIN_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        preferences.putInt(name + "_" + mContext.getString(R.string.ColorMode), value);
+        preferences.apply();
+    }
+
+    public static File GetDocumentDir() {
+        return Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS + "/" + Utilities.ApplicationName);
+    }
 }

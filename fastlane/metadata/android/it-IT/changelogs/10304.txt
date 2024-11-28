@@ -1,0 +1,5 @@
+* rimozione supporto sticky
+* ricerca all'interno delle note nell'editor
+* inserimento URL condiviso come collegamento
+* miglioramento dell'inserimento immagine
+* aggiornamento all'ultima versione (3.0.0) di richeditor

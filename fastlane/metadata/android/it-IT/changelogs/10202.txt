@@ -1,0 +1,17 @@
+* inserimento data e ora da menu
+* ricerca sempre su tutti gli account
+* modifica e ordina a ricerca attiva
+* ricezione immagini condivise
+* conversione selezione in HTML
+* conversione selezione in testo semplice
+* semplificata la selezione del periodo di sincronia
+* lettura messaggi "multipart"
+* aggiornato appcompat 1.6.1
+* aggiunta formattazione elementi <pre>
+* aggiornato gradle 8.0
+* utilizzo io.github.eltos:simpledialogfragments
+* utilizzo SimpleColorDialog per selezionare colore di test e sfondo sull'editor
+* aggiunto dialogo per dimensioni tabella
+* aggiunto dialogo per inserimento di link
+* aggiunto dialogo per inserimento immagine
+* molte correzioni di bug

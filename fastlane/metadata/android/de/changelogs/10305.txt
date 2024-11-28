@@ -1,0 +1,9 @@
+* Benutzer kann Backup-Datei erstellen
+* speichert Dateien intern als *.eml
+* Notizen speichern, wenn IMAP-Ordner auf dem Server gelöscht oder umbenannt wird
+* Richeditor v3.0.1
+* Import *.eml Dateien (via Share)
+* aktualisierte chinesische Übersetzung (dank sr093906)
+* Gradle 8.3
+* Synchronisation von Imap-Operationen überarbeitet
+* update libs

@@ -1,0 +1,5 @@
+* Übersetzungen mit Weblate hinzugefügt
+* Wiederherstellen aller oder einzelner Notizen aus einem ZIP-Archiv
+* CreateArchive in einem extra Thread ausführen
+* Spanische Übersetzung hinzugefügt (Dank an gallegonovato)
+* Änderung des Imap-Servers, erfordert Neueingabe des Passworts

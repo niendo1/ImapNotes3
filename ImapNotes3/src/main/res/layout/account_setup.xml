@@ -9,9 +9,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/AccountBgColor"
-        android:orientation="vertical"
-        android:textColor="@color/AccountTxtColor">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/heading"
@@ -25,8 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/account_name"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/AccountTxtColor" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -38,7 +35,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
-                android:autofillHints="yes"
+                android:importantForAutofill="no"
                 android:hint="@string/account_name_description"
                 android:inputType="textEmailAddress">
 
@@ -50,8 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/username"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/AccountTxtColor" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -63,7 +59,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
-                android:autofillHints="yes"
+                android:autofillHints="AUTOFILL_HINT_USERNAME"
                 android:hint="@string/your_login_name"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -72,8 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/password"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/AccountTxtColor" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -86,7 +81,7 @@
                 android:id="@+id/passwordEdit"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="yes"
+                android:autofillHints="AUTOFILL_HINT_PASSWORD"
                 android:hint="@string/your_password"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -96,8 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/server"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/AccountTxtColor" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -109,7 +103,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
-                android:autofillHints="yes"
                 android:hint="@string/imap_notes_server"
                 android:inputType="textNoSuggestions|text|textVisiblePassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -118,12 +111,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/security"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/AccountTxtColor" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
             android:id="@+id/securitySpinner"
-            android:popupBackground="@color/AccountBgColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -131,8 +122,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/port_number"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/AccountTxtColor" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -144,32 +134,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
-                android:autofillHints="yes"
                 android:ems="10"
                 android:hint="@string/server_port_number_to_use"
-                android:inputType="number"
-                android:textColor="@color/AccountTxtColor" />
+                android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sync_interval"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/AccountTxtColor" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
             android:id="@+id/syncintervalSpinner"
             android:layout_width="match_parent"
-            android:popupBackground="@color/AccountBgColor"
             android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/notes_folder_optional"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/AccountTxtColor" />
+            android:text="@string/notes_folder"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -178,30 +163,12 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/folderEdit"
+                android:hint="@string/notes_folder_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
-                android:autofillHints="yes"
-                android:hint="@string/manually_set_full_imap_path_to_notes_folder"
-                android:inputType="text"
-                android:textColor="@color/AccountTxtColor" />
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- CheckBox
-            android:id="@+id/stickyCheckBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/AccountTxtColor"
-            android:text="@string/use_sticky_notes" />
-
-        <Button
-            android:id="@+id/loginButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:onClick="DoLogin"
-            android:text="Login" >
-        </Button> -->
 
         <LinearLayout
             android:id="@+id/buttonsLayout"

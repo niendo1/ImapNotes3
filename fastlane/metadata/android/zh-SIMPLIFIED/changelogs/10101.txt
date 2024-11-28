@@ -1,0 +1,12 @@
+* 使用 https://github.com/niendo1/richeditor-android
+* 添加待办事项列表的复选框
+* 添加表格支持
+* 添加对可折叠部分的支持
+*使用 getHTML()作为回调.. windows高性能模式
+* 添加插入链接
+* 添加插入图像
+* 添加插入音频、视频和 YouTube 视频
+* 添加对 fontFamily的支持
+* 使用外部程序打开链接
+* 关闭编辑器时要求保存更改
+* 错误修复

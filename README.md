@@ -7,6 +7,7 @@
 <a href="https://github.com/niendo1/richeditor-android"><img alt="GitHub Release RichEditor" src="https://img.shields.io/github/v/release/niendo1/richeditor-android?label=RichEditor"></a>
 <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License_GPL_v3"/></a>
 <a href="https://f-droid.org/packages/de.niendo.ImapNotes3/"><img alt="F-Droid Version" src="https://img.shields.io/f-droid/v/de.niendo.ImapNotes3"></a>
+<a href="https://hosted.weblate.org/projects/ImapNotes3/"><img src="https://img.shields.io/weblate/progress/ImapNotes3" alt="Translation state"/></a>
 </p>
 
 ImapNotes3
@@ -26,6 +27,8 @@ src="https://github.com/niendo1/ImapNotes3/blob/master/fastlane/metadata/android
 src="https://github.com/niendo1/ImapNotes3/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/4.png"/>
 <img width="29%" style="border:5px"
 src="https://github.com/niendo1/ImapNotes3/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/5.png"/>
+<img width="29%" style="border:5px"
+src="https://github.com/niendo1/ImapNotes3/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/6.png"/>
 
 ### Features
 
@@ -38,12 +41,20 @@ src="https://github.com/niendo1/ImapNotes3/blob/master/fastlane/metadata/android
 * light and dark mode support
 * color support for notes
 * share your notes
+* backup your notes to a local zip archive
+* restore all or just a single note from a local archive
 * notes are saved as standard HTML E-mails
 * security can be plain text, SSL/TLS or STARTTLS
 * multiple IMAP accounts and/or notepads can be managed
 * works offline and sync is done in the background
 * only a minimum on user permissions required
 * open source - no tracker or advertising
+
+### Translations
+
+This app can be translated at: <a href="https://hosted.weblate.org/projects/ImapNotes3/">
+https://hosted.weblate.org</a>. Your help is greatly appreciated.
+If your favourite language is missing, just drop me an email.
 
 ### History
 

@@ -1,0 +1,12 @@
+* verwendet http://github.com/niendo1/richeditor-android
+* Checkboxen für ToDo-Listen hinzufügen
+* Tabellenunterstützung hinzufügen
+* Unterstützung für Aufklappbare Sektionen hinzugefügt
+* Verwenden Sie getHTML() als Callback .. Leistungsgewinn
+* neu: Einfügen Links
+* neu: Einfügen Bild
+* Fügen Sie Audio, Video und Youtube Video ein
+* Unterstützung für fontFamily
+* öffne Links mit externen Programmen
+* Abfrage, Änderungen zu speichern, wenn Sie den Editor schließen
+* Bugfixes

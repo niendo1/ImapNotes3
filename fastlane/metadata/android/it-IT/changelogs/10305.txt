@@ -1,0 +1,9 @@
+* l'utente può creare il backup su file
+* salvataggio file interni come *.eml
+* salvataggio delle note se la cartella IMAP sul server viene eliminata o rinominata
+* richeditor v3.0.1
+* importazione file *.eml (attraverso la condivisione)
+* aggiornata traduzione in cinese (grazie a sr093906)
+* gradle 8.3
+* ristrutturata la sincronizzazione delle operazioni IMAP
+* aggiornamento delle librerie e degli strumenti di compilazione

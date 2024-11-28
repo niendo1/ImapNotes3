@@ -1,0 +1,11 @@
+* añadir traducción al ruso (gracias a weblate)
+* añadir traducción al italiano (gracias a weblate)
+* agregar botón de acción flotante para nueva nota
+* actualización para API 35
+* Personaliza el texto y el color de fondo de las notas.
+* simplificar colores
+* reemplazar el campo de estado con mensajes de notificación
+* actualizaciones de gradle y lib
+*correcciones de traducción
+* Corrección de la selección de color de las notas
+* copia de seguridad a Documents/ImapNotes3 - crear si no existe

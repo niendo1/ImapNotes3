@@ -1,0 +1,17 @@
+* insertar fecha y hora a través del menú
+* buscar siempre en todas las cuentas
+* editar y ordenar cuando la búsqueda está activa
+* recibir imágenes compartidas
+* convertir la selección a código HTML
+* convertir la selección a texto
+* simplificar la selección del intervalo de sincronización
+* leer mensajes de varias partes
+* actualización a appcompat 1.6.1
+* agregar formato html previamente
+*actualizar a gradle 8.0
+* use io.github.eltos:simpledialogfragments
+* use SimpleColorDialog para seleccionar el texto y el color de fondo en el editor
+* agregar cuadro de diálogo para las dimensiones de la tabla
+* agregar cuadro de diálogo para insertar enlace
+* agregar cuadro de diálogo para insertar imagen
+* muchas correcciones de errores

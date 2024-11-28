@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
  * Copyright (C)         ? - kwhitefoot
  * Copyright (C)      2016 - Martin Carpella
  * Copyright (C)      2014 - c0238
@@ -44,17 +44,14 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.FileProvider;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -82,7 +79,6 @@ import jp.wasabeef.richeditor.RichEditor;
 
 public class NoteDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, SimpleDialog.OnDialogResultListener {
 
-    //region Intent item names
     public static final String selectedNote = "selectedNote";
     public static final String ActivityType = "ActivityType";
     public static final String ActivityTypeEdit = "ActivityTypeEdit";
@@ -125,13 +121,10 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     private String accountName = "";
     private String suid; // uid as string
     private RichEditor editText;
-    private @ColorInt int lastTxtColor = 0x80e9a11d;
-    private @ColorInt int lastBgColor = 0x80e9a11d;
     private String lastTag = "#";
     private List<String> tagList;
     private MenuItem itemNext;
     private MenuItem itemPrevious;
-    //endregion
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +145,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             ChangeNote = "";
         if (action == null)
             action = "";
+
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -194,10 +188,10 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 return;
             }
         } else if (ChangeNote.equals(ActivityTypeAdd)) {   // new entry
-            accountName = intent.getStringExtra(ListActivity.ACCOUNTNAME);
+            accountName = intent.getStringExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME);
             SetupRichEditor();
         } else if (ChangeNote.equals(ActivityTypeAddShare)) {   // new Entry from Share
-            accountName = intent.getStringExtra(ListActivity.ACCOUNTNAME);
+            accountName = intent.getStringExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME);
             SetupRichEditor();
             processShareIntent(intent);
         }
@@ -206,15 +200,25 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public boolean onResult(@NonNull String dialogTag, int which, @NonNull Bundle extras) {
-        if (which == BUTTON_POSITIVE) {
+        if (which == BUTTON_NEUTRAL) {
+            editText.requestFocusFromTouch();
             switch (dialogTag) {
                 case DLG_HTML_TXT_COLOR:
-                    lastTxtColor = extras.getInt(SimpleColorDialog.COLOR);
-                    editText.setTextColor(lastTxtColor);
+                    editText.setTextColor("initial");
                     return true;
                 case DLG_HTML_BG_COLOR:
-                    lastBgColor = extras.getInt(SimpleColorDialog.COLOR);
-                    editText.setTextBackgroundColor(lastBgColor);
+                    editText.setTextBackgroundColor("initial");
+                    return true;
+            }
+        }
+        if (which == BUTTON_POSITIVE) {
+            editText.requestFocusFromTouch();
+            switch (dialogTag) {
+                case DLG_HTML_TXT_COLOR:
+                    editText.setTextColor(extras.getInt(SimpleColorDialog.COLOR));
+                    return true;
+                case DLG_HTML_BG_COLOR:
+                    editText.setTextBackgroundColor(extras.getInt(SimpleColorDialog.COLOR));
                     return true;
                 case DLG_TABLE_DIMENSION:
                     editText.insertTable(Integer.valueOf(extras.getString(DLG_TABLE_DIMENSION_COL)), Integer.valueOf(extras.getString(DLG_TABLE_DIMENSION_ROW)));
@@ -237,11 +241,11 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     return true;
                 case DLG_INSERT_IMAGE: {
                     Boolean relative = extras.getBoolean(DLG_INSERT_LINK_IMAGE_RELATIVE);
-                    Boolean inline = extras.getBoolean(DLG_INSERT_IMAGE_INLINE);
-                    Integer scale = Integer.valueOf(extras.getString(DLG_INSERT_IMAGE_SHRINK_FACTOR));
+                    boolean inline = extras.getBoolean(DLG_INSERT_IMAGE_INLINE);
+                    int scale = Integer.parseInt(extras.getString(DLG_INSERT_IMAGE_SHRINK_FACTOR));
                     Uri uri = extras.getParcelable(Intent.EXTRA_STREAM);
                     double fileSize = extras.getDouble(DLG_INSERT_IMAGE_FILE_SIZE);
-                    editText.insertHTML(extras.getString(DLG_INSERT_LINK_IMAGE_ALT) + "\n<br>");
+                    editText.insertHTML(extras.getString(DLG_INSERT_LINK_IMAGE_ALT));
                     if (inline) {
                         if ((double) (Utilities.getRealSizeFromUri(this, uri) / (scale * scale)) > MAX_INSERT_FILE_SIZE_MB * 1024 * 1024) {
                             Log.d(TAG, "FileSize:" + fileSize / (scale * scale));
@@ -256,12 +260,16 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                                 extras.getString(DLG_INSERT_LINK_IMAGE_ALT), extras.getString(DLG_INSERT_LINK_IMAGE_WIDTH),
                                 extras.getString(DLG_INSERT_LINK_IMAGE_HEIGHT), relative);
                     }
-                    editText.insertHTML("\n<br>");
-
+                    editText.insertHTML("<br><br>");
+                    return true;
                 }
                 case DLG_SELECT_ACCOUNT: {
                     accountName = extras.getString(DLG_SELECT_ACCOUNT_ACCOUNT);
                     saveNote(extras.getBoolean(DLG_SELECT_ACCOUNT_FINISH));
+                    return true;
+                }
+                default: {
+                    Log.d(TAG, "unknown dialog");
                 }
             }
         }
@@ -370,45 +378,64 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             case R.id.action_heading6:
                 editText.setHeading(6);
                 break;
-            case R.id.action_txt_color:
+            case R.id.action_txt_color: {
+                int pallet = getString(R.string.ColorMode).equals("light") ? SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK : SimpleColorDialog.MATERIAL_COLOR_PALLET_LIGHT;
                 SimpleColorDialog.build()
-                        .colors(this, SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK)
+                        .colors(this, pallet)
                         .title(getString(R.string.selectTextColor))
-                        .colorPreset(lastTxtColor)
+                        .colorPreset(ImapNotes3.loadPreferenceColor("EditorTxtColor", getColor(R.color.EditorTxtColor)))
                         .setupColorWheelAlpha(false)
                         .allowCustom(true)
                         .neg(R.string.cancel)
+                        .neut(R.string.default_color)
                         .show(this, DLG_HTML_TXT_COLOR);
                 break;
-            case R.id.action_bg_color:
+            }
+            case R.id.action_bg_color: {
+                int mybgColor;
+                if (bgColor.equals("none")) {
+                    mybgColor = ImapNotes3.loadPreferenceColor("EditorBgColorDefault", getColor(R.color.EditorBgColorDefault));
+                } else {
+                    mybgColor = Utilities.getColorByName(bgColor, getApplicationContext());
+                }
+                int pallet = getString(R.string.ColorMode).equals("light") ? SimpleColorDialog.MATERIAL_COLOR_PALLET_LIGHT : SimpleColorDialog.MATERIAL_COLOR_PALLET_DARK;
                 SimpleColorDialog.build()
-                        .colors(this, SimpleColorDialog.MATERIAL_COLOR_PALLET_LIGHT)
+                        .colors(this, pallet)
                         .title(getString(R.string.selectBgColor))
-                        .colorPreset(lastBgColor)
+                        .colorPreset(mybgColor)
                         .setupColorWheelAlpha(false)
                         .allowCustom(true)
                         .neg(R.string.cancel)
+                        .neut(R.string.default_color)
                         .show(this, DLG_HTML_BG_COLOR);
                 break;
+            }
             case R.id.action_font_size_1:
+                editText.requestFocusFromTouch();
                 editText.setFontSize(1);
                 break;
             case R.id.action_font_size_2:
+                editText.requestFocusFromTouch();
                 editText.setFontSize(2);
                 break;
             case R.id.action_font_size_3:
+                editText.requestFocusFromTouch();
                 editText.setFontSize(3);
                 break;
             case R.id.action_font_size_4:
+                editText.requestFocusFromTouch();
                 editText.setFontSize(4);
                 break;
             case R.id.action_font_size_5:
+                editText.requestFocusFromTouch();
                 editText.setFontSize(5);
                 break;
             case R.id.action_font_size_6:
+                editText.requestFocusFromTouch();
                 editText.setFontSize(6);
                 break;
             case R.id.action_font_size_7:
+                editText.requestFocusFromTouch();
                 editText.setFontSize(7);
                 break;
             case R.id.action_font_serif:
@@ -666,10 +693,14 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     // realColor is misnamed.  It is the ID of the radio button widget that chooses the background
     // colour.
     private void ResetColors() {
-        editText.setEditorFontColor(getColor(R.color.EditorTxtColor));
-        (findViewById(R.id.scrollView)).setBackgroundColor(Utilities.getColorByName(bgColor, getApplicationContext()));
-        lastTxtColor = getColor(R.color.EditorTxtColor);
-        lastBgColor = Utilities.getColorByName(bgColor, getApplicationContext());
+        editText.setEditorFontColor(ImapNotes3.loadPreferenceColor("EditorTxtColor", getColor(R.color.EditorTxtColor)));
+        int mybgColor;
+        if (bgColor.equals("none")) {
+            mybgColor = ImapNotes3.loadPreferenceColor("EditorBgColorDefault", getColor(R.color.EditorBgColorDefault));
+        } else {
+            mybgColor = Utilities.getColorByName(bgColor, getApplicationContext());
+        }
+        (findViewById(R.id.scrollView)).setBackgroundColor(mybgColor);
     }
 
     @SuppressLint("RestrictedApi")
@@ -679,6 +710,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         m.setOptionalIconsVisible(true);
         itemNext = menu.findItem(R.id.itemNext);
         itemPrevious = menu.findItem(R.id.itemPrevious);
+        SetColorSelect(menu, bgColor);
         return true;
     }
 
@@ -688,6 +720,11 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         super.onPrepareOptionsMenu(menu);
         //depending on your conditions, either enable/disable
         return true;
+    }
+
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+        return super.onMenuOpened(featureId, menu);
     }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -710,7 +747,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     public boolean onQueryTextChange(String query) {
                         // When the query length is greater
                         // than 0 we will perform the search
-                        if (query.length() > 0) {
+                        if (!query.isEmpty()) {
                             // findAllAsync finds all instances
                             // on the page and
                             // highlights them,asynchronously.
@@ -821,6 +858,44 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         return false;
     }
 
+    /**
+     * Set android:id="@+id/color" to the selected note color
+     */
+    private void SetColorSelect(Menu menu, String color) {
+        switch (color) {
+            case "":
+            case "none":
+                menu.findItem(R.id.none).setChecked(true);
+                break;
+            case "blue":
+                menu.findItem(R.id.blue).setChecked(true);
+                break;
+            case "white":
+                menu.findItem(R.id.white).setChecked(true);
+                break;
+            case "gray":
+                menu.findItem(R.id.gray).setChecked(true);
+                break;
+            case "black":
+                menu.findItem(R.id.black).setChecked(true);
+                break;
+            case "yellow":
+                menu.findItem(R.id.yellow).setChecked(true);
+                break;
+            case "pink":
+                menu.findItem(R.id.pink).setChecked(true);
+                break;
+            case "green":
+                menu.findItem(R.id.green).setChecked(true);
+                break;
+            case "brown":
+                menu.findItem(R.id.brown).setChecked(true);
+                break;
+            case "red":
+                menu.findItem(R.id.red).setChecked(true);
+                break;
+        }
+    }
 
     /**
      * Note that this function does not save the note to permanent storage it just passes it back to
@@ -829,17 +904,15 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     private void saveNote(boolean finish) {
         Log.d(TAG, "saveNote");
 
-        if (accountName == null || accountName.equals("")) {
+        if (accountName == null || accountName.isEmpty()) {
             Bundle extra = new Bundle();
             extra.putBoolean(DLG_SELECT_ACCOUNT_FINISH, finish);
-
-            ArrayList accounts = ListActivity.getAccountList();
 
             SimpleFormDialog.build()
                     .extra(extra)
                     .title(R.string.select_one_account)
                     .fields(
-                            Input.spinner(DLG_SELECT_ACCOUNT_ACCOUNT, accounts)
+                            Input.spinner(DLG_SELECT_ACCOUNT_ACCOUNT, (ArrayList<String>) ListActivity.getAccountList())
                                     .required()
                                     .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL))
 
@@ -904,7 +977,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
     }
 
     private void processShareIntent(Intent intent) {
-        String sharedData = "";
+        Log.d(TAG, "processShareIntent");
         // Share: Receive Data as new message
         String strAction = intent.getAction();
         if (!editText.hasFocus()) editText.focusEditor();
@@ -912,10 +985,10 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
             String type = intent.getType();
             String subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+            if (subject == null) subject = "";
             Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-            if (uri != null) {
+            if (uri != null && type != null) {
                 if (type.startsWith("image/")) {
-                    String finalSubject = subject;
                     Bundle extra = new Bundle();
                     extra.putParcelable(Intent.EXTRA_STREAM, uri);
                     double fileSize = Utilities.getRealSizeFromUri(this, uri);
@@ -961,36 +1034,30 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                             .show(this, DLG_INSERT_IMAGE);
                     //https://stackoverflow.com/questions/17839388/creating-a-scaled-bitmap-with-createscaledbitmap-in-android
 
-                } else {
-                    BufferedInputStream bufferedInputStream;
+                } else if (type.equals("message/rfc822")) {
                     try {
-                        bufferedInputStream =
-                                new BufferedInputStream(getContentResolver().openInputStream(uri));
-                        byte[] contents = new byte[1024];
-                        int bytesRead = 0;
-                        while ((bytesRead = bufferedInputStream.read(contents)) != -1) {
-                            sharedData += new String(contents, 0, bytesRead);
-                        }
-                        bufferedInputStream.close();
-                        editText.insertHTML(sharedData);
-                    } catch (IOException e) {
+                        editText.insertHTML(HtmlNote.GetNoteFromMessage(SyncUtils.ReadMailFromString(ImapNotes3.UriToString(uri))).text);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } else {
+                    editText.insertHTML(ImapNotes3.UriToString(uri));
                 }
             } else {
-                if (Utilities.IsUrlScheme(sharedText)) {
-                    if (subject == null) subject = sharedText;
+                if (Utilities.IsUrl(sharedText)) {
+                    if (subject.isEmpty()) {
+                        subject = sharedText;
+                    }
                     editText.insertLink(sharedText, subject, subject);
                 } else {
-                    if (subject != null) {
+                    if (!subject.isEmpty()) {
                         subject = "<b>" + subject + "</b><br>";
-                    } else subject = "";
-                    if (sharedText != null) {
-
+                    }
+                    if (sharedText != null && type != null) {
                         if (type.equals("text/html")) {
                             editText.insertHTML(subject + sharedText);
                         } else if (type.startsWith("text/")) {
-                            editText.insertHTML(subject + Html.escapeHtml(sharedText));
+                            editText.insertHTML(subject + Html.escapeHtml(sharedText).replace("\n", "<br>"));
                         } else if (type.startsWith("image/")) {
                             editText.insertImage(sharedText, "shared image", "100", "", true);
                         }
