@@ -291,20 +291,27 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
             for (String file : allNotesTmp) {
                 publishProgress(i, allNotesTmp.size());
                 if (isCancelled()) return null;
+                Message message;
+                String subject = "";
+                String date = "";
                 try {
-                    Message message = SyncUtils.ReadMailFromFile(new File(ZipUtils.extractFile(getAppContext(), uri, file, destDirectory)));
-                    allNotes.add(file);
-                    if (!(message == null)) {
-                        allMessages.add(message.getSubject());
-                        allMessageDates.add(DateFormat.getDateTimeInstance().format(message.getSentDate()));
+                    message = SyncUtils.ReadMailFromFile(new File(ZipUtils.extractFile(getAppContext(), uri, file, destDirectory)));
+                    if (message == null) {
+                        Exception e = new Exception("File could not be extracted");
+                        throw new RuntimeException(e);
                     } else {
-                        allMessages.add("Error reading: " + file);
-                        allMessageDates.add("");
+                        subject = message.getSubject();
+                        date = DateFormat.getDateTimeInstance().format(message.getSentDate());
                     }
-                } catch (IOException | MessagingException e) {
-                    allMessages.add("Error reading: " + file + " - " + e.getMessage());
-                    allMessageDates.add("");
+                } catch (Exception e) {
+                    if (subject.isEmpty())
+                        subject = "Error reading: " + file + " - " + e.getMessage();
+                    date = "";
                     e.printStackTrace();
+                } finally {
+                    allNotes.add(file);
+                    allMessages.add(subject);
+                    allMessageDates.add(date);
                 }
                 i++;
             }

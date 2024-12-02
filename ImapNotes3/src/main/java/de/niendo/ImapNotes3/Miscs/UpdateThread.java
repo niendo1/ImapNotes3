@@ -219,12 +219,12 @@ typesafe.  Make them final to prevent accidental reuse.
                         HtmlNote htmlNote = HtmlNote.GetNoteFromMessage(message);
                         //storedNotes.SetSaveState("", OneNote.SAVE_STATE_SAVING, accountName);
 
-                        Date date;
+                        Date date = null;
                         try {
                             date = message.getSentDate();
-                        } catch (MessagingException e) {
-                            date = new Date();
+                        } catch (MessagingException ignored) {
                         }
+                        if (date == null) date = new Date();
                         SimpleDateFormat sdf = new SimpleDateFormat(Utilities.internalDateFormatString, Locale.ROOT);
                         String stringDate = sdf.format(date);
 
@@ -273,7 +273,7 @@ typesafe.  Make them final to prevent accidental reuse.
         }
 
         adapter.notifyDataSetChanged();
-        if (action == UpdateThread.Action.Delete) result = false;
+        if (action == Action.Delete) result = false;
         listener.onFinishPerformed(result);
     }
 
