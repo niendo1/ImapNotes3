@@ -166,4 +166,5 @@
     <string name="backup">Copia de seguridad</string>
     <string name="CreateBackup_sum">Guardar notas en un archivo zip.</string>
     <string name="RestoreBackup_sum">Restaurar una o más notas de un archivo zip.</string>
+    <string name="no_notes_in_file">El archivo no contiene notas válidas</string>
 </resources>
