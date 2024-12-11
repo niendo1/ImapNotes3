@@ -1,0 +1,4 @@
+* build updates (gradle etc.)
+* richeditor-android:3.0.3
+* Weblate: translation updates (thanks to z97febao,77nnit, gallegonovato, 大王叫我来巡山)
+* fix crash when archive some notes
