@@ -17,6 +17,14 @@
         app:showAsAction="collapseActionView|ifRoom" />
 
     <item
+        android:id="@+id/filter_by_hash"
+        android:checked="false"
+        android:icon="@drawable/ic_action_filter_hash"
+        android:title="@string/filter_by_hash"
+        android:visible="true"
+        app:showAsAction="collapseActionView|ifRoom" />
+
+    <item
         android:id="@+id/refresh"
         android:icon="@drawable/ic_action_refresh"
         android:title="@string/refresh"
@@ -52,14 +60,6 @@
             android:visible="true"
             app:showAsAction="ifRoom|collapseActionView" />
     </group>
-
-    <item
-        android:id="@+id/filter_by_hash"
-        android:checked="false"
-        android:icon="@drawable/ic_action_filter_hash"
-        android:title="@string/filter_by_hash"
-        android:visible="true"
-        app:showAsAction="ifRoom|collapseActionView" />
 
     <item
         android:id="@+id/newaccount"

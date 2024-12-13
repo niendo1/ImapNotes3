@@ -49,6 +49,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -98,6 +99,12 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     private TextView portnumTextView;
     private Spinner syncIntervalSpinner;
     private TextView folderTextView;
+    private TextView copyImapFolderNameTextView;
+    private final CheckBox.OnCheckedChangeListener FinishCopyFolderCheckBox = (v, r) -> {
+        copyImapFolderNameTextView.setEnabled(v.isChecked());
+        if (GetTextViewText(copyImapFolderNameTextView).isEmpty())
+            copyImapFolderNameTextView.setText("Trash");
+    };
     private Spinner securitySpinner;
     @NonNull
     private SyncInterval syncInterval = SyncInterval.t6h;
@@ -248,6 +255,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         Log.d(TAG, "clickListenerAbort onClick");
         finish();
     };
+    private CheckBox copyImapFolderCheckBox;
 
     @SuppressLint("SetTextI18n")
     private final View.OnFocusChangeListener FinishEmailEdit = (v, r) -> {
@@ -305,7 +313,9 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         syncIntervalSpinner.setOnItemSelectedListener(this);
 
         folderTextView = findTextViewById(R.id.folderEdit);
-
+        copyImapFolderNameTextView = findTextViewById(R.id.copyImapFolderName);
+        copyImapFolderCheckBox = (CheckBox) findTextViewById(R.id.copyImapFolder);
+        copyImapFolderCheckBox.setOnCheckedChangeListener(FinishCopyFolderCheckBox);
         securitySpinner = findViewById(R.id.securitySpinner);
         List<String> list = Security.Printables(getResources());
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>
@@ -349,12 +359,17 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             //passwordTextView.setText(accountManager.getPassword(myAccount));
             serverTextView.setText(GetConfigValue(ConfigurationFieldNames.Server));
             portnumTextView.setText(GetConfigValue(ConfigurationFieldNames.PortNumber));
-            Log.d(TAG, "Security: " + GetConfigValue(ConfigurationFieldNames.Security));
+            //Log.d(TAG, "Security: " + GetConfigValue(ConfigurationFieldNames.Security));
             security = Security.from(GetConfigValue(ConfigurationFieldNames.Security));
             securitySpinner.setSelection(security.ordinal());
             syncInterval = SyncInterval.from(GetConfigValue(ConfigurationFieldNames.SyncInterval));
             syncIntervalSpinner.setSelection(syncInterval.ordinal());
             folderTextView.setText(GetConfigValue(ConfigurationFieldNames.ImapFolder));
+            copyImapFolderNameTextView.setText(GetConfigValue(ConfigurationFieldNames.copyImapFolderName));
+
+            String myTempStr = GetConfigValue(ConfigurationFieldNames.copyImapFolder);
+            copyImapFolderCheckBox.setChecked(myTempStr != null && myTempStr.equals("true") && !(GetConfigValue(ConfigurationFieldNames.copyImapFolderName).isEmpty()));
+
             Button buttonAbort = new Button(this);
             buttonAbort.setText(R.string.cancel);
             Log.d(TAG, "Set onclick listener abort");
@@ -401,6 +416,10 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         return textView.getText().toString().trim();
     }
 
+    private String GetCheckBoxValue(@NonNull CheckBox checkBox) {
+        return checkBox.isChecked() ? "true" : "false";
+    }
+
     // DoLogin method is defined in account_selection.xml (account_selection layout)
     private void DoLogin() {
         Log.d(TAG, "DoLogin");
@@ -425,7 +444,9 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
                 GetTextViewText(portnumTextView),
                 security,
                 syncInterval,
-                GetTextViewText(folderTextView));
+                GetTextViewText(folderTextView),
+                GetTextViewText(copyImapFolderNameTextView),
+                GetCheckBoxValue(copyImapFolderCheckBox));
         // No need to check for valid numbers because the field only allows digits.  But it is
         // possible to remove all characters which causes the program to crash.  The easiest fix is
         // to add a zero at the beginning so that we are guaranteed to be able to parse it but that
@@ -476,6 +497,8 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         syncIntervalSpinner.setSelection(0);
         securitySpinner.setSelection(0);
         folderTextView.setText("");
+        copyImapFolderNameTextView.setText("");
+        copyImapFolderCheckBox.setChecked(false);
     }
 
 

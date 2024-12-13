@@ -212,6 +212,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                 am.getUserData(account.GetAccount(), ConfigurationFieldNames.PortNumber),
                 Security.from(am.getUserData(account.GetAccount(), ConfigurationFieldNames.Security)),
                 account.GetImapFolder(),
+                account.GetCopyImapFolderName(),
                 THREAD_ID
         );
         if (res.returnCode != ImapNotesResult.ResultCodeSuccess) {
@@ -313,8 +314,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             try {
                 syncUtils.DeleteNote(fileDeleted);
             } catch (Exception e) {
-                Log.d(TAG, "DeleteNote failed:");
-                e.printStackTrace();
+                Log.d(TAG, "DeleteNote failed: " + e.getMessage());
             }
 
             // remove file from deleted

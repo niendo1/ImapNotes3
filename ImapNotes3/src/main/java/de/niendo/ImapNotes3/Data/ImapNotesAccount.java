@@ -58,7 +58,10 @@ public class ImapNotesAccount {
     public final Security security;
     public final SyncInterval syncInterval;
     @NonNull
-    private final String imapfolder;
+    public final String copyImapFolder;
+    public final String copyImapFolderName;
+    @NonNull
+    private final String imapFolder;
     @Nullable
     private final Account account;
     private File dirForNewFiles;
@@ -72,7 +75,9 @@ public class ImapNotesAccount {
                             @NonNull String portNumber,
                             @NonNull Security security,
                             @NonNull SyncInterval syncInterval,
-                            @NonNull String folderName) {
+                            @NonNull String imapFolder,
+                            @NonNull String copyImapFolderName,
+                            @NonNull String copyImapFolder) {
         account = null;
         this.accountName = accountName;
         this.username = username;
@@ -81,7 +86,9 @@ public class ImapNotesAccount {
         this.portnum = portNumber;
         this.security = security;
         this.syncInterval = syncInterval;
-        this.imapfolder = folderName;
+        this.imapFolder = imapFolder;
+        this.copyImapFolderName = copyImapFolderName;
+        this.copyImapFolder = copyImapFolder;
     }
 
     public ImapNotesAccount(@NonNull Account account,
@@ -99,8 +106,9 @@ public class ImapNotesAccount {
         server = am.getUserData(account, ConfigurationFieldNames.Server);
         portnum = am.getUserData(account, ConfigurationFieldNames.PortNumber);
         security = Security.from(am.getUserData(account, ConfigurationFieldNames.Security));
-        imapfolder = am.getUserData(account, ConfigurationFieldNames.ImapFolder);
-
+        imapFolder = am.getUserData(account, ConfigurationFieldNames.ImapFolder);
+        copyImapFolderName = am.getUserData(account, ConfigurationFieldNames.copyImapFolderName);
+        copyImapFolder = am.getUserData(account, ConfigurationFieldNames.copyImapFolder);
     }
 
 
@@ -137,6 +145,15 @@ public class ImapNotesAccount {
     }
 
 */
+
+    @NonNull
+    public String GetCopyImapFolderName() {
+        if (copyImapFolderName.isEmpty() || !copyImapFolder.equals("true"))
+            return "";
+        else
+            return copyImapFolderName;
+    }
+
     @Nullable
     public Account GetAccount() {
         return this.account;
@@ -233,9 +250,9 @@ public class ImapNotesAccount {
 
     @NonNull
     public String GetImapFolder() {
-        if (this.imapfolder.isEmpty())
+        if (this.imapFolder.isEmpty())
             return DEFAULT_FOLDER_NAME;
-        return this.imapfolder;
+        return this.imapFolder;
     }
 
     @NonNull

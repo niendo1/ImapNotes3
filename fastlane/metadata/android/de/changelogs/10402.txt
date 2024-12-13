@@ -2,4 +2,5 @@
 * richeditor-android:3.0.3
 * Weblate: Übersetzungsaktualisierungen (Dank an z97febao,77nnit, gallegonovato, 大王叫我来巡山)
 * Beseitige Absturz beim Archivieren bestimmter Notizen
+* Konto-Einstellung: Kopiere Notizen in diesen Ordner vor dem Speichern oder Löschen
 

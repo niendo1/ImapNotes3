@@ -70,6 +70,7 @@ public class LoginThread extends AsyncTask<Void, Void, Result<String>> {
                     ImapNotesAccount.portnum,
                     ImapNotesAccount.security,
                     ImapNotesAccount.GetImapFolder(),
+                    ImapNotesAccount.GetCopyImapFolderName(),
                     THREAD_ID
             );
             if (res.returnCode == ImapNotesResult.ResultCodeImapFolderCreated) {
@@ -129,6 +130,8 @@ public class LoginThread extends AsyncTask<Void, Void, Result<String>> {
         am.setUserData(account, ConfigurationFieldNames.SyncInterval, ImapNotesAccount.syncInterval.name());
         am.setUserData(account, ConfigurationFieldNames.Security, ImapNotesAccount.security.name());
         am.setUserData(account, ConfigurationFieldNames.ImapFolder, ImapNotesAccount.GetImapFolder());
+        am.setUserData(account, ConfigurationFieldNames.copyImapFolderName, ImapNotesAccount.copyImapFolderName);
+        am.setUserData(account, ConfigurationFieldNames.copyImapFolder, ImapNotesAccount.copyImapFolder);
     }
 
     protected void onPostExecute(@NonNull Result<String> result) {

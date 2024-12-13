@@ -45,7 +45,6 @@ import com.sun.mail.imap.AppendUID;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.util.MailSSLSocketFactory;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,6 +80,7 @@ public class SyncUtils {
     private Store store;
     @Nullable
     private IMAPFolder remoteIMAPNotesFolder;
+    private String copyImapFolderName;
     private Long UIDValidity;
 
     /**
@@ -102,9 +102,12 @@ public class SyncUtils {
                                            String portnum,
                                            @NonNull Security security,
                                            @NonNull String ImapFolderName,
+                                           @NonNull String copyImapFolderName,
                                            int threadID
     ) {
         Log.d(TAG, "ConnectToRemote: " + username);
+
+        this.copyImapFolderName = copyImapFolderName;
 
         TrafficStats.setThreadStatsTag(threadID);
 
@@ -562,6 +565,16 @@ public class SyncUtils {
             OpenRemoteIMAPNotesFolder(Folder.READ_WRITE);
             //Log.d(TAG,"UID to remove:"+numMessage);
             Message[] msgs = {(remoteIMAPNotesFolder).getMessageByUID(numMessage)};
+
+            Folder saveFolder;
+            if (!copyImapFolderName.isEmpty()) {
+                try {
+                    saveFolder = remoteIMAPNotesFolder.getParent().getFolder(copyImapFolderName);
+                    remoteIMAPNotesFolder.copyMessages(msgs, saveFolder);
+                } catch (Exception e) {
+                    Log.d(TAG, "Cannot move note:" + e.getMessage());
+                }
+            }
             remoteIMAPNotesFolder.setFlags(msgs, new Flags(Flags.Flag.DELETED), true);
             remoteIMAPNotesFolder.expunge(msgs);
         }
