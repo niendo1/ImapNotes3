@@ -50,6 +50,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -100,6 +101,13 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     private Spinner syncIntervalSpinner;
     private TextView folderTextView;
     private TextView copyImapFolderNameTextView;
+    private ImageButton expandMoreSettings;
+
+    private final View.OnClickListener ClickExpandMoreSettings = (l) -> {
+        expandMoreSettings.setVisibility(View.GONE);
+        findViewById(R.id.ViewExtendedAccountSettings).setVisibility(View.VISIBLE);
+    };
+
     private final CheckBox.OnCheckedChangeListener FinishCopyFolderCheckBox = (v, r) -> {
         copyImapFolderNameTextView.setEnabled(v.isChecked());
         if (GetTextViewText(copyImapFolderNameTextView).isEmpty())
@@ -324,6 +332,9 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         securitySpinner.setOnItemSelectedListener(this);
         securitySpinner.setSelection(Security.SSL_TLS.ordinal());
 
+        expandMoreSettings = findViewById(R.id.BtnExpandAccountSettings);
+        expandMoreSettings.setOnClickListener(ClickExpandMoreSettings);
+
         Bundle extras = getIntent().getExtras();
         // TODO: find out if extras can be null.
         if (extras != null) {
@@ -376,7 +387,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             buttonAbort.setOnClickListener(clickListenerAbort);
             layout.addView(buttonAbort);
             Button buttonRemove = new Button(this);
-            buttonRemove.setText(R.string.remove);
+            buttonRemove.setText(R.string.delete);
             buttonRemove.setOnClickListener(clickListenerRemove);
             layout.addView(buttonRemove);
             Button buttonSave = new Button(this);

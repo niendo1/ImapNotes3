@@ -3,3 +3,4 @@
 * Weblate: translation updates (thanks to z97febao,77nnit, gallegonovato, 大王叫我来巡山)
 * fix crash when archive some notes
 * Account-Setting: Copy notes in this folder before saving or deleting
+* Make extended account settings expandable

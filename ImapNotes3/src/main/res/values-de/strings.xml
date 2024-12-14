@@ -168,5 +168,6 @@
     <string name="CreateBackup_sum">Notizen in eine Zip-Datei sichern.</string>
     <string name="RestoreBackup_sum">Einzelne Notizen aus einer Sicherung wiederherstellen.</string>
     <string name="no_notes_in_file">Archiv enthält keine gültigen Notizen</string>
-    <string name="copyImapFolderName">Kopiere Notizen in diesen Ordner vor dem Speichern oder Löschen</string>
+    <string name="copyImapFolderName">Kopiere Notizen vor dem Speichern oder Löschen in diesen Ordner</string>
+    <string name="extendedAccountSettings">Weitere Einstellungen</string>
 </resources>
