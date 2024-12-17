@@ -1,0 +1,6 @@
+* Actualizaciones para el proceso de compilación (gradle, etc.)
+* richeditor-android:3.0.3
+* Weblate: actualizaciones de traducción (gracias a z97febao,77nnit, gallegonovato, 大王叫我来巡山)
+* Eliminar errores al archivar ciertas notas
+* Configuración de cuenta: copie notas a esta carpeta antes de guardarlas o eliminarlas
+* La configuración avanzada de la cuenta ahora se puede expandir
