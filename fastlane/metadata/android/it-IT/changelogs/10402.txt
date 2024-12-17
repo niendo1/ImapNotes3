@@ -1,0 +1,6 @@
+* build aggiornamenti (gradle etc.)
+* richeditor-android:3.0.3
+* Weblate: aggiornamento traduzioni (grazie a z97febao, 77nnit, gallegonovato, 大王叫我来巡山)
+* corretto crash durante archiviazione di alcune note
+* impostazioni account: Copia le note in questa cartella prima di salvarle o cancellarle
+* Rese espandibili le impostazioni estese dell'account
