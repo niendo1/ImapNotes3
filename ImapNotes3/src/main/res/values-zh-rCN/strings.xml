@@ -168,4 +168,6 @@
     <string name="CreateBackup_sum">将笔记存档到 zip 文件。</string>
     <string name="RestoreBackup_sum">从 zip 文件恢复一则或多则笔记。</string>
     <string name="no_notes_in_file">存档不包含有效的笔记</string>
+    <string name="copyImapFolderName">保存或删除前复制此文件夹中的笔记</string>
+    <string name="extendedAccountSettings">扩展设置</string>
 </resources>

@@ -167,4 +167,6 @@
     <string name="CreateBackup_sum">Guardar notas en un archivo zip.</string>
     <string name="RestoreBackup_sum">Restaurar una o más notas de un archivo zip.</string>
     <string name="no_notes_in_file">El archivo no contiene notas válidas</string>
+    <string name="extendedAccountSettings">Configuraciones extendidas</string>
+    <string name="copyImapFolderName">Copie notas a esta carpeta antes de guardarlas o eliminarlas</string>
 </resources>
