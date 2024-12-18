@@ -28,7 +28,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import de.niendo.ImapNotes3.Data.OneNote;
-import de.niendo.ImapNotes3.ImapNotes3;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -46,7 +45,6 @@ import javax.mail.BodyPart;
 import javax.mail.Flags;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeBodyPart;
@@ -83,10 +81,18 @@ public class HtmlNote {
 /*
             <!DOCTYPE html>
             <html>
-            <body style="background-color:khaki;">
+            <body style="background-color:khaki;"><div>
+            </div>
             </body>
             </html>
 */
+        noteBody = noteBody.replaceFirst("<p dir=ltr>", "<div>");
+        noteBody = noteBody.replaceFirst("<p dir=\"ltr\">", "<div>");
+        noteBody = noteBody.replaceAll("<p dir=ltr>", "<div>&nbsp;</div><div>");
+        noteBody = noteBody.replaceAll("<p dir=\"ltr\">", "<div>&nbsp;</div><div>");
+        noteBody = noteBody.replaceAll("</p>", "</div>");
+        noteBody = noteBody.replaceAll("<br>", "</div><div>");
+
         Document doc = Jsoup.parse(noteBody, "utf-8");
         String bodyStyle = doc.select("body").attr("style");
         doc.outputSettings().prettyPrint(false);
@@ -98,16 +104,8 @@ public class HtmlNote {
             } else {
                 bodyStyle = BgColorStr + bodyStyle;
             }
-
             doc.select("body").attr("style", bodyStyle);
         }
-/*          body = body.replaceFirst("<p dir=ltr>", "<div>");
-            body = body.replaceFirst("<p dir=\"ltr\">", "<div>");
-            body = body.replaceAll("<p dir=ltr>", "<div><br></div><div>");
-            body = body.replaceAll("<p dir=\"ltr\">", "<div><br></div><div>");
-            body = body.replaceAll("</p>", "</div>");
-            body = body.replaceAll("<br>\n", "</div><div>");
- */
 
         message.setText(doc.toString(), "utf-8", "html");
         message.setFlag(Flags.Flag.SEEN, true);
@@ -119,8 +117,6 @@ public class HtmlNote {
     public static HtmlNote GetNoteFromMessage(@NonNull Message message) {
         ContentType contentType = null;
         String stringres = "";
-        //InputStream iis = null;
-        //String charset;
 
         MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
         mc.addMailcap("text/html;; x-java-content-handler=com.sun.mail.handlers.text_html");
@@ -129,7 +125,6 @@ public class HtmlNote {
         mc.addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed");
         mc.addMailcap("message/rfc822;; x-java-content-handler=com.sun.mail.handlers.message_rfc822");
         CommandMap.setDefaultCommandMap(mc);
-
 
         try {
             Log.d(TAG, "GetNoteFromMessage :" + message);
