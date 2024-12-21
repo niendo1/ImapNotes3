@@ -121,9 +121,9 @@
         <LinearLayout
             android:id="@+id/ViewExtendedAccountSettings"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0px"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="invisible">
 
             <TextView
                 android:layout_width="wrap_content"

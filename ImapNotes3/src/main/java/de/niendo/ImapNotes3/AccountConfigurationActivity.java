@@ -65,6 +65,7 @@ import de.niendo.ImapNotes3.Miscs.SmtpServerNameFinder;
 import de.niendo.ImapNotes3.Miscs.Utilities;
 import eltos.simpledialogfragment.SimpleDialog;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class AccountConfigurationActivity extends AccountAuthenticatorActivity implements OnItemSelectedListener, SimpleDialog.OnDialogResultListener, LoginThread.FinishListener {
@@ -105,7 +106,11 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
 
     private final View.OnClickListener ClickExpandMoreSettings = (l) -> {
         expandMoreSettings.setVisibility(View.GONE);
-        findViewById(R.id.ViewExtendedAccountSettings).setVisibility(View.VISIBLE);
+         LinearLayout lLayout=findViewById(R.id.ViewExtendedAccountSettings);
+        lLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.FILL_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+        lLayout.setVisibility(View.VISIBLE);
     };
 
     private final CheckBox.OnCheckedChangeListener FinishCopyFolderCheckBox = (v, r) -> {
@@ -485,7 +490,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId() == R.id.syncintervalSpinner) {
             syncInterval = SyncInterval.from(position);
-        } else {
+        } else if ( (parent.getId() == R.id.securitySpinner)) {
             if (!security.equals(Security.from(position))) {
                 security = Security.from(position);
                 portnumTextView.setText(security.defaultPort);
