@@ -193,7 +193,7 @@
                 android:id="@+id/copyImapFolder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                android:checked="false"
                 android:orientation="horizontal"
                 android:text="@string/copyImapFolderName" />
 

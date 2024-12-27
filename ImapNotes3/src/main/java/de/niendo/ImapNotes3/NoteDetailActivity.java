@@ -242,6 +242,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     int scale = Integer.parseInt(extras.getString(DLG_INSERT_IMAGE_SHRINK_FACTOR));
                     Uri uri = extras.getParcelable(Intent.EXTRA_STREAM);
                     double fileSize = extras.getDouble(DLG_INSERT_IMAGE_FILE_SIZE);
+                    editText.insertHTML("<div");
                     editText.insertHTML(extras.getString(DLG_INSERT_LINK_IMAGE_ALT));
                     if (inline) {
                         if ((double) (Utilities.getRealSizeFromUri(this, uri) / (scale * scale)) > MAX_INSERT_FILE_SIZE_MB * 1024 * 1024) {
@@ -257,7 +258,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                                 extras.getString(DLG_INSERT_LINK_IMAGE_ALT), extras.getString(DLG_INSERT_LINK_IMAGE_WIDTH),
                                 extras.getString(DLG_INSERT_LINK_IMAGE_HEIGHT), relative);
                     }
-                    editText.insertHTML("<br><br>");
+                    editText.insertHTML("</div");
                     return true;
                 }
                 case DLG_SELECT_ACCOUNT: {
@@ -1040,13 +1041,13 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     editText.insertLink(sharedText, subject, subject);
                 } else {
                     if (!subject.isEmpty()) {
-                        subject = "<b>" + subject + "</b><br>";
+                        subject = "<div><b>" + subject + "</b></div>";
                     }
                     if (sharedText != null && type != null) {
                         if (type.equals("text/html")) {
-                            editText.insertHTML(subject + sharedText);
+                            editText.insertHTML(subject + "<div>" + sharedText + "</div>");
                         } else if (type.startsWith("text/")) {
-                            editText.insertHTML(subject + Html.escapeHtml(sharedText).replace("\n", "<br>"));
+                            editText.insertHTML(subject + "<div><pre>" + Html.escapeHtml(sharedText) + "</pre></div>");
                         } else if (type.startsWith("image/")) {
                             editText.insertImage(sharedText, "shared image", "100", "", true);
                         }
