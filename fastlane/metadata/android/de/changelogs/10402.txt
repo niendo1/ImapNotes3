@@ -4,3 +4,4 @@
 * Beseitige Absturz beim Archivieren bestimmter Notizen
 * Konto-Einstellung: Kopiere Notizen in diesen Ordner vor dem Speichern oder Löschen
 * Erweiterte Konto-Einstellungen jetzt ausklappbar
+* einfache Notizen können jetzt von iOS IMAP Notes (ein ThunderBird Add-On) gelesen und geschrieben werden

@@ -4,3 +4,4 @@
 * fix crash when archive some notes
 * account setting: Copy notes in this folder before saving or deleting
 * Make extended account settings expandable
+* simple notes can now be read or written with iOS IMAP Notes (a ThunderBird Add-On)
