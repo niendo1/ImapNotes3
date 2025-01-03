@@ -48,6 +48,13 @@ public class AboutDialogFragment extends DialogFragment {
         about += "Build typ: " + BuildConfig.BUILD_TYPE + "<br>";
         about += getString(R.string.internet) + " <a href=\"https://github.com/niendo1/ImapNotes3/\">github.com/niendo1/ImapNotes3</a><br>";
         about += getString(R.string.appstore) + " <a href=\"" + getString(R.string.appstorelink) + "\">" + getString(R.string.appstorename) + "</a><br>";
+/*
+        about += "<h6>" + "Übersetzer" + "</h6>";
+        about += "<b>Deutsch" + "</b><br>";
+        about += "Günther, XX" + "<br>";
+        about += "<h6>" + "Mitwirkende" + "</h6>";
+        about += "Günther, XX" + "<br>";
+*/
         builder.setTitle(R.string.about)
                 .setIcon(R.mipmap.ic_launcher)
                 .setMessage(Html.fromHtml(about, Html.FROM_HTML_MODE_LEGACY))

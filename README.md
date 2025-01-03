@@ -50,10 +50,11 @@ src="https://github.com/niendo1/ImapNotes3/blob/master/fastlane/metadata/android
 * only a minimum on user permissions required
 * open source - no tracker or advertising
 
-### Translations
+### Translation
 
 This app can be translated at: <a href="https://hosted.weblate.org/projects/ImapNotes3/">
-https://hosted.weblate.org</a>. Your help is greatly appreciated.
+weblate.org</a>.
+Your help is greatly appreciated.
 If your favourite language is missing, just drop me an email.
 
 ### History

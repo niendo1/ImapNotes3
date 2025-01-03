@@ -148,7 +148,7 @@ public class ImapNotesAccount {
 
     @NonNull
     public String GetCopyImapFolderName() {
-        if (copyImapFolderName.isEmpty() || !copyImapFolder.equals("true"))
+        if (copyImapFolderName == null || copyImapFolderName.isEmpty() || !copyImapFolder.equals("true"))
             return "";
         else
             return copyImapFolderName;
