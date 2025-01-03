@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
     android:versionCode="10402"
     android:versionName="v1.4-02-1">
 
@@ -21,7 +22,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/ImapNotesTheme">
+        android:theme="@style/ImapNotesTheme"
+        tools:targetApi="tiramisu">
         <activity
             android:name=".SettingsActivity"
             android:exported="true"
