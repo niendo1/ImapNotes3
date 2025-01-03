@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     android:versionCode="10402"
-    android:versionName="v1.4-02">
+    android:versionName="v1.4-02-1">
 
     <dist:module dist:instant="true" />
 
