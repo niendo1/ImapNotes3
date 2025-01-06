@@ -64,8 +64,8 @@
     <string name="yes">Si</string>
     <string name="no">No</string>
     <string name="sort_color">Ordenar por color</string>
-    <string name="license">Licencia:</string>
-    <string name="internet">Internet:</string>
+    <string name="license">Licencia</string>
+    <string name="internet">Internet</string>
     <string name="placeholder">Introducir el texto aquí…</string>
     <string name="remove">Quitar</string>
     <string name="yellow">Amarillo</string>
@@ -131,7 +131,7 @@
     <string name="make_archive">Crear una copia de seguridad</string>
     <string name="intent_import_note">Importar nota(s)</string>
     <string name="importing">Importando…</string>
-    <string name="appstore">Tienda de aplicaciones:</string>
+    <string name="appstore">Tienda de aplicaciones</string>
     <string name="appstorelink">https://f-droid.org/en/packages/de.niendo.ImapNotes3/</string>
     <string name="appstorename">F-Droid</string>
     <string name="permission_required">permiso requerido</string>

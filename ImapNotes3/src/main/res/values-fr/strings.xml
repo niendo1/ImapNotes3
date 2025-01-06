@@ -58,8 +58,8 @@
     <string name="none">Aucun</string>
     <string name="delete_note">Supprimer note</string>
     <string name="sort_color">Trier par couleur</string>
-    <string name="license">Licence :</string>
-    <string name="internet">Internet :</string>
+    <string name="license">Licence</string>
+    <string name="internet">Internet</string>
     <string name="placeholder">Insérer texte ici…</string>
     <string name="Last_sync">"Dernière synchronisation : "</string>
     <string name="share">Partager</string>
@@ -144,7 +144,7 @@
     <string name="make_archive">Créer une sauvegarde</string>
     <string name="intent_import_note">Importer note(s)</string>
     <string name="importing">Importation…</string>
-    <string name="appstore">App store :</string>
+    <string name="appstore">App store</string>
     <string name="appstorelink">https://f-droid.org/fr/packages/de.niendo.ImapNotes3/</string>
     <string name="appstorename">F-Droid</string>
     <string name="permission_required">permission requise</string>

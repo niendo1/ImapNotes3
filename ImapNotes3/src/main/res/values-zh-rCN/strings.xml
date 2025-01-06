@@ -67,8 +67,8 @@
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="sort_color">按颜色排序</string>
-    <string name="license">许可证：</string>
-    <string name="internet">互联网：</string>
+    <string name="license">许可证</string>
+    <string name="internet">互联网</string>
     <string name="placeholder">在此插入文本…</string>
     <string name="AccountList">账户列表</string>
     <string name="Last_sync">"最后同步： "</string>
@@ -139,7 +139,7 @@
     <string name="make_archive">创建备份</string>
     <string name="intent_import_note">导入笔记</string>
     <string name="importing">正在导入…</string>
-    <string name="appstore">应用商店：</string>
+    <string name="appstore">应用商店</string>
     <string name="appstorelink">https://f-droid.org/en/packages/de.niendo.ImapNotes3/</string>
     <string name="appstorename">F-Droid</string>
     <string name="permission_required">需要权限</string>

@@ -60,8 +60,8 @@
     <string name="yes">Ano</string>
     <string name="no">Ne</string>
     <string name="sort_color">Seřadit podle barvy</string>
-    <string name="license">Licence:</string>
-    <string name="internet">Internet:</string>
+    <string name="license">Licence</string>
+    <string name="internet">Internet</string>
     <string name="security">Bezpečnost</string>
     <string name="delete_note">Odstranit poznámku</string>
     <string name="sync_wait_necessary">prosím, počkejte, dokud se nezobrazí synchronizace.</string>

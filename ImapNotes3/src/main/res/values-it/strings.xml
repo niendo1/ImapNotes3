@@ -69,7 +69,7 @@
     <string name="yes">Sì</string>
     <string name="no">No</string>
     <string name="sort_color">Ordina per Colore</string>
-    <string name="license">Licenza:</string>
+    <string name="license">Licenza</string>
     <string name="AccountList">Elenco degli account</string>
     <string name="share">Condividi</string>
     <string name="shared_note_from">Nota condivisa da</string>
@@ -85,7 +85,7 @@
     <string name="no_program_found">Nessun programma adatto trovato</string>
     <string name="made_changes">Hai fatto delle modifiche.</string>
     <string name="none">Nessuno</string>
-    <string name="internet">Internet:</string>
+    <string name="internet">Internet</string>
     <string name="table">Tabella</string>
     <string name="section">Sezione</string>
     <string name="content">Contenuto</string>
@@ -100,7 +100,7 @@
     <string name="IMAP_operation_failed">Operazione IMAP fallita</string>
     <string name="help">Aiuto</string>
     <string name="search_any_keyword">Cercare qualsiasi parola chiave..</string>
-    <string name="appstore">App-Store:</string>
+    <string name="appstore">App-Store</string>
     <string name="appstorelink">https://f-droid.org/en/packages/de.niendo.ImapNotes3/</string>
     <string name="t1h">1 ora</string>
     <string name="link_image_width">Larghezza (% o px)</string>

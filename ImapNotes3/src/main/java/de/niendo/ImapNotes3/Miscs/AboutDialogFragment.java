@@ -40,21 +40,48 @@ public class AboutDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        String about = getString(R.string.license) + " <a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">GPL v3.0</a><br>";
-        about += "ID: " + BuildConfig.APPLICATION_ID + "<br>";
-        about += "Version: " + BuildConfig.VERSION_NAME + "<br>";
-        about += "Code: " + BuildConfig.VERSION_CODE + "<br>";
-        about += "DB-Version: " + NotesDb.NOTES_VERSION + "<br>";
-        about += "Build typ: " + BuildConfig.BUILD_TYPE + "<br>";
-        about += getString(R.string.internet) + " <a href=\"https://github.com/niendo1/ImapNotes3/\">github.com/niendo1/ImapNotes3</a><br>";
-        about += getString(R.string.appstore) + " <a href=\"" + getString(R.string.appstorelink) + "\">" + getString(R.string.appstorename) + "</a><br>";
-/*
-        about += "<h6>" + "Übersetzer" + "</h6>";
-        about += "<b>Deutsch" + "</b><br>";
-        about += "Günther, XX" + "<br>";
-        about += "<h6>" + "Mitwirkende" + "</h6>";
-        about += "Günther, XX" + "<br>";
-*/
+        String h = "<b>";
+        String hf = ": </b>";
+        String h1 = "<em>";
+        String h1f = ":</em>";
+        String d = " ";
+        String df = "<br>";
+
+
+        String about = "";
+        about += h + getString(R.string.license) + hf + d + "<a href=\"https://www.gnu.org/licenses/gpl-3.0.html\">GPL v3.0</a>" + df;
+        about += h + "ID" + hf + d + BuildConfig.APPLICATION_ID + df;
+        about += h + "Version" + hf + d + BuildConfig.VERSION_NAME + df;
+        about += h + "Code" + hf + d + BuildConfig.VERSION_CODE + df;
+        about += h + "DB-Version" + hf + d + NotesDb.NOTES_VERSION + df;
+        about += h + "Build typ" + hf + d + BuildConfig.BUILD_TYPE + df;
+        about += h + getString(R.string.internet) + hf + d + "<a href=\"https://github.com/niendo1/ImapNotes3/\">github.com</a>" + df;
+        about += h + getString(R.string.appstore) + hf + d + "<a href=\"" + getString(R.string.appstorelink) + "\">" + getString(R.string.appstorename) + "</a>" + df;
+        about += "<br>";
+        about += h + getString(R.string.translation) + hf + d + "<a href=\"https://hosted.weblate.org/projects/ImapNotes3/\">weblate.org</a>" + df;
+        about += h1 + getString(R.string.chinese) + h1f;
+        about += d + "sr093906, hamburger2048, pyccl, Xue Xuan, 大王叫我来巡山" + df;
+        about += h1 + getString(R.string.czech) + h1f;
+        about += d + "LibreTranslate" + df;
+        about += h1 + getString(R.string.french) + h1f;
+        about += d + "z97febao, e2jk" + df;
+        about += h1 + getString(R.string.german) + h1f;
+        about += d + "niendo1" + df;
+        about += h1 + getString(R.string.italian) + h1f;
+        about += d + "77nnit" + df;
+        about += h1 + getString(R.string.norwegian) + h1f;
+        about += d + "kwhitefood" + df;
+        about += h1 + getString(R.string.portuguese) + h1f;
+        about += d + "weblate" + df;
+        about += h1 + getString(R.string.russian) + h1f;
+        about += d + "pazengaz" + df;
+        about += h1 + getString(R.string.spanish) + h1f;
+        about += d + "gallegonovato" + df;
+
+        about += "<br>";
+        about += h + getString(R.string.contributors) + hf + "<br>";
+        about += d + "nb(enm), c0238, Axel Strübing, Poussinou, woheller69, Martin Carpella, john-p-williams, ..." + df;
+
         builder.setTitle(R.string.about)
                 .setIcon(R.mipmap.ic_launcher)
                 .setMessage(Html.fromHtml(about, Html.FROM_HTML_MODE_LEGACY))

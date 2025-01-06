@@ -41,8 +41,8 @@
     <string name="brown">Castanho</string>
     <string name="none">Nenhuma</string>
     <string name="sort_color">Ordenar por cor</string>
-    <string name="license">Licença:</string>
-    <string name="internet">Internet:</string>
+    <string name="license">Licença</string>
+    <string name="internet">Internet</string>
     <string name="cancel">Cancelar</string>
     <string name="table">Quadro</string>
     <string name="section">Secção</string>
@@ -98,7 +98,7 @@
     <string name="share_file_error">Compartilhar erro de arquivo:</string>
     <string name="insert_in_note">Insira dados compartilhados</string>
     <string name="no_program_found">Nenhum programa adequado encontrado</string>
-    <string name="appstore">Aplicação:</string>
+    <string name="appstore">Aplicação</string>
     <string name="logging_in">Entrando em sua conta…</string>
     <string name="your_login_name">Seu nome de login para servidor de email</string>
     <string name="password">Senha</string>

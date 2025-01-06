@@ -32,7 +32,7 @@
     <string name="none">Нет</string>
     <string name="are_you_sure_you_wish_to_delete_the_note">Вы уверены, что хотите удалить заметку?</string>
     <string name="no">Нет</string>
-    <string name="license">Лицензия:</string>
+    <string name="license">Лицензия</string>
     <string name="share">Поделиться</string>
     <string name="select_link_video">Выберите ссылку на видео</string>
     <string name="open_link">Открыть ссылку во внешнем браузере</string>
@@ -113,7 +113,7 @@
     <string name="make_archive">Создание архива</string>
     <string name="intent_import_note">Импортная(ые) записка(ы)</string>
     <string name="importing">Импорт…</string>
-    <string name="appstore">App-Store:</string>
+    <string name="appstore">App-Store</string>
     <string name="appstorelink">https://f-droid.org/ru/packages/de.niendo.ImapNotes3/</string>
     <string name="appstorename">F-Droid</string>
     <string name="permission_required">разрешение</string>
@@ -128,7 +128,7 @@
     <string name="success">успешно</string>
     <string name="reading_archive_file">Чтение архивного файла</string>
     <string name="imap_server_changed_new_password">Имя сервера изменено, пожалуйста, пароль рендера!</string>
-    <string name="internet">Интернет:</string>
+    <string name="internet">Интернет</string>
     <string name="AccountList">Список</string>
     <string name="send_debug_report">Создать отчет об ошибке</string>
     <string name="insert_as_new_note">Включить общие данные в качестве новой записки</string>

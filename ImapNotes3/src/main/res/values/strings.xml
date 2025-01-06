@@ -67,8 +67,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="sort_color">Sort by Color</string>
-    <string name="license">License:</string>
-    <string name="internet">Internet:</string>
+    <string name="license">License</string>
+    <string name="internet">Internet</string>
     <string name="placeholder">Insert text here…</string>
     <string name="AccountList">Account List</string>
     <string name="Last_sync">"Last sync: "</string>
@@ -140,7 +140,7 @@
     <string name="make_archive">Create Backup</string>
     <string name="intent_import_note">Import Note(s)</string>
     <string name="importing">Importing…</string>
-    <string name="appstore">App-Store:</string>
+    <string name="appstore">App-Store</string>
     <string name="appstorelink">https://f-droid.org/en/packages/de.niendo.ImapNotes3/</string>
     <string name="appstorename">F-Droid</string>
     <string name="permission_required">permission required</string>
@@ -171,4 +171,15 @@
     <string name="no_notes_in_file">Archive contains no valid notes</string>
     <string name="copyImapFolderName">Copy notes in this folder before saving or deleting</string>
     <string name="extendedAccountSettings">Extended Settings</string>
+    <string name="translation">Translation</string>
+    <string name="german">German</string>
+    <string name="contributors">Contributors</string>
+    <string name="chinese">Chinese</string>
+    <string name="italian">Italian</string>
+    <string name="french">French</string>
+    <string name="spanish">Spanish</string>
+    <string name="portuguese">Portuguese</string>
+    <string name="russian">Russian</string>
+    <string name="czech">Czech</string>
+    <string name="norwegian">Norwegian</string>
 </resources>
