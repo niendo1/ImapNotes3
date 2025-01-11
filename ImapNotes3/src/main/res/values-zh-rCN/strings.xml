@@ -170,4 +170,15 @@
     <string name="no_notes_in_file">存档不包含有效的笔记</string>
     <string name="copyImapFolderName">保存或删除前复制此文件夹中的笔记</string>
     <string name="extendedAccountSettings">扩展设置</string>
+    <string name="norwegian">挪威语</string>
+    <string name="german">德语</string>
+    <string name="translation">翻译</string>
+    <string name="contributors">贡献者</string>
+    <string name="chinese">中文</string>
+    <string name="italian">意大利语</string>
+    <string name="spanish">西班牙语</string>
+    <string name="russian">俄语</string>
+    <string name="french">法语</string>
+    <string name="portuguese">葡萄牙语</string>
+    <string name="czech">捷克语</string>
 </resources>
