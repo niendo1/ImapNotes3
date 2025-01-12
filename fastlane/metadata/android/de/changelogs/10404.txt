@@ -1,0 +1,3 @@
+* Updates für Build-Prozess (gradle etc.)
+* Weblate: Katalanische Übersetzung hinzugefügt (Dank an polrojas)
+* Weblate: Übersetzungsaktualisierungen (Dank hamburger2048)

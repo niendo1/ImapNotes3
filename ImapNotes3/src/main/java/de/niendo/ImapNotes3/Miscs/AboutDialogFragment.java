@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024      - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2024-2025 - Peter Korf <peter@niendo.de>
  *
  * This file is part of ImapNotes3.
  *
@@ -59,8 +59,10 @@ public class AboutDialogFragment extends DialogFragment {
         about += h + getString(R.string.appstore) + hf + d + "<a href=\"" + getString(R.string.appstorelink) + "\">" + getString(R.string.appstorename) + "</a>" + df;
         about += "<br>";
         about += h + getString(R.string.translation) + hf + d + "<a href=\"https://hosted.weblate.org/projects/ImapNotes3/\">weblate.org</a>" + df;
+        about += h1 + getString(R.string.catalan) + h1f;
+        about += d + "polrojas" + df;
         about += h1 + getString(R.string.chinese) + h1f;
-        about += d + "sr093906, hamburger2048, pyccl, Xue Xuan, 大王叫我来巡山" + df;
+        about += d + "sr093906, hamburger2048 (大王叫我来巡山), pyccl, Xue Xuan" + df;
         about += h1 + getString(R.string.czech) + h1f;
         about += d + "LibreTranslate" + df;
         about += h1 + getString(R.string.french) + h1f;
@@ -80,7 +82,7 @@ public class AboutDialogFragment extends DialogFragment {
 
         about += "<br>";
         about += h + getString(R.string.contributors) + hf + "<br>";
-        about += d + "nb(enm), c0238, Axel Strübing, Poussinou, woheller69, Martin Carpella, john-p-williams, ..." + df;
+        about += d + "nb(enm), c0238, Axel Strübing, Poussinou, woheller69, Martin Carpella, john-p-williams, Ulli Heist, ..." + df;
 
         builder.setTitle(R.string.about)
                 .setIcon(R.mipmap.ic_launcher)
