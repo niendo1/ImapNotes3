@@ -240,18 +240,16 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 ImapNotes3.ShowMessage(R.string.sync_wait_necessary, listview, 3);
                 return;
             } else if (saveState.equals(OneNote.SAVE_STATE_FAILED)) {
-                // message was not correctly saved, discard changes silently
+                Log.d(TAG, "message was not correctly saved, discard changes silently");
                 // FIXME: inform user
             }
-
             if (intentActionSend != null)
                 // FIXME StrictMode policy violation: android.os.strictmode.UnsafeIntentLaunchViolation: Launch of unsafe intent: Intent
                 toDetail = intentActionSend;
             else
                 toDetail = new Intent(widget.getContext(), NoteDetailActivity.class);
             toDetail.putExtra(NoteDetailActivity.selectedNote, (OneNote) parent.getItemAtPosition(selectedNote));
-            if (ListActivity.ImapNotesAccount != null)
-                 toDetail.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeEdit);
+            toDetail.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeEdit);
             startActivityForResult(toDetail, SEE_DETAIL);
             if (intentActionSend != null)
                 intentActionSend.putExtra(NoteDetailActivity.ActivityTypeProcessed, true);
