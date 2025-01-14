@@ -4,3 +4,5 @@
 * corretto crash durante archiviazione di alcune note
 * impostazioni account: Copia le note in questa cartella prima di salvarle o cancellarle
 * Rese espandibili le impostazioni estese dell'account
+* semplici note possono adesso essere lette o scritte con iOS IMAP Notes (un add-on di Thunderbird)
+* About-Dialog: ringraziamento a traduttori e contributori
