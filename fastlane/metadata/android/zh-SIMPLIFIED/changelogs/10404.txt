@@ -1,0 +1,3 @@
+* 构建更新（梯度等）
+* Weblate：添加加泰罗尼亚语翻译（感谢polrojas）
+* Weblate：翻译更新（感谢hamburger2048）
