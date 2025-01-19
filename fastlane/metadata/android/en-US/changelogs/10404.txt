@@ -1,3 +1,4 @@
 * build updates (gradle etc.)
 * Weblate: add Catalan translation (thanks to polrojas)
-* Weblate: translation updates (thanks to hamburger2048)
+* Weblate: translation updates (thanks to hamburger2048, 77nnit)
+* fix empty note, if all accounts are selected

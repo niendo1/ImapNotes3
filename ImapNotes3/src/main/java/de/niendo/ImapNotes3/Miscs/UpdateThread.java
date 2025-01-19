@@ -167,7 +167,7 @@ typesafe.  Make them final to prevent accidental reuse.
                 String oldSuid = suid;
                 storedNotes.SetSaveState(suid, OneNote.SAVE_STATE_SAVING, accountName);
                 // Use the first line as the tile
-                String[] tok = Html.fromHtml(noteBody.substring(0, Math.min(noteBody.length(), 500)), Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE).toString().split("\n", 2);
+                String[] tok = Html.fromHtml(noteBody, Html.FROM_HTML_MODE_LEGACY).toString().split("\n", 2);
                 String title = tok[0];
                 //"<html><head></head><body>" + noteBody + "</body></html>";
 
