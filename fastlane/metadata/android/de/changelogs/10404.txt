@@ -1,4 +1,5 @@
 * Updates für Build-Prozess (gradle etc.)
 * Weblate: Katalanische Übersetzung hinzugefügt (Dank an polrojas)
 * Weblate: Übersetzungsaktualisierungen (Dank hamburger2048, 77nnit)
-* Bugfix Leere Notiz, wenn alle Kontos gewählt sind
+* Bugfix: Leere Notiz, wenn alle Kontos gewählt sind
+* Bugfix: Zeige letzte Notiz in der Liste
