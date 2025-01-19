@@ -34,6 +34,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -85,13 +86,16 @@ public class HtmlNote {
             </div>
             </body>
             </html>
-*/
+
         noteBody = noteBody.replaceFirst("<p dir=ltr>", "<div>");
         noteBody = noteBody.replaceFirst("<p dir=\"ltr\">", "<div>");
         noteBody = noteBody.replaceAll("<p dir=ltr>", "<div>&nbsp;</div><div>");
         noteBody = noteBody.replaceAll("<p dir=\"ltr\">", "<div>&nbsp;</div><div>");
         noteBody = noteBody.replaceAll("</p>", "</div>");
-        noteBody = noteBody.replaceAll("<br>", "</div><div>");
+ */
+        // replace <br>, but avoid recursive replacement
+        noteBody = noteBody.replaceAll("</div><br><div>", "<br>");
+        noteBody = noteBody.replaceAll("<br>", "</div><br><div>");
 
         Document doc = Jsoup.parse(noteBody, "utf-8");
         String bodyStyle = doc.select("body").attr("style");
@@ -115,7 +119,7 @@ public class HtmlNote {
 
     @NonNull
     public static HtmlNote GetNoteFromMessage(@NonNull Message message) {
-        ContentType contentType = null;
+        ContentType contentType;
         String stringres = "";
 
         MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
@@ -147,8 +151,7 @@ public class HtmlNote {
             }
 
         } catch (Exception e) {
-            Log.d(TAG, "Exception GetNoteFromMessage:" + e.toString());
-            e.printStackTrace();
+            Log.d(TAG, "Exception GetNoteFromMessage:" + e);
         }
 
         return new HtmlNote(
@@ -168,12 +171,12 @@ public class HtmlNote {
             // alternatives appear in an order of increasing
             // faithfulness to the original content. Customize as req'd.
             return getTextFromBodyPart(mimeMultipart.getBodyPart(count - 1));
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < count; i++) {
             BodyPart bodyPart = mimeMultipart.getBodyPart(i);
-            result += getTextFromBodyPart(bodyPart);
+            result.append(getTextFromBodyPart(bodyPart));
         }
-        return result;
+        return result.toString();
     }
 
     private static String getTextFromBodyPart(
@@ -206,7 +209,7 @@ public class HtmlNote {
         String bodyStyle = doc.select("body").attr("style");
         Matcher matcherColor = patternBodyBgColor.matcher(bodyStyle);
         if (matcherColor.find()) {
-            String colorName = matcherColor.group(1).toLowerCase(Locale.ROOT);
+            String colorName = Objects.requireNonNull(matcherColor.group(1)).toLowerCase(Locale.ROOT);
             return ((colorName.isEmpty()) || colorName.equals("null") || colorName.equals("transparent")) ? "none" : colorName;
         } else {
             return "none";
