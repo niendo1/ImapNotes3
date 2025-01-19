@@ -1,0 +1,8 @@
+* 构建更新（如梯度等）
+* richeditor-android：3.0.3版本
+* Weblate：翻译更新（感谢z97febao、77nnit、gallegonovato、大王叫我来巡山的贡献）
+* 修复归档某些笔记时崩溃的问题
+* 帐户设置：在保存或删除前复制此文件夹中的笔记
+* 使扩展帐户设置可展开
+* 现在可以使用iOS IMAP Notes（ThunderBird插件）读取或写入简单笔记
+* 关于对话框：向翻译者和贡献者致敬
