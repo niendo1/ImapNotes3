@@ -62,7 +62,7 @@ public class AboutDialogFragment extends DialogFragment {
         about += h1 + getString(R.string.catalan) + h1f;
         about += d + "polrojas" + df;
         about += h1 + getString(R.string.chinese) + h1f;
-        about += d + "sr093906, hamburger2048 (大王叫我来巡山), pyccl, Xue Xuan" + df;
+        about += d + "sr093906, hamburger2048 (大王叫我来巡山), pyccl, Xue Xuan, bj y" + df;
         about += h1 + getString(R.string.czech) + h1f;
         about += d + "LibreTranslate" + df;
         about += h1 + getString(R.string.french) + h1f;
