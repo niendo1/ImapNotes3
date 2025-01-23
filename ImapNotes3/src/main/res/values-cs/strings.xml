@@ -140,7 +140,7 @@
     <string name="appstorelink">https://f-droid.org/cs/packages/de.niendo.ImapNotes3/</string>
     <string name="imap_help_text">Pokud se dostanete chybou splatných přihlašovacích údajů:\nNěkteří poskytovatelé jako gmail nebo gmx vyžadují konkrétní heslo pro přihlášení do protokolu IMAP. Jeho potřeba pro aktivaci dvou faktorů ověřování.\nMůžete vytvořit heslo s vaším poskytovatelem.</string>
     <string name="intent_import_note">Importní poznámka(y)</string>
-    <string name="appstore">App-Store:</string>
+    <string name="appstore">App-Store</string>
     <string name="permission_message">prosím uveďte povolení k zápisu zálohy do adresáře dokumentů</string>
     <string name="default_color">Výchozí</string>
     <string name="miscellaneous">Různé</string>
@@ -164,4 +164,18 @@
     <string name="backup">Záloha</string>
     <string name="CreateBackup_sum">Archiv poznámky do souboru zip.</string>
     <string name="RestoreBackup_sum">Obnovit jeden nebo více poznámek z zip souboru.</string>
+    <string name="portuguese">Portugalština</string>
+    <string name="italian">Italština</string>
+    <string name="spanish">Španělština</string>
+    <string name="translation">Translation</string>
+    <string name="german">Německy</string>
+    <string name="contributors">Přispěvatelé</string>
+    <string name="french">Francouzština</string>
+    <string name="czech">Čeština</string>
+    <string name="norwegian">Norština</string>
+    <string name="no_notes_in_file">Archiv neobsahuje žádné platné poznámky</string>
+    <string name="catalan">Katalánština</string>
+    <string name="extendedAccountSettings">Rozšířená nastavení</string>
+    <string name="russian">Ruština</string>
+    <string name="chinese">Čínština</string>
 </resources>
