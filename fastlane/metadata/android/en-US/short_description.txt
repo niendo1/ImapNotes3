@@ -1,1 +1,1 @@
-View, edit and synchronize HTML notes and check lists on your IMAP mailboxes
+An app for viewing, editing, and synchronizing notes and checklists in your IMAP mailboxes.
