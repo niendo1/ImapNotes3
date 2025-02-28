@@ -1,1 +1,1 @@
-An app for viewing, editing, and synchronizing notes and checklists in your IMAP mailboxes.
+A notes and checklist app that synchronizes in your IMAP mailbox.
