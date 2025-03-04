@@ -53,7 +53,7 @@ __Feature-Rich HTML Editor__
 __Additional Capabilities__
 
 * no tracking or advertising
-* light and dark themes
+* light and dark mode support
 * filter and organize your notes by _#HashTags_
 * note sharing with other apps (import/export)
 * backup notes as local zip archive
