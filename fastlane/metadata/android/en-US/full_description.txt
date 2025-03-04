@@ -1,25 +1,25 @@
-* Editor for your notes with lots of features
-   - font attributes
-   - tables
-   - check boxes
-   - lists
-   - insert images, links etc.
-   - undo / redo
-   - much more
-* synchronize HTML notes between Android devices and IMAP servers.
-* to be used with different IMAP servers (Gmail, Yahoo, AOL, Posteo and your server)
-* create check lists
-* full text search
-* filter and organize your notes by #HashTags
-* light and dark mode support
-* color support for notes
-* share your notes
-* backup your notes to a local zip archive
-* restore all or just a single note from a local archive
-* notes are saved as standard HTML E-mails
-* security can be plain text, SSL/TLS or STARTTLS
-* multiple IMAP accounts and/or notepads can be managed
-* works offline and sync is done in the background
-* only a minimum on user permissions required
-* fully open source - no tracker or advertising
-* customizable colors for the editor
+A free and fast notes editor for Android that allows for synchronization with IMAP servers.
+
+General Attributes
+        • compatible with various IMAP servers (Gmail, Yahoo, AOL, Posteo, and your server)
+        • security options include plain text, SSL/TLS, or STARTTLS
+        • save notes as standard HTML E-mails
+        • manage multiple IMAP accounts and/or notepads
+        • works offline (with background synchronization)
+
+Feature-Rich HTML Editor
+        • versatile text formatting
+        • image integration
+        • create checklists
+        • full-text search
+        • font colors
+
+Additional Capabilities
+        • no tracking or advertising
+        • light and dark themes
+        • filter and organize your notes by #HashTags
+        • note sharing with other apps (import/export) 
+        • backup notes as local zip archive
+        • restore all or just a single note from a local archive
+
+All of these features are contained in this fully open source app, which has no tracking or advertising, and requires only minimal user permissions.
