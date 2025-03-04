@@ -1,25 +1,25 @@
-* Umfangreicher Editor für Ihre Notizen mit HTML-Funktionalität
-   - Schrifteigenschaften
-   - Tabellen
-   - Check-Boxen
-   - Listen
-   - Einfügen von Bildern, Links etc.
-   - Undo / Redo
-   - und vieles mehr
-* ermöglicht die Synchronisation von Notizen zwischen Android-Geräten und IMAP-Servern
-* kann für alle gängigen IMAP-fähigen Postfächer genutzt werden (Gmail, Yahoo, AOL, Posteo und viele andere)
-* auch für ToDo-Listen geeignet
+Ein kostenloser und schneller Notizeneditor für Android, der die Synchronisierung mit IMAP-Servern ermöglicht.
+
+__Allgemeine Eigenschaften__
+* kompatibel mit verschiedenen IMAP-Servern (Gmail, Yahoo, AOL, Posteo und Ihrem Server)
+* Sicherheitsoptionen umfassen _Nur-Text_, _SSL/TLS_ oder _STARTTLS_
+* Notizen als Standard-HTML-E-Mails speichern
+* mehrere IMAP-Konten und/oder Notizblöcke verwalten
+* offline arbeiten (mit Hintergrundsynchronisierung)
+
+__Funktionsreicher HTML-Editor__
+* vielseitige Textformatierung
+* Bildintegration
+* Checklisten erstellen
 * Volltextsuche
-* Filtern und Organisieren der Notizen mit Hilfe von #HashTags
+* Schriftfarben und Hintergrundfarben ändern
+
+__Zusätzliche Funktionen__
+* kein Tracking oder Werbung
 * Hell- und Dunkelmodus
-* Jeder Notiz können Farben zugeordnet werden
-* Notizen auf dem Handy teilen
-* Notizen in ein lokales ZIP-Archive sichern
-* Wiederherstellen aller oder einzelner Notizen aus einem ZIP-Archiv
-* Notizen werden als normale E-Mails im HTML-Format gespeichert
-* verschiedene Verschlüsselungsarten werden unterstützt (Text, SSL/TLS oder STARTTLS)
-* mehrere IMAP-Konten bzw. Notizbücher können angelegt und verwaltet werden
-* Offline arbeiten möglich - die Synchronisation mit dem Server erfolgt im Hintergrund
-* Die App benötigt minimale Benutzerrechte
-* vollständig quelloffene Software - keine Werbung oder Tracker
-* Anpassbare Farben für Editor
+* Ihre Notizen nach _#HashTags_ filtern und organisieren
+* Notizen mit anderen Apps teilen (Import/Export)
+* Notizen als lokales Zip-Archiv sichern
+* alle oder nur eine einzelne Notiz aus einem lokalen Archiv wiederherstellen
+
+Alle diese Funktionen sind in dieser vollständig Open-Source-App enthalten, die kein Tracking oder keine Werbung enthält und nur minimale Benutzerberechtigungen erfordert.

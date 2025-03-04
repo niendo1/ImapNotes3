@@ -1,1 +1,1 @@
-Notizen und ToDo-Listen erstellen und in IMAP-Postfächern synchronisieren
+App für Notizen und ToDo-Listen, die in IMAP-Postfächern gespeichert werden.

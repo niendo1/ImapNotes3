@@ -32,23 +32,35 @@ src="https://github.com/niendo1/ImapNotes3/blob/master/fastlane/metadata/android
 
 ### Features
 
-* synchronize HTML notes between Android devices and IMAP servers.
-* to be used with different IMAP servers (Gmail, Yahoo, AOL, Posteo and your server)
-* HTML editor with lots of features
-* create check lists
-* full text search
-* filter and organize your notes by #HashTags
-* light and dark mode support
-* color support for notes
-* share your notes
-* backup your notes to a local zip archive
+A free and fast notes editor for Android that allows for synchronization with IMAP servers.
+
+__General Attributes__
+
+* compatible with various IMAP servers (Gmail, Yahoo, AOL, Posteo, and your server)
+* security options include _plain text_, _SSL/TLS_, or _STARTTLS_
+* save notes as standard HTML E-mails
+* manage multiple IMAP accounts and/or notepads
+* works offline (with background synchronization)
+
+__Feature-Rich HTML Editor__
+
+* versatile text formatting
+* image integration
+* create checklists
+* full-text search
+* font colors
+
+__Additional Capabilities__
+
+* no tracking or advertising
+* light and dark themes
+* filter and organize your notes by _#HashTags_
+* note sharing with other apps (import/export)
+* backup notes as local zip archive
 * restore all or just a single note from a local archive
-* notes are saved as standard HTML E-mails
-* security can be plain text, SSL/TLS or STARTTLS
-* multiple IMAP accounts and/or notepads can be managed
-* works offline and sync is done in the background
-* only a minimum on user permissions required
-* open source - no tracker or advertising
+
+All of these features are contained in this fully open source app, which has no tracking or
+advertising, and requires only minimal user permissions.
 
 ### Translation
 
