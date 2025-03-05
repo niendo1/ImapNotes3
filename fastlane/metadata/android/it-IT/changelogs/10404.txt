@@ -1,3 +1,5 @@
-* build aggiornamenti (gradle, etc.)
-*weblate: aggiunta traduzione in Catalano (grazie a polrojas)
-* Weblate: aggiornamenti traduzioni (grazie ad hamburger2048)
+* costruire aggiornamenti (grado ecc.)
+* Weblate: aggiungi traduzione in catalano (grazie a polrojas)
+* Weblate: aggiornamenti di traduzione (grazie a hamburger2048, 77nnit)
+* fissare la nota vuota, se tutti gli account sono selezionati
+* fix: mostra l'ultima nota nella lista

@@ -10,7 +10,7 @@
     <string name="check_and_create_account">Controlla e Crea Account</string>
     <string name="logging_in">Accesso al tuo account…</string>
     <string name="account_added">L\'account è stato aggiunto</string>
-    <string name="account_name">Nome per il conto o il blocco note</string>
+    <string name="account_name">Nome account o il blocco note</string>
     <string name="account_name_description">Lasciare vuoto per usare il nome utente</string>
     <string name="add_account">Aggiunta account/raccolta</string>
     <string name="username">Nome utente</string>
