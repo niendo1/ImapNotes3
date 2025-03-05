@@ -13,7 +13,7 @@
 ImapNotes3
 ==========
 
-Android app to view, edit and synchronize HTML notes and check lists on your IMAP mailboxes.
+A notes and checklist Android app that synchronizes in your IMAP mailbox.
 
 ### Screenshots
 
