@@ -47,6 +47,7 @@ public class ImapNotes3 extends Application {
     private static View mContent;
     public static Intent intent; // For Data-Exchange SyncAdapater
     private static final String ReservedChars = "[\\\\/:*?\"<>|'!]";
+    public static final Integer MainLock = 0;
 
     public static Context getAppContext() {
         return mContext;

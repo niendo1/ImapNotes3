@@ -74,11 +74,11 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
     private final ArrayList<OneNote> notesList;
     private final String noteBody;
     private final String bgColor;
+    private String ErrorMsg;
 
     private final String accountName;
     private final Action action;
     private String suid;
-    private boolean bool_to_return;
     private final NotesDb storedNotes;
     private OneNote currentNote;
     private int indexToDelete;
@@ -99,7 +99,7 @@ public class UpdateThread extends AsyncTask<Object, Void, Boolean> {
                         Context context,
                         Action action) {
         //ImapNotesAccount ImapNotesAccount
-        //Log.d(TAG, "UpdateThread: " + noteBody);
+        Log.d(TAG, "UpdateThread: ");
         this.accountName = accountName;
         Account account = new Account(accountName, Utilities.PackageName);
         this.ImapNotesAccount = new ImapNotesAccount(account, context);
@@ -130,7 +130,7 @@ typesafe.  Make them final to prevent accidental reuse.
                         ArrayList<Uri> uris,
                         Context context) {
         //ImapNotesAccount ImapNotesAccount
-        //Log.d(TAG, "UpdateThread: " + noteBody);
+        Log.d(TAG, "UpdateThread: ");
         this.accountName = accountName;
         Account account = new Account(accountName, Utilities.PackageName);
         this.ImapNotesAccount = new ImapNotesAccount(account, context);
@@ -150,6 +150,7 @@ typesafe.  Make them final to prevent accidental reuse.
 
     @Override
     protected Boolean doInBackground(Object... stuffs) {
+        ErrorMsg = "";
         Log.d(TAG, "doInBackground");
             // Do we have a note to remove?
             if (action == Action.Delete) {
@@ -158,7 +159,7 @@ typesafe.  Make them final to prevent accidental reuse.
                 indexToDelete = getIndexByNumber(suid);
                 storedNotes.DeleteANote(suid, accountName);
                 MoveMailToDeleted(suid);
-                bool_to_return = true;
+                return true;
             }
 
             // Do we have a note to add?
@@ -187,12 +188,14 @@ typesafe.  Make them final to prevent accidental reuse.
                 Log.d(TAG, "doInBackground body: ");
                 try {
                     WriteMailToNew(currentNote, noteBody);
-                } catch (MessagingException | IOException e) {
+                } catch (RuntimeException e) {
                     // something went wrong; set new state for message
                     // for now all changes are lost
-                    storedNotes.SetSaveState(oldSuid, OneNote.SAVE_STATE_FAILED, accountName);
-                    bool_to_return = false;
-                    return bool_to_return;
+                    ErrorMsg = "WriteMailToNew failed (discard changes): " + e;
+                    Log.e(TAG, ErrorMsg);
+                    storedNotes.RemoveTempNumber(currentNote);
+                    storedNotes.SetSaveState(oldSuid, OneNote.SAVE_STATE_OK, accountName);
+                    return false;
                 }
                 if ((action == Action.Update) && (!oldSuid.startsWith("-"))) {
                     MoveMailToDeleted(oldSuid);
@@ -206,7 +209,7 @@ typesafe.  Make them final to prevent accidental reuse.
                 String sdate = DateFormat.getDateTimeInstance().format(date);
                 currentNote.SetDate(sdate);
                 indexToDelete = getIndexByNumber(oldSuid);
-                bool_to_return = true;
+                return true;
             }
 
         // Do we have multiple notes to add?
@@ -246,9 +249,11 @@ typesafe.  Make them final to prevent accidental reuse.
                         Log.d(TAG, "doInBackground body: ");
                         try {
                             WriteMailToNew(currentNote, htmlNote.text);
-                        } catch (MessagingException | IOException e) {
+                        } catch (RuntimeException e) {
                             // something went wrong; undo all actions in database
                             storedNotes.RemoveTempNumber(currentNote);
+                            ErrorMsg = "Multiple WriteMailToNew failed (discard changes): " + e;
+                            Log.e(TAG, ErrorMsg);
                             continue;
                         }
                         currentNote.SetState(OneNote.SAVE_STATE_OK);
@@ -258,12 +263,12 @@ typesafe.  Make them final to prevent accidental reuse.
                         //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext);
                         String sdate = DateFormat.getDateTimeInstance().format(date);
                         currentNote.SetDate(sdate);
-                        bool_to_return = true;
                         indexToDelete = -1;
+                        return true;
                     }
                 }
             }
-        return bool_to_return;
+        return false;
     }
 
     protected void onPostExecute(Boolean result) {
@@ -274,7 +279,7 @@ typesafe.  Make them final to prevent accidental reuse.
 
         adapter.notifyDataSetChanged();
         if (action == Action.Delete) result = false;
-        listener.onFinishPerformed(result);
+        listener.onFinishPerformed(result, ErrorMsg);
     }
 
     private int getIndexByNumber(String pNumber) {
@@ -342,33 +347,53 @@ typesafe.  Make them final to prevent accidental reuse.
     }
 
     private void WriteMailToNew(@NonNull OneNote note,
-                                String noteBody) throws MessagingException, IOException {
+                                String noteBody) {
+        //throws MessagingException, IOException
         Log.d(TAG, "WriteMailToNew: " + noteBody.length() + "Bytes");
         //String body = null;
 
         // Here we add the new note to the new note folder
         //Log.d(TAG,"Add new note");
         Message message;
-        message = HtmlNote.GetMessageFromNote(note, noteBody);
-        message.setSubject(note.GetTitle());
+        try {
+            message = HtmlNote.GetMessageFromNote(note, noteBody);
+        } catch (MessagingException e) {
+            Log.e(TAG, "WriteMailToNew: GetMessageFromNote fatal failed:" + e);
+            throw new RuntimeException(e);
+        }
+
+        try {
+            message.setSubject(note.GetTitle());
+        } catch (MessagingException e) {
+            Log.e(TAG, "WriteMailToNew: setSubject failed:" + e);
+        }
         MailDateFormat mailDateFormat = new MailDateFormat();
         // Remove (CET) or (GMT+1) part as asked in github issue #13
         String headerDate = (mailDateFormat.format(new Date())).replaceAll("\\(.*$", "");
-        message.addHeader("Date", headerDate);
+        try {
+            message.addHeader("Date", headerDate);
+        } catch (MessagingException e) {
+            Log.e(TAG, "WriteMailToNew: addHeader Date failed:" + e);
+        }
         // Get temporary UID
         String uid = Integer.toString(Math.abs(Integer.parseInt(note.GetUid())));
         File accountDirectory = ImapNotesAccount.GetRootDirAccount();
         File directory = new File(accountDirectory, "new");
-        message.setFrom(UserNameToEmail(ImapNotesAccount.username));
-        File outfile = new File(directory, Utilities.addMailExt(uid));
         try {
-            outfile.delete();
-        } catch (Exception ignored) {
-
+            message.setFrom(UserNameToEmail(ImapNotesAccount.username));
+        } catch (MessagingException e) {
+            Log.e(TAG, "WriteMailToNew: UsernameToEmail failed:" + e);
         }
-        OutputStream str = new FileOutputStream(outfile, false);
-        message.writeTo(str);
-        str.close();
+        File outfile = new File(directory, Utilities.addMailExt(uid));
+        OutputStream str = null;
+        try {
+            str = new FileOutputStream(outfile, false);
+            message.writeTo(str);
+            str.close();
+        } catch (IOException | MessagingException e) {
+            Log.e(TAG, "WriteMailToNew: write file fatal failed:" + e);
+            throw new RuntimeException(e);
+        }
     }
 
     public Address UserNameToEmail(@NonNull String name) {
@@ -378,7 +403,7 @@ typesafe.  Make them final to prevent accidental reuse.
     }
 
     public interface FinishListener {
-        void onFinishPerformed(Boolean result);
+        void onFinishPerformed(Boolean result, String ErrText);
     }
 
     public enum Action {

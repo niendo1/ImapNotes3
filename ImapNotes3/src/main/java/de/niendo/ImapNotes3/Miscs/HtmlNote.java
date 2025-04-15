@@ -74,11 +74,15 @@ public class HtmlNote {
         Session session = Session.getDefaultInstance(props, null);
         MimeMessage message = new MimeMessage(session);
 
-        message.setHeader("X-Uniform-Type-Identifier", "com.apple.mail-note");
-        UUID uuid = UUID.randomUUID();
-        message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
-        message.setHeader("X-Mailer", Utilities.FullApplicationName);
-
+        try {
+            message.setFlag(Flags.Flag.SEEN, true);
+            message.setHeader("X-Uniform-Type-Identifier", "com.apple.mail-note");
+            message.setHeader("X-Mailer", Utilities.FullApplicationName);
+            UUID uuid = UUID.randomUUID();
+            message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
+        } catch (MessagingException e) {
+            Log.e(TAG, "GetMessageFromNote failed: " + e);
+        }
 /*
             <!DOCTYPE html>
             <html>
@@ -110,10 +114,12 @@ public class HtmlNote {
             }
             doc.select("body").attr("style", bodyStyle);
         }
-
-        message.setText(doc.toString(), "utf-8", "html");
-        message.setFlag(Flags.Flag.SEEN, true);
-
+        try {
+            message.setText(doc.toString(), "utf-8", "html");
+        } catch (MessagingException e) {
+            Log.e(TAG, "GetMessageFromNote setText fatal failed: " + e);
+            throw e;
+        }
         return (message);
     }
 

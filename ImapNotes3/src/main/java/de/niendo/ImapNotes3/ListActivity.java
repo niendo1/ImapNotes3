@@ -240,8 +240,9 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 ImapNotes3.ShowMessage(R.string.sync_wait_necessary, listview, 3);
                 return;
             } else if (saveState.equals(OneNote.SAVE_STATE_FAILED)) {
-                Log.d(TAG, "message was not correctly saved, discard changes silently");
-                // FIXME: inform user
+                ImapNotes3.ShowMessage(R.string.save_note_failed, listview, 3);
+                Log.d(TAG, "message was not correctly saved");
+                return;
             }
             if (intentActionSend != null)
                 // FIXME StrictMode policy violation: android.os.strictmode.UnsafeIntentLaunchViolation: Launch of unsafe intent: Intent
@@ -397,7 +398,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         savePreferences();
         if (!(updateThread == null)) {
             // for some reason this helps...
-            synchronized (updateThread) {
+            synchronized (ImapNotes3.MainLock) {
                 if (updateThread.getStatus() == AsyncTask.Status.RUNNING) {
                     Log.d(TAG, "onPause RUNNING");
                 }
@@ -445,7 +446,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         listToView.setSortOrder(getSortOrder());
         String accountName = getSelectedAccountName();
         listToView.setAccountName(accountName);
-        synchronized (this) {
+        synchronized (ImapNotes3.MainLock) {
             new SyncThread(
                     accountName,
                     noteList,
@@ -465,7 +466,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             String bgColor,
             String accountName,
             UpdateThread.Action action) {
-        synchronized (this) {
+        synchronized (ImapNotes3.MainLock) {
                 updateThread = new UpdateThread(accountName,
                         this,
                         noteList,
@@ -483,7 +484,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     private void UpdateList(
             ArrayList<Uri> uris,
             String accountName) {
-        synchronized (this) {
+        synchronized (ImapNotes3.MainLock) {
             updateThread = new UpdateThread(accountName,
                     this,
                     noteList,
@@ -495,8 +496,13 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     }
 
     @Override
-    public void onFinishPerformed(Boolean result) {
-        if (result) TriggerSync(false);
+    public void onFinishPerformed(Boolean result, String ErrText) {
+        if (result) {
+            TriggerSync(false);
+        }
+        if (!ErrText.isEmpty()) {
+            ImapNotes3.ShowMessage(ErrText, listview, 30);
+        }
     }
 
     @SuppressLint("RestrictedApi")
