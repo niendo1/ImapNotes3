@@ -1,4 +1,5 @@
-* build updates (gradle etc.)
+* build updates (libs, gradle etc.)
 * Weblate: translation updates (thanks to 77nnit)
 * layout fix: list start at top
+* saving notes is more robust, show exceptions to user
 * App Store Description Enhancement (thanks to RightWrite)
