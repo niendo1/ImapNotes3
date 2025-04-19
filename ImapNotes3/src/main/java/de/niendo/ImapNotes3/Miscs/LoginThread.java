@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * Copyright (C)           - kwhitefoot
  * and Contributors.
  *
@@ -117,8 +117,8 @@ public class LoginThread extends AsyncTask<Void, Void, Result<String>> {
             Log.d(TAG, "doInBackground success");
             return new Result<>(accountConfigurationActivity.getString(resultTxtId), true);
         } catch (Exception e) {
-            e.printStackTrace();
-            return new Result<>("Unexpected exception: " + e.getMessage(), false);
+            Log.e(TAG, Log.getStackTraceString(e));
+            return new Result<>("Unexpected exception: " + e.getLocalizedMessage(), false);
         }
     }
 

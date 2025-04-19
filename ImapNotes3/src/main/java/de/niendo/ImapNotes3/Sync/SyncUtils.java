@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * Copyright (C)      2016 - Axel Strübing
  * Copyright (C)      2016 - Martin Carpella
  * Copyright (C) 2015-2016 - nb
@@ -95,6 +95,142 @@ public class SyncUtils {
         (new File(rootDirAccount, "deleted")).mkdirs();
     }
 
+    /**
+     * @param uid     ID of the message as created by the IMAP server
+     * @param nameDir Name of the account with which this message is associated, used to find the
+     *                directory in which it is stored.
+     * @return A Java mail message object.
+     */
+    @Nullable
+    public static Message ReadMailFromNoteFile(@NonNull File nameDir,
+                                               @NonNull String uid) {
+        Log.d(TAG, "ReadMailFromFile: " + nameDir.getPath() + " " + Utilities.addMailExt(uid));
+
+        File mailFile;
+        mailFile = new File(nameDir, Utilities.addMailExt(uid));
+        if (!mailFile.exists()) {
+            // old: only UID is used
+            mailFile = new File(nameDir, uid);
+            if (!mailFile.exists()) {
+                mailFile = new File(nameDir, uid);
+                if (!mailFile.exists()) {
+                    Log.e(TAG, "ReadMailFromFile: file not found.." + mailFile);
+                    return null;
+                }
+            }
+        }
+        return (ReadMailFromFile(mailFile));
+    }
+
+    // Put values in shared preferences
+    synchronized public static void SetUIDValidity(@NonNull Account account,
+                                            Long UIDValidity,
+                                            @NonNull Context ctx) {
+        Log.d(TAG, "SetUIDValidity: " + account.name);
+        SharedPreferences preferences = ctx.getSharedPreferences(ImapNotes3.RemoveReservedChars(account.name), Context.MODE_MULTI_PROCESS);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Name", "valid_data");
+        editor.putLong("UIDValidity", UIDValidity);
+        editor.apply();
+    }
+
+    synchronized private boolean IsConnected() {
+        return store != null && store.isConnected();
+    }
+
+    // Retrieve values from shared preferences:
+    synchronized Long GetUIDValidity(@NonNull Account account,
+                                            @NonNull Context ctx) {
+        Log.d(TAG, "GetUIDValidity: " + account.name);
+        UIDValidity = (long) -1;
+        SharedPreferences preferences = ctx.getSharedPreferences(ImapNotes3.RemoveReservedChars(account.name), Context.MODE_MULTI_PROCESS);
+        String name = preferences.getString("Name", "");
+        if (!name.equalsIgnoreCase("")) {
+            UIDValidity = preferences.getLong("UIDValidity", -1);
+        }
+        return UIDValidity;
+    }
+
+    /**
+     * @param uid     ID of the message as created by the IMAP server
+     * @param fileDir Name of the account with which this message is associated, used to find the
+     *                directory in which it is stored.
+     * @return A Java mail message object.
+     */
+    @Nullable
+    public static Message ReadMailFromFileRootAndNew(@NonNull String uid,
+                                                     @NonNull File fileDir) {
+        Log.d(TAG, "ReadMailFromFileRootAndNew: " + fileDir.getPath() + " " + uid);
+
+        // new or changed file
+        if (uid.startsWith("-")) {
+            uid = uid.substring(1);
+            fileDir = new File(fileDir, "new");
+        }
+        return ReadMailFromNoteFile(fileDir, uid);
+    }
+
+    /**
+     * @param mailFile Name of the account with which this message is associated, used to find the
+     *                 directory in which it is stored.
+     * @return A Java mail message object.
+     */
+    @Nullable
+    public static Message ReadMailFromFile(@NonNull File mailFile) {
+        try (InputStream mailFileInputStream = new FileInputStream(mailFile)) {
+            try {
+                Properties props = new Properties();
+                Session session = Session.getDefaultInstance(props);
+                Message message = new MimeMessage(session, mailFileInputStream);
+                Log.d(TAG, "ReadMailFromFile return new MimeMessage.");
+                return message;
+            } catch (Exception e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+            } finally {
+                mailFileInputStream.close();
+            }
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "File not found opening mailFile: " + mailFile.getAbsolutePath());
+            Log.e(TAG, Log.getStackTraceString(e));
+        } catch (IOException exIO) {
+            Log.e(TAG, "IO exception opening mailFile: " + mailFile.getAbsolutePath());
+            Log.e(TAG, Log.getStackTraceString(exIO));
+        }
+        Log.e(TAG, "ReadMailFromFile return null.");
+        return null;
+    }
+
+    /**
+     * @param msgString
+     * @return A Java mail message object.
+     */
+    @Nullable
+    public static Message ReadMailFromString(String msgString) {
+            try {
+                Properties props = new Properties();
+                Session session = Session.getDefaultInstance(props);
+                return new MimeMessage(session, new ByteArrayInputStream(msgString.getBytes()));
+            } catch (Exception e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+        }
+        return null;
+    }
+
+    /**
+     * @param outfile      Name of local file in which to store the note.
+     * @param notesMessage The note in the form of a mail message.
+     */
+    private static void SaveNote(@NonNull File outfile,
+                                 @NonNull Message notesMessage) {
+        try (OutputStream str = new FileOutputStream(outfile)) {
+            Log.d(TAG, "SaveNote: " + outfile.getCanonicalPath());
+            notesMessage.writeTo(str);
+        } catch (IOException | MessagingException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+
+    }
+
     @NonNull
     public ImapNotesResult ConnectToRemote(@NonNull String username,
                                            @NonNull String password,
@@ -118,7 +254,7 @@ public class SyncUtils {
             } catch (MessagingException e) {
                 // Log the error but do not propagate the exception because the connection is now
                 // closed even if an exception was thrown.
-                Log.d(TAG, "ConnectToRemote Store.Close(): " + e.getMessage());
+                Log.w(TAG, "ConnectToRemote Store.Close(): " + e.getMessage());
             }
         }
         //boolean acceptcrt = security.acceptcrt;
@@ -127,9 +263,9 @@ public class SyncUtils {
         try {
             sf = new MailSSLSocketFactory();
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+            Log.e(TAG, "MailSSLSocketFactory failed: " + e.getMessage());
             return new ImapNotesResult(ImapNotesResult.ResultCodeCantConnect,
-                    "Can't connect to server: " + e.getMessage(), -1);
+                    "Can't connect to server: " + e.getLocalizedMessage(), -1);
         }
         Properties props = new Properties();
 
@@ -170,11 +306,11 @@ public class SyncUtils {
             store = session.getStore(proto);
             store.connect(server, username, password);
             //res.hasUIDPLUS = ((IMAPStore) store).hasCapability("UIDPLUS");
-            //Log.d(TAG, "has UIDPLUS="+res.hasUIDPLUS);
+            //Log.v(TAG, "has UIDPLUS="+res.hasUIDPLUS);
 
             Folder[] folders = store.getPersonalNamespaces();
             Folder rootFolder = folders[0];
-            Log.d(TAG, "Personal Namespaces=" + rootFolder.getFullName());
+            Log.v(TAG, "Personal Namespaces=" + rootFolder.getFullName());
             // TODO: this the wrong place to make decisions about the name of the notes folder, that
             // should be done where it is created.
             String sfolder = ImapFolderName;
@@ -187,7 +323,7 @@ public class SyncUtils {
             if (!remoteIMAPNotesFolder.exists()) {
                 if (remoteIMAPNotesFolder.create(Folder.HOLDS_MESSAGES)) {
                     remoteIMAPNotesFolder.setSubscribed(true);
-                    Log.d(TAG, "Folder was created successfully");
+                    Log.v(TAG, "Folder was created successfully");
                     return new ImapNotesResult(ImapNotesResult.ResultCodeImapFolderCreated,
                             "", -1);
                 } else {
@@ -199,143 +335,12 @@ public class SyncUtils {
                     "",
                     remoteIMAPNotesFolder.getUIDValidity());
         } catch (Exception e) {
-            Log.d(TAG, e.getMessage());
+            Log.e(TAG, Log.getStackTraceString(e));
             return new ImapNotesResult(ImapNotesResult.ResultCodeException,
-                    e.getMessage(),
+                    e.getLocalizedMessage(),
                     -1);
         }
 
-    }
-
-    // Put values in shared preferences
-    synchronized public static void SetUIDValidity(@NonNull Account account,
-                                            Long UIDValidity,
-                                            @NonNull Context ctx) {
-        Log.d(TAG, "SetUIDValidity: " + account.name);
-        SharedPreferences preferences = ctx.getSharedPreferences(ImapNotes3.RemoveReservedChars(account.name), Context.MODE_MULTI_PROCESS);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("Name", "valid_data");
-        //Log.d(TAG, "UIDValidity set to in shared_prefs:"+UIDValidity);
-        editor.putLong("UIDValidity", UIDValidity);
-        editor.apply();
-    }
-
-    synchronized private boolean IsConnected() {
-        return store != null && store.isConnected();
-    }
-
-    // Retrieve values from shared preferences:
-    synchronized Long GetUIDValidity(@NonNull Account account,
-                                            @NonNull Context ctx) {
-        Log.d(TAG, "GetUIDValidity: " + account.name);
-        UIDValidity = (long) -1;
-        SharedPreferences preferences = ctx.getSharedPreferences(ImapNotes3.RemoveReservedChars(account.name), Context.MODE_MULTI_PROCESS);
-        String name = preferences.getString("Name", "");
-        if (!name.equalsIgnoreCase("")) {
-            UIDValidity = preferences.getLong("UIDValidity", -1);
-            //Log.d(TAG, "UIDValidity got from shared_prefs:"+UIDValidity);
-        }
-        return UIDValidity;
-    }
-
-    /**
-     * @param uid     ID of the message as created by the IMAP server
-     * @param fileDir Name of the account with which this message is associated, used to find the
-     *                directory in which it is stored.
-     * @return A Java mail message object.
-     */
-    @Nullable
-    public static Message ReadMailFromFileRootAndNew(@NonNull String uid,
-                                                     @NonNull File fileDir) {
-        Log.d(TAG, "ReadMailFromFileRootAndNew: " + fileDir.getPath() + " " + uid);
-
-        // new or changed file
-        if (uid.startsWith("-")) {
-            uid = uid.substring(1);
-            fileDir = new File(fileDir, "new");
-        }
-        return ReadMailFromNoteFile(fileDir, uid);
-    }
-
-    /**
-     * @param uid     ID of the message as created by the IMAP server
-     * @param nameDir Name of the account with which this message is associated, used to find the
-     *                directory in which it is stored.
-     * @return A Java mail message object.
-     */
-    @Nullable
-    public static Message ReadMailFromNoteFile(@NonNull File nameDir,
-                                               @NonNull String uid) {
-        Log.d(TAG, "ReadMailFromFile: " + nameDir.getPath() + " " + Utilities.addMailExt(uid));
-
-        File mailFile;
-        mailFile = new File(nameDir, Utilities.addMailExt(uid));
-        if (!mailFile.exists()) {
-            // old: only UID is used
-            mailFile = new File(nameDir, uid);
-            if (!mailFile.exists()) {
-                mailFile = new File(nameDir, uid);
-                if (!mailFile.exists()) {
-                    Log.d(TAG, "ReadMailFromFile: file not found.." + mailFile);
-                    return null;
-                }
-            }
-        }
-        return (ReadMailFromFile(mailFile));
-    }
-
-    /**
-     * @param mailFile Name of the account with which this message is associated, used to find the
-     *                 directory in which it is stored.
-     * @return A Java mail message object.
-     */
-    @Nullable
-    public static Message ReadMailFromFile(@NonNull File mailFile) {
-        try (InputStream mailFileInputStream = new FileInputStream(mailFile)) {
-            try {
-                Properties props = new Properties();
-                Session session = Session.getDefaultInstance(props);
-                Message message = new MimeMessage(session, mailFileInputStream);
-                Log.d(TAG, "ReadMailFromFile return new MimeMessage.");
-                return message;
-            } catch (MessagingException e) {
-                // TODO Auto-generated catch block
-                Log.d(TAG, "Exception getting MimeMessage.");
-                e.printStackTrace();
-            } catch (Exception e2) {
-                //TODO: handle this properly
-                Log.d(TAG, "exception opening mailFile: ");
-                e2.printStackTrace();
-            } finally {
-                mailFileInputStream.close();
-            }
-        } catch (FileNotFoundException e1) {
-            // TODO Auto-generated catch block
-            Log.d(TAG, "File not found opening mailFile: " + mailFile.getAbsolutePath());
-            e1.printStackTrace();
-        } catch (IOException exIO) {
-            //TODO: handle this properly
-            Log.d(TAG, "IO exception opening mailFile: " + mailFile.getAbsolutePath());
-            exIO.printStackTrace();
-        }
-        Log.d(TAG, "ReadMailFromFile return null.");
-        return null;
-    }
-
-    /**
-     * @param msgString
-     * @return A Java mail message object.
-     */
-    @Nullable
-    public static Message ReadMailFromString(String msgString) {
-            try {
-                Properties props = new Properties();
-                Session session = Session.getDefaultInstance(props);
-                return new MimeMessage(session, new ByteArrayInputStream(msgString.getBytes()));
-            } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     synchronized void DisconnectFromRemote() {
@@ -343,26 +348,8 @@ public class SyncUtils {
         try {
             store.close();
         } catch (MessagingException e) {
-            // TODO Auto-generated catch block
-            Log.d(TAG, "DisconnectFromRemote Error:" + e.getMessage());
-            e.printStackTrace();
+            Log.e(TAG, Log.getStackTraceString(e));
         }
-    }
-
-    /**
-     * @param outfile      Name of local file in which to store the note.
-     * @param notesMessage The note in the form of a mail message.
-     */
-    private static void SaveNote(@NonNull File outfile,
-                                 @NonNull Message notesMessage) {
-        try (OutputStream str = new FileOutputStream(outfile)) {
-            Log.d(TAG, "SaveNote: " + outfile.getCanonicalPath());
-            notesMessage.writeTo(str);
-        } catch (IOException | MessagingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
     }
 
     synchronized static void RemoveAccount(@NonNull Context context, @NonNull Account account) {
@@ -407,7 +394,7 @@ public class SyncUtils {
         try {
             title = notesMessage.getSubject();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, Log.getStackTraceString(e));
         }
 
         // Some servers (such as posteo.de) don't encode non us-ascii characters in subject
@@ -422,7 +409,7 @@ public class SyncUtils {
                 title = new String(title.getBytes(StandardCharsets.ISO_8859_1));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, Log.getStackTraceString(e));
         }
 
         // Get INTERNALDATE
@@ -431,7 +418,7 @@ public class SyncUtils {
             Date MessageInternaldate = notesMessage.getReceivedDate();
             internaldate = Utilities.internalDateFormat.format(MessageInternaldate);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, Log.getStackTraceString(e));
         }
 
         if (title == null)
@@ -563,7 +550,6 @@ public class SyncUtils {
         int numMessage = Integer.parseInt(Utilities.removeMailExt(fileName));
         synchronized (myLock) {
             OpenRemoteIMAPNotesFolder(Folder.READ_WRITE);
-            //Log.d(TAG,"UID to remove:"+numMessage);
             Message[] msgs = {(remoteIMAPNotesFolder).getMessageByUID(numMessage)};
 
             Folder saveFolder;
@@ -572,7 +558,7 @@ public class SyncUtils {
                     saveFolder = remoteIMAPNotesFolder.getParent().getFolder(copyImapFolderName);
                     remoteIMAPNotesFolder.copyMessages(msgs, saveFolder);
                 } catch (Exception e) {
-                    Log.d(TAG, "Cannot move note:" + e.getMessage());
+                    Log.e(TAG, "DeleteNote Cannot move note:" + e.getMessage());
                 }
             }
             remoteIMAPNotesFolder.setFlags(msgs, new Flags(Flags.Flag.DELETED), true);
@@ -586,7 +572,7 @@ public class SyncUtils {
             try {
                 store.close();
             } catch (MessagingException e) {
-                e.printStackTrace();
+                Log.e(TAG, Log.getStackTraceString(e));
             }
         }
 

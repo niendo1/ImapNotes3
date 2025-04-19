@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-2024 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2024-2025 - Peter Korf <peter@niendo.de>
  *
  * This file is part of ImapNotes3.
  *
@@ -155,7 +155,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 emailData = sb.toString();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "bufferedReader failed: " + e.getMessage());
             }
 
             //send file using email

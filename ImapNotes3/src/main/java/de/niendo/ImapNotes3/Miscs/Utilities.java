@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * Copyright (C)         ? - kwhitefoot
  * Copyright (C)      2016 - kj
  * and Contributors.
@@ -25,6 +25,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -44,6 +45,7 @@ import de.niendo.ImapNotes3.R;
  * Reduce repetition by providing static fields and methods for common operations.
  */
 public final class Utilities {
+    private static final String TAG = "IN_Utilities";
     @NonNull
     public static final String PackageName = BuildConfig.APPLICATION_ID;
     @NonNull
@@ -75,7 +77,7 @@ public final class Utilities {
             color = field.getInt(null);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, Log.getStackTraceString(e));
         }
         return color;
     }
@@ -114,6 +116,7 @@ public final class Utilities {
         try {
             URL url = new URL(stringURL);
         } catch (MalformedURLException e) {
+            Log.e(TAG, "new URL failed (" + stringURL + "): " + e.getMessage());
             return false;
         }
         return true;

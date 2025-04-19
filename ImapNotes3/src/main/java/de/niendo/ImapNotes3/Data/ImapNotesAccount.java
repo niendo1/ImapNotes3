@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * Copyright (C) ?   -2022 - Axel Strübing
  * Copyright (C) ?   -2016 - Martin Carpella
  * Copyright (C) ?   -2015 - nb
@@ -125,8 +125,7 @@ public class ImapNotesAccount {
             FileUtils.deleteDirectory(rootDirAccount);
         } catch (IOException | Error e) {
             // for anbox - otherwise it will crash
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.e(TAG, "ClearHomeDir failed:" + e.getMessage());
         }
     }
 

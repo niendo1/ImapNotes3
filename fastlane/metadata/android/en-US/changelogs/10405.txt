@@ -3,3 +3,4 @@
 * layout fix: list start at top
 * saving notes is more robust, show exceptions to user
 * App Store Description Enhancement (thanks to RightWrite)
+* improve logging

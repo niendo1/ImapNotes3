@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * Copyright (C)      2016 - Martin Carpella
  * Copyright (C) 2014-2015 - nb
  * and Contributors.
@@ -130,7 +130,7 @@ typesafe.  Make them final to prevent accidental reuse.
                         ArrayList<Uri> uris,
                         Context context) {
         //ImapNotesAccount ImapNotesAccount
-        Log.d(TAG, "UpdateThread: ");
+        Log.d(TAG, "UpdateThread Uri: ");
         this.accountName = accountName;
         Account account = new Account(accountName, Utilities.PackageName);
         this.ImapNotesAccount = new ImapNotesAccount(account, context);
@@ -154,7 +154,7 @@ typesafe.  Make them final to prevent accidental reuse.
         Log.d(TAG, "doInBackground");
             // Do we have a note to remove?
             if (action == Action.Delete) {
-                Log.d(TAG, "Received request to delete message #" + suid);
+                Log.v(TAG, "Received request to delete message #" + suid);
                 // Here we delete the note from the local notes list
                 indexToDelete = getIndexByNumber(suid);
                 storedNotes.DeleteANote(suid, accountName);
@@ -164,7 +164,7 @@ typesafe.  Make them final to prevent accidental reuse.
 
             // Do we have a note to add?
             if ((action == Action.Insert) || (action == Action.Update)) {
-                Log.d(TAG, "Action Insert/Update:" + suid);
+                Log.v(TAG, "Action Insert/Update:" + suid);
                 String oldSuid = suid;
                 storedNotes.SetSaveState(suid, OneNote.SAVE_STATE_SAVING, accountName);
                 // Use the first line as the tile
@@ -185,14 +185,14 @@ typesafe.  Make them final to prevent accidental reuse.
                 currentNote.SetUid(suid);
                 // Here we ask to add the new note to the new note folder
                 // Must be done AFTER uid has been set in currentNote
-                Log.d(TAG, "doInBackground body: ");
+                Log.v(TAG, "doInBackground body: ");
                 try {
                     WriteMailToNew(currentNote, noteBody);
                 } catch (RuntimeException e) {
                     // something went wrong; set new state for message
                     // for now all changes are lost
-                    ErrorMsg = "WriteMailToNew failed (discard changes): " + e;
-                    Log.e(TAG, ErrorMsg);
+                    ErrorMsg = "WriteMailToNew failed (discard changes): " + e.getLocalizedMessage();
+                    Log.e(TAG, Log.getStackTraceString(e));
                     storedNotes.RemoveTempNumber(currentNote);
                     storedNotes.SetSaveState(oldSuid, OneNote.SAVE_STATE_OK, accountName);
                     return false;
@@ -225,7 +225,8 @@ typesafe.  Make them final to prevent accidental reuse.
                         Date date = null;
                         try {
                             date = message.getSentDate();
-                        } catch (MessagingException ignored) {
+                        } catch (MessagingException e) {
+                            Log.e(TAG, "getSentDate failed: " + e.getMessage());
                         }
                         if (date == null) date = new Date();
                         SimpleDateFormat sdf = new SimpleDateFormat(Utilities.internalDateFormatString, Locale.ROOT);
@@ -235,7 +236,8 @@ typesafe.  Make them final to prevent accidental reuse.
                         try {
                             subject = message.getSubject();
                         } catch (MessagingException e) {
-                            subject = "subject not found: " + e;
+                            Log.e(TAG, "getSubject failed: " + e.getMessage());
+                            subject = "subject not found: " + e.getLocalizedMessage();
                         }
 
                         currentNote = new OneNote(subject, stringDate, "", accountName, htmlNote.color, OneNote.SAVE_STATE_SAVING);
@@ -252,8 +254,8 @@ typesafe.  Make them final to prevent accidental reuse.
                         } catch (RuntimeException e) {
                             // something went wrong; undo all actions in database
                             storedNotes.RemoveTempNumber(currentNote);
-                            ErrorMsg = "Multiple WriteMailToNew failed (discard changes): " + e;
-                            Log.e(TAG, ErrorMsg);
+                            ErrorMsg = "WriteMailToNew failed (discard changes): " + e.getLocalizedMessage();
+                            Log.e(TAG, "WriteMailToNew failed: " + e.getMessage());
                             continue;
                         }
                         currentNote.SetState(OneNote.SAVE_STATE_OK);
@@ -358,14 +360,14 @@ typesafe.  Make them final to prevent accidental reuse.
         try {
             message = HtmlNote.GetMessageFromNote(note, noteBody);
         } catch (MessagingException e) {
-            Log.e(TAG, "WriteMailToNew: GetMessageFromNote fatal failed:" + e);
+            Log.e(TAG, "WriteMailToNew: GetMessageFromNote fatal failed:" + e.getMessage());
             throw new RuntimeException(e);
         }
 
         try {
             message.setSubject(note.GetTitle());
         } catch (MessagingException e) {
-            Log.e(TAG, "WriteMailToNew: setSubject failed:" + e);
+            Log.e(TAG, "WriteMailToNew: setSubject failed:" + e.getMessage());
         }
         MailDateFormat mailDateFormat = new MailDateFormat();
         // Remove (CET) or (GMT+1) part as asked in github issue #13
@@ -373,7 +375,7 @@ typesafe.  Make them final to prevent accidental reuse.
         try {
             message.addHeader("Date", headerDate);
         } catch (MessagingException e) {
-            Log.e(TAG, "WriteMailToNew: addHeader Date failed:" + e);
+            Log.e(TAG, "WriteMailToNew: addHeader Date failed:" + e.getMessage());
         }
         // Get temporary UID
         String uid = Integer.toString(Math.abs(Integer.parseInt(note.GetUid())));
@@ -382,7 +384,7 @@ typesafe.  Make them final to prevent accidental reuse.
         try {
             message.setFrom(UserNameToEmail(ImapNotesAccount.username));
         } catch (MessagingException e) {
-            Log.e(TAG, "WriteMailToNew: UsernameToEmail failed:" + e);
+            Log.e(TAG, "WriteMailToNew: UsernameToEmail failed:" + e.getMessage());
         }
         File outfile = new File(directory, Utilities.addMailExt(uid));
         OutputStream str = null;
@@ -391,8 +393,7 @@ typesafe.  Make them final to prevent accidental reuse.
             message.writeTo(str);
             str.close();
         } catch (IOException | MessagingException e) {
-            Log.e(TAG, "WriteMailToNew: write file fatal failed:" + e);
-            throw new RuntimeException(e);
+            Log.e(TAG, "WriteMailToNew: write file fatal failed:" + e.getMessage());
         }
     }
 

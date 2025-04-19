@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * Copyright (C)         ? - kwhitefoot
  * and Contributors.
  *
@@ -30,6 +30,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.StringRes;
@@ -43,6 +44,7 @@ import java.io.File;
 import de.niendo.ImapNotes3.Miscs.Utilities;
 
 public class ImapNotes3 extends Application {
+    private static final String TAG = "IN_ImapNotes3";
     private static Context mContext;
     private static View mContent;
     public static Intent intent; // For Data-Exchange SyncAdapater
@@ -88,7 +90,8 @@ public class ImapNotes3 extends Application {
             bufferedInputStream.close();
             return (sharedData.toString());
         } catch (Exception e) {
-            return e.getMessage();
+            Log.e(TAG, Log.getStackTraceString(e));
+            return e.getLocalizedMessage();
         }
     }
 

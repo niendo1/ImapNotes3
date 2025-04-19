@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2024-20255 - Peter Korf <peter@niendo.de>
+ * and Contributors.
+ *
+ * This file is part of ImapNotes3.
+ *
+ * ImapNotes3 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package de.niendo.ImapNotes3.Miscs;
 
 import static de.niendo.ImapNotes3.ImapNotes3.GetDocumentDir;
@@ -26,7 +45,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.Message;
-import javax.mail.MessagingException;
 
 import de.niendo.ImapNotes3.ImapNotes3;
 import de.niendo.ImapNotes3.R;
@@ -96,7 +114,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "RestoreArchive failed" + e.getMessage());
         }
     }
     private INotesRestore mCallback;
@@ -179,7 +197,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
         try {
             mCallback = (INotesRestore) context;
         } catch (ClassCastException e) {
-            Log.d(TAG, "Activity doesn't implement the INotesRestore interface");
+            Log.e(TAG, "Activity doesn't implement the INotesRestore interface");
         }
     }
 
@@ -283,7 +301,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
             try {
                 allNotesTmp = ZipUtils.listFilesInDirectory(getAppContext(), uri, dir);
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "listFilesInDirectory failed" + e.getMessage());
                 return null;
             }
             String destDirectory = getAppContext().getCacheDir().toString() + "/Import/" + dir + "/";
@@ -305,9 +323,9 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
                     }
                 } catch (Exception e) {
                     if (subject.isEmpty())
-                        subject = "Error reading: " + file + " - " + e.getMessage();
+                        subject = "Error reading: " + file + " - " + e.getLocalizedMessage();
                     date = "";
-                    e.printStackTrace();
+                    Log.e(TAG, subject + " " + Log.getStackTraceString(e));
                 } finally {
                     allNotes.add(file);
                     allMessages.add(subject);
@@ -343,7 +361,8 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
                 sd.updateInfoText(getAppContext().getResources().getString(R.string.success));
                 return 1;
             } catch (IOException e) {
-                sd.updateInfoText(getAppContext().getResources().getString(R.string.failed) + e.getMessage());
+                sd.updateInfoText(getAppContext().getResources().getString(R.string.failed) + e.getLocalizedMessage());
+                Log.e(TAG, "zipDirectory failed" + e.getMessage());
             }
             return -1;
         }

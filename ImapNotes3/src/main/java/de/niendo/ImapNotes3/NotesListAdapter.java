@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Peter Korf
+ * Copyright (C) 2025 Peter Korf
  * Copyright (C) 2016 Martin Carpella
  * Copyright (C) 2015 nb
  * Copyright (C) 2006 The Android Open Source Project
@@ -200,82 +200,23 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
         return createViewFromResource(position, convertView, parent, mDropDownResource);
     }
 
-    private void bindView(int position, @NonNull View view) {
-        final Map dataSet;
-        try {
-            dataSet = mData.get(position);
-        } catch (Exception e) {
-            return;
-        }
-        if (dataSet == null) {
-            return;
-        }
-
-        //final ViewBinder binder = mViewBinder;
-        final int[] to = mTo;
-        final int count = to.length;
-
-        int txtColor = ImapNotes3.loadPreferenceColor("EditorTxtColor", mContext.getColor(R.color.EditorTxtColor));
-        int bgColorDefault = ImapNotes3.loadPreferenceColor("EditorBgColorDefault", mContext.getColor(R.color.EditorBgColorDefault));
-        for (int i = 0; i < count; i++) {
-            final View v = view.findViewById(to[i]);
-            if (v != null) {
-                final Object data = dataSet.get(mFrom[i]);
-                String text = data == null ? "" : data.toString();
-                String bgColor = dataSet.get(mBgColor) == null ? "none" : dataSet.get(mBgColor).toString();
-
-                int bgColorNr;
-                if (bgColor.equals("none")) {
-                    bgColorNr = bgColorDefault;
-                } else {
-                    bgColorNr = Utilities.getColorByName(bgColor, mContext);
-                }
-
-                boolean bound = false;
-                //if (binder != null) {
-                //    bound = binder.setViewValue(v, data, text);
-                //}
-
-                if (!bound) {
-                    if (v instanceof Checkable) {
-                        if (data instanceof Boolean) {
-                            ((Checkable) v).setChecked((Boolean) data);
-                        } else if (v instanceof TextView) {
-                            // Note: keep the instanceof TextView check at the bottom of these
-                            // ifs since a lot of views are TextViews (e.g. CheckBoxes).
-                            setViewText((TextView) v, text);
-                        } else {
-                            throw new IllegalStateException(v.getClass().getName() +
-                                    " should be bound to a Boolean, not a " +
-                                    (data == null ? "<unknown type>" : data.getClass()));
-                        }
-                    } else if (v instanceof TextView) {
-                        // Note: keep the instanceof TextView check at the bottom of these
-                        // ifs since a lot of views are TextViews (e.g. CheckBoxes).
-                        setViewText((TextView) v, text);
-                        if (i == 0) {
-                            // note name
-                            setTxtColor((TextView) v, txtColor);
-                        } else {
-                            // time & date
-                            setTxtColor((TextView) v, ColorUtils.blendARGB(txtColor, bgColorNr, 0.5f));
-                        }
-                        setBgColor((TextView) v, bgColorNr);
-                        setBgColor((RelativeLayout) view, bgColorNr);
-
-                    } else if (v instanceof ImageView) {
-                        if (data instanceof Integer) {
-                            setViewImage((ImageView) v, (Integer) data);
-                        } else {
-                            setViewImage((ImageView) v, text);
-                        }
-                    } else {
-                        throw new IllegalStateException(v.getClass().getName() + " is not a " +
-                                " view that can be bounds by this SimpleAdapter");
-                    }
-                }
+    public static boolean searchHTML(@NonNull File nameDir, @NonNull String uid, String searchTerm, boolean useRegex) {
+        // Compile the regular expression pattern if necessary
+        Pattern pattern = null;
+        if (useRegex) {
+            try {
+                pattern = Pattern.compile(searchTerm);
+            } catch (PatternSyntaxException e) {
+                Log.w(TAG, "Pattern.compile failed: " + e.getMessage());
+                return false;
             }
+        } else {
+            pattern = Pattern.compile(Pattern.quote(searchTerm), Pattern.CASE_INSENSITIVE);
         }
+
+        String html = HtmlNote.GetNoteFromMessage(SyncUtils.ReadMailFromNoteFile(nameDir, uid)).text;
+        Matcher matcher = pattern.matcher(html);
+        return (matcher.find());
     }
 
 // --Commented out by Inspection START (12/2/16 9:22 PM):
@@ -404,22 +345,83 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
         boolean setViewValue(View view, Object data, String textRepresentation);
     }
 
-    public static boolean searchHTML(@NonNull File nameDir, @NonNull String uid, String searchTerm, boolean useRegex) {
-        // Compile the regular expression pattern if necessary
-        Pattern pattern = null;
-        if (useRegex) {
-            try {
-                pattern = Pattern.compile(searchTerm);
-            } catch (PatternSyntaxException e) {
-                return false;
-            }
-        } else {
-            pattern = Pattern.compile(Pattern.quote(searchTerm), Pattern.CASE_INSENSITIVE);
+    private void bindView(int position, @NonNull View view) {
+        final Map dataSet;
+        try {
+            dataSet = mData.get(position);
+        } catch (Exception e) {
+            Log.e(TAG, "mData.get(position) failed: " + e.getMessage());
+            return;
+        }
+        if (dataSet == null) {
+            return;
         }
 
-        String html = HtmlNote.GetNoteFromMessage(SyncUtils.ReadMailFromNoteFile(nameDir, uid)).text;
-        Matcher matcher = pattern.matcher(html);
-        return (matcher.find());
+        //final ViewBinder binder = mViewBinder;
+        final int[] to = mTo;
+        final int count = to.length;
+
+        int txtColor = ImapNotes3.loadPreferenceColor("EditorTxtColor", mContext.getColor(R.color.EditorTxtColor));
+        int bgColorDefault = ImapNotes3.loadPreferenceColor("EditorBgColorDefault", mContext.getColor(R.color.EditorBgColorDefault));
+        for (int i = 0; i < count; i++) {
+            final View v = view.findViewById(to[i]);
+            if (v != null) {
+                final Object data = dataSet.get(mFrom[i]);
+                String text = data == null ? "" : data.toString();
+                String bgColor = dataSet.get(mBgColor) == null ? "none" : dataSet.get(mBgColor).toString();
+
+                int bgColorNr;
+                if (bgColor.equals("none")) {
+                    bgColorNr = bgColorDefault;
+                } else {
+                    bgColorNr = Utilities.getColorByName(bgColor, mContext);
+                }
+
+                boolean bound = false;
+                //if (binder != null) {
+                //    bound = binder.setViewValue(v, data, text);
+                //}
+
+                if (!bound) {
+                    if (v instanceof Checkable) {
+                        if (data instanceof Boolean) {
+                            ((Checkable) v).setChecked((Boolean) data);
+                        } else if (v instanceof TextView) {
+                            // Note: keep the instanceof TextView check at the bottom of these
+                            // ifs since a lot of views are TextViews (e.g. CheckBoxes).
+                            setViewText((TextView) v, text);
+                        } else {
+                            throw new IllegalStateException(v.getClass().getName() +
+                                    " should be bound to a Boolean, not a " +
+                                    (data == null ? "<unknown type>" : data.getClass()));
+                        }
+                    } else if (v instanceof TextView) {
+                        // Note: keep the instanceof TextView check at the bottom of these
+                        // ifs since a lot of views are TextViews (e.g. CheckBoxes).
+                        setViewText((TextView) v, text);
+                        if (i == 0) {
+                            // note name
+                            setTxtColor((TextView) v, txtColor);
+                        } else {
+                            // time & date
+                            setTxtColor((TextView) v, ColorUtils.blendARGB(txtColor, bgColorNr, 0.5f));
+                        }
+                        setBgColor((TextView) v, bgColorNr);
+                        setBgColor((RelativeLayout) view, bgColorNr);
+
+                    } else if (v instanceof ImageView) {
+                        if (data instanceof Integer) {
+                            setViewImage((ImageView) v, (Integer) data);
+                        } else {
+                            setViewImage((ImageView) v, text);
+                        }
+                    } else {
+                        throw new IllegalStateException(v.getClass().getName() + " is not a " +
+                                " view that can be bounds by this SimpleAdapter");
+                    }
+                }
+            }
+        }
     }
 
     /**

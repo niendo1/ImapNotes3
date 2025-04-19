@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2023 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * and Contributors.
  *
  * This file is part of ImapNotes3.
@@ -81,7 +81,7 @@ public class HtmlNote {
             UUID uuid = UUID.randomUUID();
             message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
         } catch (MessagingException e) {
-            Log.e(TAG, "GetMessageFromNote failed: " + e);
+            Log.w(TAG, Log.getStackTraceString(e));
         }
 /*
             <!DOCTYPE html>
@@ -117,7 +117,7 @@ public class HtmlNote {
         try {
             message.setText(doc.toString(), "utf-8", "html");
         } catch (MessagingException e) {
-            Log.e(TAG, "GetMessageFromNote setText fatal failed: " + e);
+            Log.e(TAG, Log.getStackTraceString(e));
             throw e;
         }
         return (message);
@@ -137,7 +137,7 @@ public class HtmlNote {
         CommandMap.setDefaultCommandMap(mc);
 
         try {
-            Log.d(TAG, "GetNoteFromMessage :" + message);
+            Log.v(TAG, "GetNoteFromMessage :" + message);
             contentType = new ContentType(message.getContentType());
 
             if (message.isMimeType("multipart/*")) {
@@ -157,7 +157,8 @@ public class HtmlNote {
             }
 
         } catch (Exception e) {
-            Log.d(TAG, "Exception GetNoteFromMessage:" + e);
+            // FIXME more to do
+            Log.e(TAG, Log.getStackTraceString(e));
         }
 
         return new HtmlNote(

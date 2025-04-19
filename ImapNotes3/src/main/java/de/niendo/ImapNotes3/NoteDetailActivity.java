@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * Copyright (C)         ? - kwhitefoot
  * Copyright (C)      2016 - Martin Carpella
  * Copyright (C)      2014 - c0238
@@ -246,7 +246,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     editText.insertHTML(extras.getString(DLG_INSERT_LINK_IMAGE_ALT));
                     if (inline) {
                         if ((double) (Utilities.getRealSizeFromUri(this, uri) / (scale * scale)) > MAX_INSERT_FILE_SIZE_MB * 1024 * 1024) {
-                            Log.d(TAG, "FileSize:" + fileSize / (scale * scale));
+                            Log.i(TAG, "FileSize:" + fileSize / (scale * scale));
                             ImapNotes3.ShowMessage(String.format(getResources().getString(R.string.file_size_allowed), MAX_INSERT_FILE_SIZE_MB), editText, 2);
                         } else {
                             editText.insertImageAsBase64(uri, extras.getString(DLG_INSERT_LINK_IMAGE_ALT),
@@ -267,7 +267,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     return true;
                 }
                 default: {
-                    Log.d(TAG, "unknown dialog");
+                    Log.e(TAG, "onResult: unknown dialog");
                 }
             }
         }
@@ -301,6 +301,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                         try {
                             startActivity(browserIntent);
                         } catch (ActivityNotFoundException e) {
+                            Log.e(TAG, "startActivity failed: " + e.getMessage());
                             ImapNotes3.ShowMessage(R.string.no_program_found, editText, 3);
                         }
 
@@ -775,7 +776,6 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                         .setMessage(R.string.are_you_sure_you_wish_to_delete_the_note)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(R.string.yes, (dialog, whichButton) -> {
-                            //Log.d(TAG,"We ask to delete Message #"+this.currentNote.get("number"));
                             intent.putExtra("DELETE_ITEM_NUM_IMAP", suid);
                             intent.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, accountName);
                             setResult(ListActivity.DELETE_BUTTON, intent);
@@ -944,12 +944,12 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 
             String directory = getApplicationContext().getCacheDir().toString();
             File outfile = new File(directory, title.replaceAll("[#:/]", "") + ".html");
-            Log.d(TAG, "Share Note: " + outfile);
+            Log.v(TAG, "Share Note: " + outfile);
             try (OutputStream str = new FileOutputStream(outfile)) {
                 str.write(value.getBytes(StandardCharsets.UTF_8));
             } catch (Exception e) {
-                ImapNotes3.ShowMessage(R.string.share_file_error + e.toString(), editText, 2);
-                e.printStackTrace();
+                ImapNotes3.ShowMessage(R.string.share_file_error + e.getLocalizedMessage(), editText, 2);
+                Log.e(TAG, Log.getStackTraceString(e));
             }
 
             Uri logUri =
@@ -1028,7 +1028,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     try {
                         editText.insertHTML(HtmlNote.GetNoteFromMessage(SyncUtils.ReadMailFromString(ImapNotes3.UriToString(uri))).text);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "insertHTML failed: " + e.getMessage());
                     }
                 } else {
                     editText.insertHTML(ImapNotes3.UriToString(uri));

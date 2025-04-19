@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * Copyright (C)      2023 - woheller69
  * Copyright (C)         ? - kwhitefoot
  * Copyright (C)      2016 - Martin Carpella
@@ -181,6 +181,64 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         return accounts;
     }
 
+    public static List<String> searchHTMLTags(@NonNull File nameDir, @NonNull String uid, String searchTerm, boolean useRegex) {
+        // Compile the regular expression pattern if necessary
+        Pattern pattern = null;
+        List<String> retVal = new ArrayList<String>();
+        if (useRegex) {
+            try {
+                pattern = Pattern.compile(searchTerm);
+            } catch (PatternSyntaxException e) {
+                Log.e(TAG, "searchHTMLTags compile failed:" + e.getMessage());
+                return retVal;
+            }
+        } else {
+            pattern = Pattern.compile(Pattern.quote(searchTerm), Pattern.CASE_INSENSITIVE);
+        }
+
+        String html = Jsoup.parse(HtmlNote.GetNoteFromMessage(SyncUtils.ReadMailFromNoteFile(nameDir, uid)).text).text();
+
+        Matcher matcher = pattern.matcher(html);
+        while (matcher.find()) {
+            retVal.add(matcher.group());
+        }
+        return retVal;
+    }
+
+
+    @Override
+    public boolean onResult(@NonNull String dialogTag, int which, @NonNull Bundle extras) {
+        if (which == BUTTON_NEGATIVE) return false;
+        switch (dialogTag) {
+            case DLG_FILTER_HASHTAG:
+                if (which == BUTTON_POSITIVE) {
+                    hashFilterSelected = extras.getStringArrayList(SimpleListDialog.SELECTED_LABELS);
+                    if (hashFilterSelected.isEmpty())
+                        hashFilter = null;
+                    else {
+                        hashFilter = new String[hashFilterSelected.size()];
+                        hashFilterSelected.toArray(hashFilter);
+                    }
+                    ;
+                }
+                if (which == BUTTON_NEUTRAL) {
+                    hashFilter = null;
+                    hashFilterSelected.clear();
+                }
+                RefreshList();
+                return true;
+        }
+        return false;
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.d(TAG, "onNewIntent");
+        Check_Action_Send(intent);
+    }
+
     /**
      * Called when the activity is first created.
      */
@@ -241,7 +299,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 return;
             } else if (saveState.equals(OneNote.SAVE_STATE_FAILED)) {
                 ImapNotes3.ShowMessage(R.string.save_note_failed, listview, 3);
-                Log.d(TAG, "message was not correctly saved");
+                Log.i(TAG, "message was not correctly saved");
                 return;
             }
             if (intentActionSend != null)
@@ -254,10 +312,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             startActivityForResult(toDetail, SEE_DETAIL);
             if (intentActionSend != null)
                 intentActionSend.putExtra(NoteDetailActivity.ActivityTypeProcessed, true);
-            //intentActionSend=null;
             Log.d(TAG, "onItemClick, back from detail.");
-
-            //TriggerSync(status);
         });
 
         Button editAccountButton = findViewById(R.id.editAccountButton);
@@ -273,13 +328,14 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 String errorMessage = ImapNotes3.intent.getStringExtra(SYNCED_ERR_MSG);
                 SyncInterval syncInterval = SyncInterval.from(ImapNotes3.intent.getStringExtra(SYNCINTERVAL));
                 if ((ImapNotesAccount != null) && accountName.equals(ImapNotesAccount.accountName)) {
-                    Log.d(TAG, "if " + accountName + " " + ImapNotesAccount.accountName);
+                    Log.v(TAG, "if " + accountName + " " + ImapNotesAccount.accountName);
                     if (isSynced) {
                         Date date = new Date();
                         String sdate;
                         try {
                             sdate = DateFormat.getDateTimeInstance().format(date);
                         } catch (Exception e) {
+                            Log.e(TAG, "getDateTimeInstance failed: " + date + " " + e.getMessage());
                             sdate = "";
                         }
                         ImapNotes3.ShowMessage(getText(R.string.Last_sync) + sdate + " (" + getText(syncInterval.textID) + ")", accountSpinner, 2);
@@ -293,75 +349,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         };
         getContentResolver().registerContentObserver(Uri.parse("content://" + BuildConfig.APPLICATION_ID + "/"), false, mObserver);
 
-    }
-
-
-    @Override
-    public boolean onResult(@NonNull String dialogTag, int which, @NonNull Bundle extras) {
-        if (which == BUTTON_NEGATIVE) return false;
-        switch (dialogTag) {
-            case DLG_FILTER_HASHTAG:
-                if (which == BUTTON_POSITIVE) {
-                    hashFilterSelected = extras.getStringArrayList(SimpleListDialog.SELECTED_LABELS);
-                    if (hashFilterSelected.isEmpty())
-                        hashFilter = null;
-                    else {
-                        hashFilter = new String[hashFilterSelected.size()];
-                        hashFilterSelected.toArray(hashFilter);
-                    }
-                    ;
-                }
-                if (which == BUTTON_NEUTRAL) {
-                    hashFilter = null;
-                    hashFilterSelected.clear();
-                }
-                RefreshList();
-                return true;
-        }
-        return false;
-    }
-
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        Log.d(TAG, "onNewIntent");
-        Check_Action_Send(intent);
-    }
-
-    private void Check_Action_Send(Intent intent) {
-        Log.d(TAG, "Check_Action_Send");
-        // Get intent, action and MIME type
-        if (intent == null)
-            intent = getIntent();
-        String action = intent.getAction();
-
-        intentActionSend = null;
-        if (action.equals(Intent.ACTION_SEND)) {
-            intentActionSend = (Intent) intent.clone();
-            intentActionSend.setClass(this, NoteDetailActivity.class);
-            intentActionSend.setFlags(0);
-            intentActionSend.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, getSelectedAccountName());
-            intentActionSend.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAddShare);
-
-            ImapNotes3.ShowAction(listview, R.string.insert_as_new_note, R.string.ok, 0,
-                    () -> {
-                        startActivityForResult(intentActionSend, ListActivity.NEW_BUTTON);
-                        intentActionSend = null;
-                    });
-        } else if (action.equals(Intent.ACTION_SEND_MULTIPLE)) {
-            if (intent.getType().equals("message/rfc822")) {
-                Intent finalIntent = intent;
-                ImapNotes3.ShowAction(listview, R.string.insert_as_new_note, R.string.ok, 0,
-                        () -> {
-                            try {
-                                handleSendMultipleImages(finalIntent);
-                            } catch (Exception e) {
-                                Log.d(TAG, "Check_Action_Send: Exception Multiple");
-                            }
-                        });
-            }
-        }
     }
 
     void handleSendMultipleImages(Intent intent) {
@@ -608,33 +595,45 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         return OneNote.DATE + " DESC";
     }
 
-    public static List<String> searchHTMLTags(@NonNull File nameDir, @NonNull String uid, String searchTerm, boolean useRegex) {
-        // Compile the regular expression pattern if necessary
-        Pattern pattern = null;
-        List<String> retVal = new ArrayList<String>();
-        if (useRegex) {
-            try {
-                pattern = Pattern.compile(searchTerm);
-            } catch (PatternSyntaxException e) {
-                return retVal;
+    private void Check_Action_Send(Intent intent) {
+        Log.d(TAG, "Check_Action_Send");
+        // Get intent, action and MIME type
+        if (intent == null)
+            intent = getIntent();
+        String action = intent.getAction();
+
+        intentActionSend = null;
+        if (action.equals(Intent.ACTION_SEND)) {
+            intentActionSend = (Intent) intent.clone();
+            intentActionSend.setClass(this, NoteDetailActivity.class);
+            intentActionSend.setFlags(0);
+            intentActionSend.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, getSelectedAccountName());
+            intentActionSend.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAddShare);
+
+            ImapNotes3.ShowAction(listview, R.string.insert_as_new_note, R.string.ok, 0,
+                    () -> {
+                        startActivityForResult(intentActionSend, ListActivity.NEW_BUTTON);
+                        intentActionSend = null;
+                    });
+        } else if (action.equals(Intent.ACTION_SEND_MULTIPLE)) {
+            if (intent.getType().equals("message/rfc822")) {
+                Intent finalIntent = intent;
+                ImapNotes3.ShowAction(listview, R.string.insert_as_new_note, R.string.ok, 0,
+                        () -> {
+                            try {
+                                handleSendMultipleImages(finalIntent);
+                            } catch (Exception e) {
+                                Log.e(TAG, Log.getStackTraceString(e));
+                            }
+                        });
             }
-        } else {
-            pattern = Pattern.compile(Pattern.quote(searchTerm), Pattern.CASE_INSENSITIVE);
         }
-
-        String html = Jsoup.parse(HtmlNote.GetNoteFromMessage(SyncUtils.ReadMailFromNoteFile(nameDir, uid)).text).text();
-
-        Matcher matcher = pattern.matcher(html);
-        while (matcher.find()) {
-            retVal.add(matcher.group());
-        }
-        return retVal;
     }
 
     synchronized private void TriggerSync(boolean refreshTags) {
         Log.d(TAG, "TriggerSync");
         if (ListActivity.ImapNotesAccount == null) {
-            Log.d(TAG, "TriggerSync: Account==null");
+            Log.w(TAG, "TriggerSync: Account==null");
             return;
         }
 
@@ -643,8 +642,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         settingsBundle.putBoolean(REFRESH_TAGS, refreshTags);
-        //Log.d(TAG,"Request a sync for:"+mAccount);
-
         Account mAccount = ListActivity.ImapNotesAccount.GetAccount();
         ContentResolver.cancelSync(mAccount, AUTHORITY);
         ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
@@ -721,7 +718,8 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 startActivityForResult(
                         Intent.createChooser(intent, "Select a ZIP file"),
                         SELECT_ARCHIVE_FOR_RESTORE);
-            } catch (ActivityNotFoundException ex) {
+            } catch (ActivityNotFoundException e) {
+                Log.e(TAG, "ActivityNotFoundException: " + e.getMessage());
                 ImapNotes3.ShowMessage("Please install a file manager.", listview, 3000);
             }
         }
@@ -840,7 +838,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 }
                 break;
             default:
-                Log.d(TAG, "onActivityResult: unknown result code");
+                Log.e(TAG, "onActivityResult: unknown result code");
         }
     }
 
@@ -954,8 +952,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                         try {
                             FileUtils.deleteDirectory(ImapNotes3.GetAccountDir(s));
                         } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
+                            Log.e(TAG, "deleteDirectory failed:" + e.getMessage());
                         }
                         equalLists = false;
                     }
@@ -981,12 +978,8 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                     ListActivity.accountManager.removeOnAccountsUpdatedListener(new AccountsUpdateListener());
                     try {
                         FileUtils.cleanDirectory(filesDir);
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    } catch (Error err) {
-                        // TODO Auto-generated catch block
-                        err.printStackTrace();
+                    } catch (IOException | Error e) {
+                        Log.e(TAG, "cleanDirectory failed:" + e.getMessage());
                     }
 
                     Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);

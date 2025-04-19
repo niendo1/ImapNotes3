@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * Copyright (C) ?   -2016 - Martin Carpella
  * Copyright (C) ?   -2015 - nb
  * and Contributors.
@@ -106,9 +106,9 @@ public class NotesDb extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d(TAG, "onCreate");
         db.execSQL(CREATE_NOTES_DB);
         db.execSQL(CREATE_TAGS_DB);
-        // Log.d(TAG, CREATE_TAGS_VIEW);
         db.execSQL(CREATE_TAGS_VIEW);
     }
 
@@ -122,20 +122,22 @@ public class NotesDb extends SQLiteOpenHelper {
             if (oldVersion < 3) {
                 try {
                     db.execSQL("Drop table " + TABLE_NAME_NOTES + ";");
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
                 try {
                     db.execSQL("Drop table " + TABLE_NAME_TAGS + ";");
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
                 try {
                     db.execSQL("Drop view " + VIEW_NAME_TAGS + ";");
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             } else {
                 try {
                     db.execSQL("ALTER TABLE " + TABLE_NAME_NOTES + " ADD " + COL_SAVE_STATE + " text not null DEFAULT '';");
                 } catch (Exception e) {
+                    Log.e(TAG, "onUpgrade: ALTER TABLE failed");
+                    Log.e(TAG, Log.getStackTraceString(e));
                 }
             }
             db.execSQL(CREATE_NOTES_DB);
@@ -165,7 +167,7 @@ public class NotesDb extends SQLiteOpenHelper {
         tableRow.put(COL_SAVE_STATE, noteElement.GetState());
         db.insert(TABLE_NAME_NOTES, null, tableRow);
 
-        //Log.d(TAG, "note inserted");
+        Log.d(TAG, "note inserted");
         db.close();
     }
 
@@ -282,7 +284,7 @@ public class NotesDb extends SQLiteOpenHelper {
                     try {
                         date = Utilities.internalDateFormat.parse(resultPointer.getString(dateIndex));
                     } catch (ParseException e) {
-                        Log.d(TAG, "Parsing data from database failed: " + e.getMessage());
+                        Log.w(TAG, "GetStoredNotes: Parsing data from database failed: " + Log.getStackTraceString(e));
                     }
                     //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this.ctx);
                     //String sdate = dateFormat.format(date);
@@ -290,6 +292,7 @@ public class NotesDb extends SQLiteOpenHelper {
                     try {
                         sdate = DateFormat.getDateTimeInstance().format(date);
                     } catch (Exception e) {
+                        Log.w(TAG, "getDateTimeInstance failed for : " + date + " " + e.getMessage());
                         sdate = "?";
                     }
                     if (accountName.isEmpty()) {
@@ -303,7 +306,7 @@ public class NotesDb extends SQLiteOpenHelper {
                             resultPointer.getString(bgSaveStateIndex)));
 
                 } while (resultPointer.moveToNext());
-                // Log.d(TAG,"GetStoredNotes: Anzahl" + resultPointer.getCount());
+                //Log.d(TAG,"GetStoredNotes: count" + resultPointer.getCount());
                 resultPointer.close();
             }
         }
@@ -312,10 +315,10 @@ public class NotesDb extends SQLiteOpenHelper {
 
     public synchronized void SetSaveState(@NonNull String uid, @NonNull String saveState, @NonNull String accountname) {
         SQLiteDatabase db = this.getWritableDatabase();
+        //Log.v(TAG,"SetSaveState:" + uid + "-->" + saveState + " Account "+ accountname);
         String req = "update notesTable set saveState='" + saveState + "' where number='" + uid + "' and accountname='" + accountname + "'";
         db.execSQL(req);
         db.close();
-        // Log.d(TAG,"SetSaveState:" + uid + "-->" + saveState + " Account "+ accountname);
     }
 
     ;
@@ -330,7 +333,7 @@ public class NotesDb extends SQLiteOpenHelper {
             }
         }
         db.close();
-        //Log.d(TAG,"GetSaveState:" + uid + "-->" + RetValue + " Account "+ accountname);
+        //Log.v(TAG,"GetSaveState:" + uid + "-->" + RetValue + " Account "+ accountname);
         return RetValue;
     }
 

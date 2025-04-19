@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * Copyright (C)      2016 - Axel Strübing
  * Copyright (C)      2016 - Martin Carpella
  * Copyright (C)      2015 - nb
@@ -127,9 +127,8 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                         account.GetRootDirAccount(),
                         applicationContext, storedNotes);
             } catch (MessagingException | IOException e) {
-                // TODO Auto-generated catch block
-                errorMessage = e.getMessage();
-                e.printStackTrace();
+                errorMessage = e.getLocalizedMessage();
+                Log.e(TAG, "onPerformSync Clear failed: " + e.getMessage());
             }
             SyncUtils.SetUIDValidity(accountArg, res.UIDValidity, applicationContext);
             // Notify ListActivity that it's finished, and that it can refresh display
@@ -153,9 +152,8 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             remoteNotesManaged = syncUtils.handleRemoteNotes(account.GetRootDirAccount(),
                     storedNotes, accountArg.name);
         } catch (MessagingException | IOException e) {
-            errorMessage = e.getMessage();
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            errorMessage = e.getLocalizedMessage();
+            Log.e(TAG, "onPerformSync handleRemoteNotes failed: " + e.getMessage());
         }
         if (remoteNotesManaged) isChanged = true;
 
@@ -244,14 +242,13 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                 Log.d(TAG, "handleNewNotes message: " + Objects.requireNonNull(message).getSize());
                 Log.d(TAG, "handleNewNotes message: " + fileInNew.length());
             } catch (Exception e) {
+                Log.e(TAG, "handleNewNotes failed: " + e.getMessage());
                 continue;
             }
             try {
                 message.setFlag(Flags.Flag.SEEN, true); // set message as seen
             } catch (MessagingException e) {
-                // TODO Auto-generated catch block
-                Log.d(TAG, "handleNewNotes setFlag Error: " + e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, "handleNewNotes setFlag Error: " + e.getMessage());
                 continue;
             }
             // Send this new message to remote
@@ -259,9 +256,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             try {
                 uids = syncUtils.sendMessageToRemote(new MimeMessage[]{(MimeMessage) message});
             } catch (Exception e) {
-                // TODO: Handle message properly.
-                Log.d(TAG, "handleNewNotes sendMessageToRemote Error: " + e.getMessage());
-                e.printStackTrace();
+                Log.e(TAG, "handleNewNotes sendMessageToRemote Error: " + e.getMessage());
                 continue;
             }
             // Update uid in database entry
@@ -314,7 +309,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             try {
                 syncUtils.DeleteNote(fileDeleted);
             } catch (Exception e) {
-                Log.d(TAG, "DeleteNote failed: " + e.getMessage());
+                Log.e(TAG, "DeleteNote failed: " + e.getMessage());
             }
 
             // remove file from deleted
