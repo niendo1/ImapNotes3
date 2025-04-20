@@ -77,7 +77,7 @@ public final class Utilities {
             color = field.getInt(null);
 
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "getColorIdByName failed", e);
         }
         return color;
     }
@@ -116,7 +116,7 @@ public final class Utilities {
         try {
             URL url = new URL(stringURL);
         } catch (MalformedURLException e) {
-            Log.e(TAG, "new URL failed (" + stringURL + "): " + e.getMessage());
+            Log.e(TAG, "new URL failed: " + stringURL, e);
             return false;
         }
         return true;

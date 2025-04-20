@@ -207,7 +207,7 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
             try {
                 pattern = Pattern.compile(searchTerm);
             } catch (PatternSyntaxException e) {
-                Log.w(TAG, "Pattern.compile failed: " + e.getMessage());
+                Log.w(TAG, "Pattern.compile failed: ", e);
                 return false;
             }
         } else {
@@ -350,7 +350,7 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
         try {
             dataSet = mData.get(position);
         } catch (Exception e) {
-            Log.e(TAG, "mData.get(position) failed: " + e.getMessage());
+            Log.e(TAG, "mData.get(position) failed: ", e);
             return;
         }
         if (dataSet == null) {

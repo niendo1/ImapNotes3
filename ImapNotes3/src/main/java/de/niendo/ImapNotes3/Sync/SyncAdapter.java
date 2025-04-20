@@ -128,7 +128,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                         applicationContext, storedNotes);
             } catch (MessagingException | IOException e) {
                 errorMessage = e.getLocalizedMessage();
-                Log.e(TAG, "onPerformSync Clear failed: " + e.getMessage());
+                Log.e(TAG, "onPerformSync Clear failed", e);
             }
             SyncUtils.SetUIDValidity(accountArg, res.UIDValidity, applicationContext);
             // Notify ListActivity that it's finished, and that it can refresh display
@@ -153,7 +153,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                     storedNotes, accountArg.name);
         } catch (MessagingException | IOException e) {
             errorMessage = e.getLocalizedMessage();
-            Log.e(TAG, "onPerformSync handleRemoteNotes failed: " + e.getMessage());
+            Log.e(TAG, "onPerformSync handleRemoteNotes failed", e);
         }
         if (remoteNotesManaged) isChanged = true;
 
@@ -242,13 +242,13 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
                 Log.d(TAG, "handleNewNotes message: " + Objects.requireNonNull(message).getSize());
                 Log.d(TAG, "handleNewNotes message: " + fileInNew.length());
             } catch (Exception e) {
-                Log.e(TAG, "handleNewNotes failed: " + e.getMessage());
+                Log.e(TAG, "handleNewNotes failed", e);
                 continue;
             }
             try {
                 message.setFlag(Flags.Flag.SEEN, true); // set message as seen
             } catch (MessagingException e) {
-                Log.e(TAG, "handleNewNotes setFlag Error: " + e.getMessage());
+                Log.e(TAG, "handleNewNotes setFlag Error: ", e);
                 continue;
             }
             // Send this new message to remote
@@ -256,7 +256,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             try {
                 uids = syncUtils.sendMessageToRemote(new MimeMessage[]{(MimeMessage) message});
             } catch (Exception e) {
-                Log.e(TAG, "handleNewNotes sendMessageToRemote Error: " + e.getMessage());
+                Log.e(TAG, "handleNewNotes sendMessageToRemote Error: ", e);
                 continue;
             }
             // Update uid in database entry
@@ -309,7 +309,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
             try {
                 syncUtils.DeleteNote(fileDeleted);
             } catch (Exception e) {
-                Log.e(TAG, "DeleteNote failed: " + e.getMessage());
+                Log.e(TAG, "DeleteNote failed: ", e);
             }
 
             // remove file from deleted

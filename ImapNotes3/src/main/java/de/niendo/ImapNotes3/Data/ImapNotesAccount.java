@@ -125,7 +125,7 @@ public class ImapNotesAccount {
             FileUtils.deleteDirectory(rootDirAccount);
         } catch (IOException | Error e) {
             // for anbox - otherwise it will crash
-            Log.e(TAG, "ClearHomeDir failed:" + e.getMessage());
+            Log.e(TAG, "ClearHomeDir failed:", e);
         }
     }
 

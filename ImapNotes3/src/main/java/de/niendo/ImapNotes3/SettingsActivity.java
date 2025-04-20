@@ -155,7 +155,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 emailData = sb.toString();
             } catch (IOException e) {
-                Log.e(TAG, "bufferedReader failed: " + e.getMessage());
+                Log.e(TAG, "bufferedReader failed: ", e);
             }
 
             //send file using email

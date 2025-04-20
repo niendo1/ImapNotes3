@@ -185,16 +185,14 @@ public class SyncUtils {
                 Log.d(TAG, "ReadMailFromFile return new MimeMessage.");
                 return message;
             } catch (Exception e) {
-                Log.e(TAG, Log.getStackTraceString(e));
+                Log.e(TAG, "ReadMailFromFile failed", e);
             } finally {
                 mailFileInputStream.close();
             }
         } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found opening mailFile: " + mailFile.getAbsolutePath());
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "File not found opening mailFile: " + mailFile.getAbsolutePath(), e);
         } catch (IOException exIO) {
-            Log.e(TAG, "IO exception opening mailFile: " + mailFile.getAbsolutePath());
-            Log.e(TAG, Log.getStackTraceString(exIO));
+            Log.e(TAG, "IO exception opening mailFile: " + mailFile.getAbsolutePath(), exIO);
         }
         Log.e(TAG, "ReadMailFromFile return null.");
         return null;
@@ -211,7 +209,7 @@ public class SyncUtils {
                 Session session = Session.getDefaultInstance(props);
                 return new MimeMessage(session, new ByteArrayInputStream(msgString.getBytes()));
             } catch (Exception e) {
-                Log.e(TAG, Log.getStackTraceString(e));
+                Log.e(TAG, "ReadMailFromString failed", e);
         }
         return null;
     }
@@ -226,7 +224,7 @@ public class SyncUtils {
             Log.d(TAG, "SaveNote: " + outfile.getCanonicalPath());
             notesMessage.writeTo(str);
         } catch (IOException | MessagingException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "SaveNote failed", e);
         }
 
     }
@@ -254,7 +252,7 @@ public class SyncUtils {
             } catch (MessagingException e) {
                 // Log the error but do not propagate the exception because the connection is now
                 // closed even if an exception was thrown.
-                Log.w(TAG, "ConnectToRemote Store.Close(): " + e.getMessage());
+                Log.w(TAG, "ConnectToRemote Store.Close(): ", e);
             }
         }
         //boolean acceptcrt = security.acceptcrt;
@@ -263,7 +261,7 @@ public class SyncUtils {
         try {
             sf = new MailSSLSocketFactory();
         } catch (GeneralSecurityException e) {
-            Log.e(TAG, "MailSSLSocketFactory failed: " + e.getMessage());
+            Log.e(TAG, "MailSSLSocketFactory failed: ", e);
             return new ImapNotesResult(ImapNotesResult.ResultCodeCantConnect,
                     "Can't connect to server: " + e.getLocalizedMessage(), -1);
         }
@@ -335,7 +333,7 @@ public class SyncUtils {
                     "",
                     remoteIMAPNotesFolder.getUIDValidity());
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "session failed", e);
             return new ImapNotesResult(ImapNotesResult.ResultCodeException,
                     e.getLocalizedMessage(),
                     -1);
@@ -348,7 +346,7 @@ public class SyncUtils {
         try {
             store.close();
         } catch (MessagingException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "DisconnectFromRemote failed", e);
         }
     }
 
@@ -394,7 +392,7 @@ public class SyncUtils {
         try {
             title = notesMessage.getSubject();
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "getSubject failed", e);
         }
 
         // Some servers (such as posteo.de) don't encode non us-ascii characters in subject
@@ -409,7 +407,7 @@ public class SyncUtils {
                 title = new String(title.getBytes(StandardCharsets.ISO_8859_1));
             }
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "getHeader failed", e);
         }
 
         // Get INTERNALDATE
@@ -418,7 +416,7 @@ public class SyncUtils {
             Date MessageInternaldate = notesMessage.getReceivedDate();
             internaldate = Utilities.internalDateFormat.format(MessageInternaldate);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "getReceivedDate failed", e);
         }
 
         if (title == null)
@@ -558,7 +556,7 @@ public class SyncUtils {
                     saveFolder = remoteIMAPNotesFolder.getParent().getFolder(copyImapFolderName);
                     remoteIMAPNotesFolder.copyMessages(msgs, saveFolder);
                 } catch (Exception e) {
-                    Log.e(TAG, "DeleteNote Cannot move note:" + e.getMessage());
+                    Log.e(TAG, "DeleteNote Cannot move note:", e);
                 }
             }
             remoteIMAPNotesFolder.setFlags(msgs, new Flags(Flags.Flag.DELETED), true);
@@ -572,7 +570,7 @@ public class SyncUtils {
             try {
                 store.close();
             } catch (MessagingException e) {
-                Log.e(TAG, Log.getStackTraceString(e));
+                Log.e(TAG, "store.close() failed", e);
             }
         }
 

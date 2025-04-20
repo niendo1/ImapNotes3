@@ -81,7 +81,7 @@ public class HtmlNote {
             UUID uuid = UUID.randomUUID();
             message.setHeader("X-Universally-Unique-Identifier", uuid.toString());
         } catch (MessagingException e) {
-            Log.w(TAG, Log.getStackTraceString(e));
+            Log.w(TAG, "GetMessageFromNote setHeader failed:", e);
         }
 /*
             <!DOCTYPE html>
@@ -117,7 +117,7 @@ public class HtmlNote {
         try {
             message.setText(doc.toString(), "utf-8", "html");
         } catch (MessagingException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "GetMessageFromNote setText fatal failed:", e);
             throw e;
         }
         return (message);
@@ -158,7 +158,7 @@ public class HtmlNote {
 
         } catch (Exception e) {
             // FIXME more to do
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "GetNoteFromMessage failed", e);
         }
 
         return new HtmlNote(

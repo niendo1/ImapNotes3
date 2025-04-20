@@ -189,7 +189,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             try {
                 pattern = Pattern.compile(searchTerm);
             } catch (PatternSyntaxException e) {
-                Log.e(TAG, "searchHTMLTags compile failed:" + e.getMessage());
+                Log.e(TAG, "searchHTMLTags compile failed:", e);
                 return retVal;
             }
         } else {
@@ -335,7 +335,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                         try {
                             sdate = DateFormat.getDateTimeInstance().format(date);
                         } catch (Exception e) {
-                            Log.e(TAG, "getDateTimeInstance failed: " + date + " " + e.getMessage());
+                            Log.e(TAG, "getDateTimeInstance failed: " + date, e);
                             sdate = "";
                         }
                         ImapNotes3.ShowMessage(getText(R.string.Last_sync) + sdate + " (" + getText(syncInterval.textID) + ")", accountSpinner, 2);
@@ -623,7 +623,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                             try {
                                 handleSendMultipleImages(finalIntent);
                             } catch (Exception e) {
-                                Log.e(TAG, Log.getStackTraceString(e));
+                                Log.e(TAG, "handleSendMultipleImages faled", e);
                             }
                         });
             }
@@ -719,7 +719,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                         Intent.createChooser(intent, "Select a ZIP file"),
                         SELECT_ARCHIVE_FOR_RESTORE);
             } catch (ActivityNotFoundException e) {
-                Log.e(TAG, "ActivityNotFoundException: " + e.getMessage());
+                Log.e(TAG, "ActivityNotFoundException: ", e);
                 ImapNotes3.ShowMessage("Please install a file manager.", listview, 3000);
             }
         }
@@ -952,7 +952,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                         try {
                             FileUtils.deleteDirectory(ImapNotes3.GetAccountDir(s));
                         } catch (IOException e) {
-                            Log.e(TAG, "deleteDirectory failed:" + e.getMessage());
+                            Log.e(TAG, "deleteDirectory failed:", e);
                         }
                         equalLists = false;
                     }
@@ -979,7 +979,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                     try {
                         FileUtils.cleanDirectory(filesDir);
                     } catch (IOException | Error e) {
-                        Log.e(TAG, "cleanDirectory failed:" + e.getMessage());
+                        Log.e(TAG, "cleanDirectory failed:", e);
                     }
 
                     Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);

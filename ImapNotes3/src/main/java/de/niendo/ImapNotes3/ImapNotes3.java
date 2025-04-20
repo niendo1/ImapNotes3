@@ -76,6 +76,38 @@ public class ImapNotes3 extends Application {
         mContext = getApplicationContext();
     }
 
+    private final Thread.UncaughtExceptionHandler defaultUEH;
+
+    public static void setContent(View content) {
+        mContent = content;
+    }
+    // handler listener
+    // from https://stackoverflow.com/questions/12077318/how-to-catch-the-unknown-exception-in-run-time-android
+    private Thread.UncaughtExceptionHandler _unCaughtExceptionHandler =
+            new Thread.UncaughtExceptionHandler() {
+                @Override
+                public void uncaughtException(Thread thread, Throwable ex) {
+                    //FIXME - do something usefull
+                    Log.e(TAG, "catch uncaughtException", ex);
+                    System.exit(2);
+
+                    // re-throw critical exception further to the os (important)
+                    defaultUEH.uncaughtException(thread, ex);
+                }
+            };
+    public ImapNotes3() {
+        defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+        // setup handler for uncaught exception
+        Thread.setDefaultUncaughtExceptionHandler(_unCaughtExceptionHandler);
+        if (BuildConfig.DEBUG)
+//            StrictMode.enableDefaults();
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+//                    .penaltyDeath()
+                    .build());
+    }
+
     public static String UriToString(Uri uri) {
         StringBuilder sharedData = new StringBuilder();
         BufferedInputStream bufferedInputStream;
@@ -90,23 +122,9 @@ public class ImapNotes3 extends Application {
             bufferedInputStream.close();
             return (sharedData.toString());
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "UriToString failed", e);
             return e.getLocalizedMessage();
         }
-    }
-
-    public static void setContent(View content) {
-        mContent = content;
-    }
-
-    public ImapNotes3() {
-        if (BuildConfig.DEBUG)
-//            StrictMode.enableDefaults();
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
-//                    .penaltyDeath()
-                    .build());
     }
 
     public static Snackbar ShowAction(

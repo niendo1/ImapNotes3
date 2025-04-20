@@ -113,11 +113,9 @@ public class LoginThread extends AsyncTask<Void, Void, Result<String>> {
             } else {
                 ContentResolver.cancelSync(request);
             }
-
-            Log.d(TAG, "doInBackground success");
             return new Result<>(accountConfigurationActivity.getString(resultTxtId), true);
         } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            Log.e(TAG, "doInBackground failed", e);
             return new Result<>("Unexpected exception: " + e.getLocalizedMessage(), false);
         }
     }

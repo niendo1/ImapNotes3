@@ -136,8 +136,7 @@ public class NotesDb extends SQLiteOpenHelper {
                 try {
                     db.execSQL("ALTER TABLE " + TABLE_NAME_NOTES + " ADD " + COL_SAVE_STATE + " text not null DEFAULT '';");
                 } catch (Exception e) {
-                    Log.e(TAG, "onUpgrade: ALTER TABLE failed");
-                    Log.e(TAG, Log.getStackTraceString(e));
+                    Log.e(TAG, "onUpgrade: ALTER TABLE failed", e);
                 }
             }
             db.execSQL(CREATE_NOTES_DB);
@@ -284,7 +283,7 @@ public class NotesDb extends SQLiteOpenHelper {
                     try {
                         date = Utilities.internalDateFormat.parse(resultPointer.getString(dateIndex));
                     } catch (ParseException e) {
-                        Log.w(TAG, "GetStoredNotes: Parsing data from database failed: " + Log.getStackTraceString(e));
+                        Log.w(TAG, "GetStoredNotes: Parsing data from database failed: ", e);
                     }
                     //DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this.ctx);
                     //String sdate = dateFormat.format(date);
@@ -292,7 +291,7 @@ public class NotesDb extends SQLiteOpenHelper {
                     try {
                         sdate = DateFormat.getDateTimeInstance().format(date);
                     } catch (Exception e) {
-                        Log.w(TAG, "getDateTimeInstance failed for : " + date + " " + e.getMessage());
+                        Log.w(TAG, "getDateTimeInstance failed for : " + date, e);
                         sdate = "?";
                     }
                     if (accountName.isEmpty()) {

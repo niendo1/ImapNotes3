@@ -114,7 +114,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
             }
 
         } catch (IOException e) {
-            Log.e(TAG, "RestoreArchive failed" + e.getMessage());
+            Log.e(TAG, "RestoreArchive failed", e);
         }
     }
     private INotesRestore mCallback;
@@ -301,7 +301,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
             try {
                 allNotesTmp = ZipUtils.listFilesInDirectory(getAppContext(), uri, dir);
             } catch (IOException e) {
-                Log.e(TAG, "listFilesInDirectory failed" + e.getMessage());
+                Log.e(TAG, "listFilesInDirectory failed", e);
                 return null;
             }
             String destDirectory = getAppContext().getCacheDir().toString() + "/Import/" + dir + "/";
@@ -325,7 +325,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
                     if (subject.isEmpty())
                         subject = "Error reading: " + file + " - " + e.getLocalizedMessage();
                     date = "";
-                    Log.e(TAG, subject + " " + Log.getStackTraceString(e));
+                    Log.e(TAG, subject, e);
                 } finally {
                     allNotes.add(file);
                     allMessages.add(subject);
@@ -362,7 +362,7 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
                 return 1;
             } catch (IOException e) {
                 sd.updateInfoText(getAppContext().getResources().getString(R.string.failed) + e.getLocalizedMessage());
-                Log.e(TAG, "zipDirectory failed" + e.getMessage());
+                Log.e(TAG, "zipDirectory failed", e);
             }
             return -1;
         }

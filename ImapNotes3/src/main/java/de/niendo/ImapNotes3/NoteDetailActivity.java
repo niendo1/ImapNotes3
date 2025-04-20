@@ -301,7 +301,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                         try {
                             startActivity(browserIntent);
                         } catch (ActivityNotFoundException e) {
-                            Log.e(TAG, "startActivity failed: " + e.getMessage());
+                            Log.e(TAG, "startActivity failed: ", e);
                             ImapNotes3.ShowMessage(R.string.no_program_found, editText, 3);
                         }
 
@@ -949,7 +949,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                 str.write(value.getBytes(StandardCharsets.UTF_8));
             } catch (Exception e) {
                 ImapNotes3.ShowMessage(R.string.share_file_error + e.getLocalizedMessage(), editText, 2);
-                Log.e(TAG, Log.getStackTraceString(e));
+                Log.e(TAG, "write failed", e);
             }
 
             Uri logUri =
@@ -1028,7 +1028,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     try {
                         editText.insertHTML(HtmlNote.GetNoteFromMessage(SyncUtils.ReadMailFromString(ImapNotes3.UriToString(uri))).text);
                     } catch (Exception e) {
-                        Log.e(TAG, "insertHTML failed: " + e.getMessage());
+                        Log.e(TAG, "insertHTML failed: ", e);
                     }
                 } else {
                     editText.insertHTML(ImapNotes3.UriToString(uri));
