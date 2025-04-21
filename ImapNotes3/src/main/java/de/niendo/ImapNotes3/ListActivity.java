@@ -132,7 +132,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     private ArrayAdapter<String> spinnerList;
     private static final String AUTHORITY = Utilities.PackageName + ".provider";
     private Spinner accountSpinner;
-    public static ImapNotesAccount ImapNotesAccount;
     private static AccountManager accountManager;
     @Nullable
     private static NotesDb storedNotes = null;
@@ -220,7 +219,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                         hashFilter = new String[hashFilterSelected.size()];
                         hashFilterSelected.toArray(hashFilter);
                     }
-                    ;
                 }
                 if (which == BUTTON_NEUTRAL) {
                     hashFilter = null;
@@ -327,8 +325,8 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 boolean isSynced = ImapNotes3.intent.getBooleanExtra(SYNCED, false);
                 String errorMessage = ImapNotes3.intent.getStringExtra(SYNCED_ERR_MSG);
                 SyncInterval syncInterval = SyncInterval.from(ImapNotes3.intent.getStringExtra(SYNCINTERVAL));
-                if ((ImapNotesAccount != null) && accountName.equals(ImapNotesAccount.accountName)) {
-                    Log.v(TAG, "if " + accountName + " " + ImapNotesAccount.accountName);
+                if (accountName.equals(getSelectedAccountName())) {
+                    Log.v(TAG, "if " + accountName);
                     if (isSynced) {
                         Date date = new Date();
                         String sdate;
@@ -406,7 +404,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         Log.d(TAG, "onRestoreInstanceState");
     }
@@ -631,7 +629,8 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
 
     synchronized private void TriggerSync(boolean refreshTags) {
         Log.d(TAG, "TriggerSync");
-        if (ListActivity.ImapNotesAccount == null) {
+        Account mAccount = getSelectedAccount();
+        if (mAccount == null) {
             Log.w(TAG, "TriggerSync: Account==null");
             return;
         }
@@ -641,7 +640,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         settingsBundle.putBoolean(REFRESH_TAGS, refreshTags);
-        Account mAccount = ListActivity.ImapNotesAccount.GetAccount();
         ContentResolver.cancelSync(mAccount, AUTHORITY);
         ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
     }
@@ -738,10 +736,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         Log.d(TAG, "onItemSelected");
-        if (pos > 0) {
-            Account account = ListActivity.accounts[pos - 1];
-            ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
-        }
         RefreshList();
     }
 
@@ -752,14 +746,27 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
 
     // Hack: if the Spinner isDisabled Search is active->
     //all accounts are selected
-    public String getSelectedAccountName() {
-        if ((ImapNotesAccount == null) || accountSpinner.getSelectedItemId() == 0) {
+    private Account getSelectedAccount() {
+        long pos = accountSpinner.getSelectedItemId();
+        if (pos <= 0) {
             if (accounts.length == 1) {
-                return accounts[0].name;
+                return accounts[0];
             }
-            return "";
+        } else {
+            try {
+                return accounts[(int) pos - 1];
+            } catch (Exception e) {
+                Log.e(TAG, "getSelectedAccount wrong pos", e);
+            }
         }
-        return ImapNotesAccount.accountName;
+        return null;
+    }
+
+    private String getSelectedAccountName() {
+        Account account = getSelectedAccount();
+        if (account == null)
+            return "";
+        return account.name;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -773,7 +780,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                     // String suid will contain the Message Imap UID to delete
                     String suid = data.getStringExtra(DELETE_ITEM_NUM_IMAP);
                     String accountName = data.getStringExtra(EDIT_ITEM_ACCOUNTNAME);
-                    ListActivity.ImapNotesAccount = new ImapNotesAccount(getAccountFromName(accountName), getApplicationContext());
                     UpdateList(suid, null, null, accountName, UpdateThread.Action.Delete);
                 }
                 if (resultCode == ListActivity.EDIT_BUTTON) {
@@ -781,20 +787,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                     String suid = data.getStringExtra(EDIT_ITEM_NUM_IMAP);
                     String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
                     String accountName = data.getStringExtra(EDIT_ITEM_ACCOUNTNAME);
-                    Account myAccount = getAccountFromName(accountName);
-                    // fixme .. why we see crashs here (#120 and maybe #121)
-                    // getAccountFromName(accountName) returns null, but why??
-                    if (myAccount == null) {
-                        Log.e(TAG, "onActivityResult: ListActivity.EDIT_BUTTON: Account invalid: " + accountName);
-                        if (ListActivity.ImapNotesAccount == null) {
-                            Log.e(TAG, "onActivityResult: ListActivity.EDIT_BUTTON: ImapNotesAccount invalid: ");
-                        }
-                        myAccount = ListActivity.ImapNotesAccount.GetAccount();
-                        assert myAccount != null;
-                        accountName = myAccount.name;
-                    }
-
-                    ListActivity.ImapNotesAccount = new ImapNotesAccount(myAccount, getApplicationContext());
                     UpdateList(suid, txt, bgcolor, accountName, UpdateThread.Action.Update);
                 }
                 break;
@@ -804,22 +796,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                     String txt = ImapNotes3.AvoidLargeBundle; //data.getStringExtra(EDIT_ITEM_TXT);
                     String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
                     String accountName = data.getStringExtra(EDIT_ITEM_ACCOUNTNAME);
-                    Account myAccount = getAccountFromName(accountName);
-                    // fixme .. why we see crashs here (#120 and maybe #121)
-                    // getAccountFromName(accountName) returns null, but why??
-                    if (myAccount == null) {
-                        Log.e(TAG, "onActivityResult: ListActivity.NEW_BUTTON: Account invalid:" + accountName);
-                        if (ListActivity.ImapNotesAccount == null) {
-                            Log.e(TAG, "onActivityResult: ListActivity.NEW_BUTTON: ImapNotesAccount invalid: ");
-                        }
-                        myAccount = ListActivity.ImapNotesAccount.GetAccount();
-                        assert myAccount != null;
-                        accountName = myAccount.name;
-                    }
-
-                    ListActivity.ImapNotesAccount = new ImapNotesAccount(myAccount, getApplicationContext());
                     UpdateList("", txt, bgcolor, accountName, UpdateThread.Action.Insert);
-
                 }
                 break;
             case ListActivity.ADD_ACCOUNT:
@@ -833,8 +810,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                         Integer pos = getSpinnerPos(data.getStringExtra(EDIT_ITEM_ACCOUNTNAME));
                         if (pos > 0) {
                             accountSpinner.setSelection(pos);
-                            Account account = ListActivity.accounts[pos - 1];
-                            ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
                         }
                     }
                     TriggerSync(true);
@@ -910,18 +885,12 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         }
         if ((id == android.widget.AdapterView.INVALID_ROW_ID) || (id >= ListActivity.accountList.size())) {
             this.accountSpinner.setSelection(1);
-            id = 1;
         }
 
-        if ((ListActivity.accountList.size() > 1) && (id >= 1)) {
-            Account account = ListActivity.accounts[(int) id - 1];
-            ListActivity.ImapNotesAccount = new ImapNotesAccount(account, getApplicationContext());
-        }
         // FIXME his place is not nice..but no other is working
         Check_Action_Send(null);
 
     }
-
 
     @Nullable
     @Override
