@@ -902,7 +902,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                     .extra(extra)
                     .title(R.string.select_one_account)
                     .fields(
-                            Input.spinner(DLG_SELECT_ACCOUNT_ACCOUNT, (ArrayList<String>) ListActivity.getAccountList())
+                            Input.spinner(DLG_SELECT_ACCOUNT_ACCOUNT, ListActivity.getAccountList())
                                     .required()
                                     .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL))
 
