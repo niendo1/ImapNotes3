@@ -84,13 +84,16 @@ public class ImapNotes3 extends Application {
     private Thread.UncaughtExceptionHandler _unCaughtExceptionHandler =
             new Thread.UncaughtExceptionHandler() {
                 @Override
-                public void uncaughtException(Thread thread, Throwable ex) {
+                public void uncaughtException(Thread thread, Throwable e) {
                     //FIXME - do something usefull
-                    Log.e(TAG, "catch uncaughtException", ex);
+                    SharedPreferences.Editor preferences = mContext.getSharedPreferences(SettingsActivity.MAIN_PREFERENCE_NAME, MODE_PRIVATE).edit();
+                    preferences.putString("uncaughtException", Log.getStackTraceString(e));
+                    preferences.apply();
+
                     System.exit(2);
 
                     // re-throw critical exception further to the os (important)
-                    defaultUEH.uncaughtException(thread, ex);
+                    defaultUEH.uncaughtException(thread, e);
                 }
             };
     public ImapNotes3() {

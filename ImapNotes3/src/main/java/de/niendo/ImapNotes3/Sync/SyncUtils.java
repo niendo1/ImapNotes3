@@ -534,8 +534,8 @@ public class SyncUtils {
                 Message notesMessage = notesMessages[index];
                 // write every message in files/{accountname} directory
                 // filename is the original message uid
-                Long UIDM = remoteIMAPNotesFolder.getUID(notesMessage);
-                String suid = UIDM.toString();
+                long UIDM = remoteIMAPNotesFolder.getUID(notesMessage);
+                String suid = Long.toString(UIDM);
                 String bgColor = HtmlNote.GetNoteFromMessage(notesMessage).color;
                 SaveNoteAndUpdateDatabase(RootDirAccount, notesMessage, storedNotes, account.name, suid, bgColor);
             }

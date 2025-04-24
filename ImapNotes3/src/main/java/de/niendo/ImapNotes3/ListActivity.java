@@ -151,14 +151,15 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     @NonNull
     private static Account[] accounts = new Account[0];
     private final OnClickListener clickListenerEditAccount = v -> {
-        if (getSelectedAccountName().isEmpty()) {
+        String accountName = getSelectedAccountName();
+        if (accountName.isEmpty()) {
             ImapNotes3.ShowMessage(R.string.select_one_account, accountSpinner, 3);
             return;
         }
 
         Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
         res.putExtra(ACTION, AccountConfigurationActivity.Actions.EDIT_ACCOUNT);
-        res.putExtra(AccountConfigurationActivity.ACCOUNTNAME, getSelectedAccountName());
+        res.putExtra(AccountConfigurationActivity.ACCOUNTNAME, accountName);
         startActivityForResult(res, ListActivity.EDIT_ACCOUNT);
     };
     private static final String TAG = "IN_Listactivity";
@@ -172,8 +173,8 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         getContentResolver().unregisterContentObserver(mObserver);
     }
 
-    public static ArrayList getAccountList() {
-        ArrayList accounts = new ArrayList<>();
+    public static ArrayList<String> getAccountList() {
+        ArrayList<String> accounts = new ArrayList<>();
         for (Account mAccount : ListActivity.accounts) {
             accounts.add(mAccount.name);
         }
@@ -286,8 +287,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             Log.d(TAG, "onItemClick");
             Intent toDetail;
 
-            String saveState = noteList.get(selectedNote).GetState();
-            saveState = storedNotes.GetSaveState(noteList.get(selectedNote).GetUid(), noteList.get(selectedNote).GetAccount());
+            String saveState = storedNotes.GetSaveState(noteList.get(selectedNote).GetUid(), noteList.get(selectedNote).GetAccount());
 
             if (saveState.equals(OneNote.SAVE_STATE_SAVING)) {
                 ImapNotes3.ShowMessage(R.string.save_wait_necessary, listview, 3);
@@ -353,7 +353,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         Log.d(TAG, "handleSendMultipleImages");
         ArrayList<Uri> messageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
         String accountName = getSelectedAccountName();
-        //Integer i=0;
         if (accountName.isEmpty()) {
             ImapNotes3.ShowMessage(R.string.select_one_account, accountSpinner, 3);
             return;
@@ -654,7 +653,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 return true;
             }
             case R.id.refresh:
-                if (getSelectedAccountName().equals(""))
+                if (getSelectedAccountName().isEmpty())
                     ImapNotes3.ShowMessage(R.string.select_one_account, accountSpinner, 3);
                 else
                     TriggerSync(true);
@@ -784,7 +783,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                     UpdateList(suid, null, null, accountName, UpdateThread.Action.Delete);
                 }
                 if (resultCode == ListActivity.EDIT_BUTTON) {
-                    String txt = ImapNotes3.AvoidLargeBundle; //data.getStringExtra(EDIT_ITEM_TXT);
+                    String txt = ImapNotes3.AvoidLargeBundle;  //data.getStringExtra(EDIT_ITEM_TXT);
                     String suid = data.getStringExtra(EDIT_ITEM_NUM_IMAP);
                     String bgcolor = data.getStringExtra(EDIT_ITEM_COLOR);
                     String accountName = data.getStringExtra(EDIT_ITEM_ACCOUNTNAME);
@@ -846,12 +845,13 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
 
     ;
 
-    public Account getAccountFromName(String accountname) {
+    public Account getAccountFromName(String accountName) {
         for (Account account : ListActivity.accounts
         ) {
-            if (account.name.equals(accountname))
+            if (account.name.equals(accountName))
                 return account;
         }
+        Log.e(TAG, "getAccountFromName: no account found: " + accountName);
         return null;
     }
 
