@@ -41,8 +41,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.io.BufferedInputStream;
 import java.io.File;
 
-import de.niendo.ImapNotes3.Miscs.Utilities;
-
 public class ImapNotes3 extends Application {
     private static final String TAG = "IN_ImapNotes3";
     private static Context mContext;
@@ -188,6 +186,6 @@ public class ImapNotes3 extends Application {
     }
 
     public static File GetDocumentDir() {
-        return Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS + "/" + Utilities.ApplicationName);
+        return Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS);
     }
 }

@@ -4,3 +4,4 @@
 * saving notes is more robust, show exceptions to user
 * App Store Description Enhancement (thanks to RightWrite)
 * improve logging
+* fix create backup on older Android versions

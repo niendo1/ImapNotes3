@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024-20255 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2024-2025 - Peter Korf <peter@niendo.de>
  * and Contributors.
  *
  * This file is part of ImapNotes3.
@@ -141,16 +141,25 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
             title = title + "_" + currentDateTime.format(formatter);
         }
-        File extStorage = GetDocumentDir();
-        boolean isPresent = true;
-        if (!extStorage.exists()) {
-            isPresent = extStorage.mkdir();
-        }
-        File outfile = new File(extStorage, title + ".zip");
 
         if (!ZipUtils.checkPermissionStorage(context)) {
             ZipUtils.requestPermission(activity);
         }
+
+        File extStorage = GetDocumentDir();
+        boolean dirOK=false;
+        if (!extStorage.exists()) {
+            dirOK=extStorage.mkdir();
+        }
+        extStorage = new File(extStorage, Utilities.ApplicationName);
+        if (!extStorage.exists()) {
+            dirOK=extStorage.mkdir();
+        }
+
+       if(!dirOK)
+          extStorage = GetDocumentDir();
+
+        File outfile = new File(extStorage, title + ".zip");
 
         SimpleProgressDialog sd = new SimpleProgressDialog();
         BackupTask task = new BackupTask(directory,
