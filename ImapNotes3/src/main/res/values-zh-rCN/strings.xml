@@ -182,4 +182,5 @@
     <string name="portuguese">葡萄牙语</string>
     <string name="czech">捷克语</string>
     <string name="catalan">加泰罗尼亚语</string>
+    <string name="save_note_failed">保存笔记因未知原因失败了</string>
 </resources>
