@@ -97,9 +97,9 @@ public class HtmlNote {
         noteBody = noteBody.replaceAll("<p dir=\"ltr\">", "<div>&nbsp;</div><div>");
         noteBody = noteBody.replaceAll("</p>", "</div>");
  */
-        // replace <br>, but avoid recursive replacement
-        noteBody = noteBody.replaceAll("</div><br><div>", "<br>");
-        noteBody = noteBody.replaceAll("<br>", "</div><br><div>");
+        if (!noteBody.contains("</div>")) {
+            noteBody = noteBody.replaceFirst("<br>", "</div><div>");
+        }
 
         Document doc = Jsoup.parse(noteBody, "utf-8");
         String bodyStyle = doc.select("body").attr("style");

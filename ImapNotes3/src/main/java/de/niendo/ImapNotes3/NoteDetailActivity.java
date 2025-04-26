@@ -281,7 +281,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
         //    editText.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
         editText.setPlaceholder(getString(R.string.placeholder));
         editText.LoadFont("Alita Brush", "Alita Brush.ttf");
-
+        if (!editText.hasFocus()) editText.focusEditor();
         editText.setOnTextChangeListener(text -> {
             if (text.contains("loaded"))
                 textChanged = textChangedShare;
@@ -1036,9 +1036,11 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
             } else {
                 if (Utilities.IsUrl(sharedText)) {
                     if (subject.isEmpty()) {
-                        subject = sharedText;
+                        editText.insertLink(sharedText, sharedText, sharedText);
+                    } else {
+                        editText.insertLink(sharedText, subject, subject);
+                        editText.insertHTML("<div>" + subject + "</div>");
                     }
-                    editText.insertLink(sharedText, subject, subject);
                 } else {
                     if (!subject.isEmpty()) {
                         subject = "<div><b>" + subject + "</b></div>";
