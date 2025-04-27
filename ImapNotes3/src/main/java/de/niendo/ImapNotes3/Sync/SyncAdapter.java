@@ -202,21 +202,29 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
     private ImapNotesResult ConnectToRemote() {
         Log.d(TAG, "ConnectToRemote");
         AccountManager am = AccountManager.get(applicationContext);
-        ImapNotesResult res = syncUtils.ConnectToRemote(
-                account.username,
-                //am.getUserData(account.GetAccount(), ConfigurationFieldNames.UserName),
-                am.getPassword(account.GetAccount()),
-                am.getUserData(account.GetAccount(), ConfigurationFieldNames.Server),
-                am.getUserData(account.GetAccount(), ConfigurationFieldNames.PortNumber),
-                Security.from(am.getUserData(account.GetAccount(), ConfigurationFieldNames.Security)),
-                account.GetImapFolder(),
-                account.GetCopyImapFolderName(),
-                THREAD_ID
-        );
-        if (res.returnCode != ImapNotesResult.ResultCodeSuccess) {
-            // TODO: Notify the user?
-            Log.d(TAG, "Connection problem: " + res.errorMessage);
-        }
+        ImapNotesResult res;
+        try {
+            res = syncUtils.ConnectToRemote(
+                    account.username,
+                    //am.getUserData(account.GetAccount(), ConfigurationFieldNames.UserName),
+                    am.getPassword(account.GetAccount()),
+                    am.getUserData(account.GetAccount(), ConfigurationFieldNames.Server),
+                    am.getUserData(account.GetAccount(), ConfigurationFieldNames.PortNumber),
+                    Security.from(am.getUserData(account.GetAccount(), ConfigurationFieldNames.Security)),
+                    account.GetImapFolder(),
+                    account.GetCopyImapFolderName(),
+                    THREAD_ID
+            );
+            if (res.returnCode != ImapNotesResult.ResultCodeSuccess) {
+                // TODO: Notify the user?
+                Log.e(TAG, "Connection problem: " + res.errorMessage);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "ConnectToRemote Exception: ", e);
+            res = new ImapNotesResult(ImapNotesResult.ResultCodeException,
+                    "Unknown Error: " + e.getLocalizedMessage(), -1);
+        };
         return res;
     }
 

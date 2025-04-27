@@ -350,21 +350,21 @@ public class SyncUtils {
         }
     }
 
-    synchronized static void RemoveAccount(@NonNull Context context, @NonNull Account account) {
-        Log.d(TAG, "RemoveAccount: " + account.name);
+    synchronized static void RemoveAccount(@NonNull Context context, @NonNull String accountName) {
+        Log.d(TAG, "RemoveAccount: " + accountName);
         // Delete account name entries in database
         NotesDb storedNotes = NotesDb.getInstance(context);
-        storedNotes.ClearDb(account.name);
+        storedNotes.ClearDb(accountName);
         // remove Shared Preference file
-        File toDelete = new File(ImapNotes3.GetSharedPrefsDir(), ImapNotes3.RemoveReservedChars(account.name) + ".xml");
+        File toDelete = new File(ImapNotes3.GetSharedPrefsDir(), ImapNotes3.RemoveReservedChars(accountName) + ".xml");
         //noinspection ResultOfMethodCallIgnored
         toDelete.delete();
         // Remove all files and sub directories
         File[] files = ImapNotes3.GetRootDir().listFiles();
         if (files != null)
             for (File file : files) {
-                //noinspection ResultOfMethodCallIgnored
-                file.delete();
+                 if(!file.delete())
+                    Log.w(TAG, "RemoveAccount: could not delete: " + file);
             }
     }
 

@@ -76,7 +76,7 @@ public class ImapNotesAuthenticatorService extends Service {
                 throws NetworkErrorException {
             Bundle ret = super.getAccountRemovalAllowed(response, account);
             if (ret.getBoolean(AccountManager.KEY_BOOLEAN_RESULT))
-                SyncUtils.RemoveAccount(this.mContext, account);
+                SyncUtils.RemoveAccount(this.mContext, account.name);
 /*
             mContext.getContentResolver().delete(ListProvider.getClearUri(),
 					null, null);

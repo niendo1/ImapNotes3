@@ -108,6 +108,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     public static final int ResultCodeSuccess = 1;
     public static final int ResultCodeMakeArchive = 2;
     public static final int ResultCodeRestoreArchive = 3;
+    public static final int ResultCodeRemoveAccount = 4;
     public static final int ResultCodeNeutral = 0;
     public static final int ResultCodeError = -1;
 
@@ -427,8 +428,12 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
 
 
     private void RefreshList() {
+        // fix: AccountUpdate, when account delete
+        if(actionMenu == null)
+            return;
         listToView.setSortOrder(getSortOrder());
         String accountName = getSelectedAccountName();
+        Log.d(TAG, "RefreshList: " + accountName);
         listToView.setAccountName(accountName);
         synchronized (ImapNotes3.MainLock) {
             new SyncThread(
@@ -814,6 +819,10 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                     }
                     TriggerSync(true);
                 }
+                if (resultCode == ResultCodeRemoveAccount) {
+                    accountSpinner.setSelection(1);
+                    TriggerSync(false);
+                }
                 break;
             case ListActivity.SELECT_ARCHIVE_FOR_RESTORE:
                 if (resultCode == Activity.RESULT_OK) {
@@ -886,6 +895,8 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         if ((id == android.widget.AdapterView.INVALID_ROW_ID) || (id >= ListActivity.accountList.size())) {
             this.accountSpinner.setSelection(1);
         }
+        // fix: AccountUpdate, when account delete
+        RefreshList();
 
         // FIXME his place is not nice..but no other is working
         Check_Action_Send(null);
@@ -918,7 +929,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 }
             }
             // Hack! accountManager.addOnAccountsUpdatedListener
-            if ((newAccounts.size() > 0) & (EnableAccountsUpdate)) {
+            if ((!newAccounts.isEmpty()) & (EnableAccountsUpdate)) {
                 Account[] ImapNotesAccounts = new Account[newAccounts.size()];
                 int i = 0;
                 for (final Account account : newAccounts) {

@@ -90,6 +90,9 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
             // Click on Remove Button
             accountManager.removeAccount(myAccount, null, null, null);
             ImapNotes3.ShowMessage(R.string.account_removed, accountnameTextView, 3);
+            Intent intent = new Intent();
+            intent.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, GetTextViewText(accountnameTextView));
+            setResult(ListActivity.ResultCodeRemoveAccount, intent);
             finish();//finishing activity
         }
     };
