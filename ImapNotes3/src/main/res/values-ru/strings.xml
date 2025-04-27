@@ -92,7 +92,7 @@
     <string name="undo">Отмена</string>
     <string name="redo">Повторить</string>
     <string name="heading">Направление</string>
-    <string name="save_wait_necessary">пожалуйста, подождите, пока не закончится экономия.</string>
+    <string name="save_wait_necessary">Пожалуйста, подождите, пока заметка сохранится.</string>
     <string name="note_title">Название</string>
     <string name="insert_link">Добавить</string>
     <string name="insert_in_note">Включить общие данные</string>
