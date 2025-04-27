@@ -1,0 +1,10 @@
+* Build-Updates (Bibliotheken, Gradle usw.)
+* Weblate: Übersetzungsupdates (danke an 77nnit)
+* Layout-Fix: Liste beginnt oben
+* Absturz beim Speichern von Notizen behoben
+* Verbesserung der App Store-Beschreibung (danke an RightWrite)
+* Fehlerprotokollierung verbessert
+* Fehler beim Erstellen von Backups auf älteren Android-Versionen behoben
+* Der Editor bekommt den Fokus beim Start
+* Verlorene Zeilenumbrüche vermeiden
+* geteilte Links: füge Link und Beschreibung ein

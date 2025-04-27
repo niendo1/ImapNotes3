@@ -1039,7 +1039,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
                         editText.insertLink(sharedText, sharedText, sharedText);
                     } else {
                         editText.insertLink(sharedText, subject, subject);
-                        editText.insertHTML("<div>" + subject + "</div>");
+                        editText.insertHTML("<br><div>" + sharedText + "</div>");
                     }
                 } else {
                     if (!subject.isEmpty()) {
