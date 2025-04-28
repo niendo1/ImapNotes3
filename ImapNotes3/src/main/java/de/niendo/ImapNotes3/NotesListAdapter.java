@@ -124,7 +124,8 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
 
     public void setAccountName(String setAccountName) {
         mUnfilteredData = null;
-        mAccountName = setAccountName;
+        if(!setAccountName.equals(mAccountName))
+           mAccountName = setAccountName;
     }
 
     /**

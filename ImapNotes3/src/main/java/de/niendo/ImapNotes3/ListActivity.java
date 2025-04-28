@@ -431,10 +431,10 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         // fix: AccountUpdate, when account delete
         if(actionMenu == null)
             return;
+        Log.d(TAG, "RefreshList: ");
         listToView.setSortOrder(getSortOrder());
         String accountName = getSelectedAccountName();
-        Log.d(TAG, "RefreshList: " + accountName);
-        listToView.setAccountName(accountName);
+        //listToView.setAccountName(accountName);
         synchronized (ImapNotes3.MainLock) {
             new SyncThread(
                     accountName,
@@ -741,6 +741,8 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         Log.d(TAG, "onItemSelected");
+        String accountName = getSelectedAccountName();
+        listToView.setAccountName(accountName);
         RefreshList();
     }
 
@@ -807,7 +809,18 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             case ListActivity.ADD_ACCOUNT:
             case ListActivity.EDIT_ACCOUNT:
                 // Returning from ADD
-                if (resultCode == ResultCodeSuccess) {
+                // Cancel, when no Account exists
+                if (ListActivity.accountList.isEmpty() && resultCode != ResultCodeSuccess ) {
+                    Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
+                    startActivityForResult(res, ListActivity.ADD_ACCOUNT);
+                }
+                if (resultCode == ResultCodeRemoveAccount) {
+                    accountSpinner.setSelection(1);
+                    String accountName = getSelectedAccountName();
+                    listToView.setAccountName(accountName);
+                    TriggerSync(false);
+                }
+                if (resultCode == ResultCodeSuccess ) {
                     EnableAccountsUpdate = true;
                     ListActivity.accountManager.addOnAccountsUpdatedListener(
                             new AccountsUpdateListener(), null, true);
@@ -818,10 +831,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                         }
                     }
                     TriggerSync(true);
-                }
-                if (resultCode == ResultCodeRemoveAccount) {
-                    accountSpinner.setSelection(1);
-                    TriggerSync(false);
                 }
                 break;
             case ListActivity.SELECT_ARCHIVE_FOR_RESTORE:
@@ -895,8 +904,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         if ((id == android.widget.AdapterView.INVALID_ROW_ID) || (id >= ListActivity.accountList.size())) {
             this.accountSpinner.setSelection(1);
         }
-        // fix: AccountUpdate, when account delete
-        RefreshList();
 
         // FIXME his place is not nice..but no other is working
         Check_Action_Send(null);
@@ -929,7 +936,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 }
             }
             // Hack! accountManager.addOnAccountsUpdatedListener
-            if ((!newAccounts.isEmpty()) & (EnableAccountsUpdate)) {
+            if ((!newAccounts.isEmpty()) && (EnableAccountsUpdate)) {
                 Account[] ImapNotesAccounts = new Account[newAccounts.size()];
                 int i = 0;
                 for (final Account account : newAccounts) {
