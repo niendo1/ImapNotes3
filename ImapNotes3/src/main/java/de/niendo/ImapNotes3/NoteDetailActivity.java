@@ -125,6 +125,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
         setContentView(R.layout.note_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -134,7 +135,7 @@ public class NoteDetailActivity extends AppCompatActivity implements AdapterView
 
         Intent intent = getIntent();
         String stringres;
-        Log.d(TAG, "Check_Action_Send");
+
         // Get intent, action and MIME type
         String action = intent.getAction();
         String ChangeNote = intent.getStringExtra(ActivityType);
