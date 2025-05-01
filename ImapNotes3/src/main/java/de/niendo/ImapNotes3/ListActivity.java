@@ -63,7 +63,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 
-import de.niendo.ImapNotes3.Data.ImapNotesAccount;
 import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
 import de.niendo.ImapNotes3.Data.SyncInterval;
@@ -603,6 +602,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         if (intent == null)
             intent = getIntent();
         String action = intent.getAction();
+        Log.d(TAG, "Check_Action_Send:" + action);
 
         intentActionSend = null;
         if (action.equals(Intent.ACTION_SEND)) {
@@ -810,10 +810,10 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             case ListActivity.EDIT_ACCOUNT:
                 // Returning from ADD
                 // Cancel, when no Account exists
-                if (ListActivity.accountList.isEmpty() && resultCode != ResultCodeSuccess ) {
-                    Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
-                    startActivityForResult(res, ListActivity.ADD_ACCOUNT);
-                }
+                //if (ListActivity.accountList.isEmpty() && resultCode != ResultCodeSuccess ) {
+                //    Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
+                //    startActivityForResult(res, ListActivity.ADD_ACCOUNT);
+                // }
                 if (resultCode == ResultCodeRemoveAccount) {
                     accountSpinner.setSelection(1);
                     String accountName = getSelectedAccountName();
@@ -877,6 +877,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
 
     private void newNote() {
         Intent toNew;
+
         if (intentActionSend != null)
             toNew = intentActionSend;
         else
@@ -905,9 +906,10 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             this.accountSpinner.setSelection(1);
         }
 
-        // FIXME his place is not nice..but no other is working
-        Check_Action_Send(null);
-
+        if (accounts.length == 0 && ListActivity.accountList.isEmpty()) {
+            Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
+            startActivityForResult(res, ListActivity.ADD_ACCOUNT);
+        }
     }
 
     @Nullable
@@ -995,9 +997,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                     } catch (IOException | Error e) {
                         Log.e(TAG, "cleanDirectory failed:", e);
                     }
-
-                    Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
-                    startActivityForResult(res, ListActivity.ADD_ACCOUNT);
                 }
             }
         }
