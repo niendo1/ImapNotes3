@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
  * Copyright (C)           - kwhitefoot
  * and Contributors.
  *
@@ -65,7 +65,6 @@ import de.niendo.ImapNotes3.Miscs.SmtpServerNameFinder;
 import de.niendo.ImapNotes3.Miscs.Utilities;
 import eltos.simpledialogfragment.SimpleDialog;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class AccountConfigurationActivity extends AccountAuthenticatorActivity implements OnItemSelectedListener, SimpleDialog.OnDialogResultListener, LoginThread.FinishListener {
@@ -311,6 +310,7 @@ public class AccountConfigurationActivity extends AccountAuthenticatorActivity i
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
+        setResult(ListActivity.ResultCodeNeutral);
         setContentView(R.layout.account_setup);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView headingTextView = findTextViewById(R.id.heading);

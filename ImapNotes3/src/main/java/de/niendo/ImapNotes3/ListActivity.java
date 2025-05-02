@@ -90,8 +90,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import static de.niendo.ImapNotes3.AccountConfigurationActivity.ACTION;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ListActivity extends AppCompatActivity implements BackupRestore.INotesRestore, OnItemSelectedListener, Filterable, SimpleDialog.OnDialogResultListener, UpdateThread.FinishListener {
@@ -142,11 +140,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     private static ArrayList<String> hashFilterSelected = new ArrayList<>();
     private ContentObserver mObserver;
 
-    // FIXME
-    // Hack! accountManager.addOnAccountsUpdatedListener
-    // OnAccountsUpdatedListener is called to early - so not all
-    // Date in AccountManager is saved - it gives crashes on the very first start
-    public Boolean EnableAccountsUpdate = true;
     // Ensure that we never have to check for null by initializing reference.
     @NonNull
     private static Account[] accounts = new Account[0];
@@ -158,7 +151,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         }
 
         Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
-        res.putExtra(ACTION, AccountConfigurationActivity.Actions.EDIT_ACCOUNT);
+        res.putExtra(AccountConfigurationActivity.ACTION, AccountConfigurationActivity.Actions.EDIT_ACCOUNT);
         res.putExtra(AccountConfigurationActivity.ACCOUNTNAME, accountName);
         startActivityForResult(res, ListActivity.EDIT_ACCOUNT);
     };
@@ -257,7 +250,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         this.accountSpinner.setOnItemSelectedListener(this);
         ImapNotes3.setContent(findViewById(android.R.id.content));
 
-        //ImapNotesAccount = new ImapNotesAccount();
         ListActivity.accountManager = AccountManager.get(getApplicationContext());
         ListActivity.accountManager.addOnAccountsUpdatedListener(
                 new AccountsUpdateListener(), null, true);
@@ -267,7 +259,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         accountSpinner.setAdapter(spinnerList);
 
         this.noteList = new ArrayList<>();
-        //((de.niendo.ImapNotes3) this.getApplicationContext()).SetNotesList(this.noteList);
+
         this.listToView = new NotesListAdapter(
                 this,
                 this.noteList,
@@ -427,13 +419,13 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
 
 
     private void RefreshList() {
-        // fix: AccountUpdate, when account delete
+        RefreshList(getSelectedAccountName());
+    }
+    private void RefreshList(String accountName) {
         if(actionMenu == null)
             return;
         Log.d(TAG, "RefreshList: ");
         listToView.setSortOrder(getSortOrder());
-        String accountName = getSelectedAccountName();
-        //listToView.setAccountName(accountName);
         synchronized (ImapNotes3.MainLock) {
             new SyncThread(
                     accountName,
@@ -653,7 +645,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         switch (item.getItemId()) {
             case R.id.newaccount: {
                 Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
-                res.putExtra(ACTION, AccountConfigurationActivity.Actions.CREATE_ACCOUNT);
+                res.putExtra(AccountConfigurationActivity.ACTION, AccountConfigurationActivity.Actions.CREATE_ACCOUNT);
                 startActivityForResult(res, ListActivity.ADD_ACCOUNT);
                 return true;
             }
@@ -743,7 +735,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         Log.d(TAG, "onItemSelected");
         String accountName = getSelectedAccountName();
         listToView.setAccountName(accountName);
-        RefreshList();
+        RefreshList(accountName);
     }
 
     @Override
@@ -810,18 +802,14 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             case ListActivity.EDIT_ACCOUNT:
                 // Returning from ADD
                 // Cancel, when no Account exists
-                //if (ListActivity.accountList.isEmpty() && resultCode != ResultCodeSuccess ) {
-                //    Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
-                //    startActivityForResult(res, ListActivity.ADD_ACCOUNT);
-                // }
+                if ((ListActivity.accountList.size() <= 1) && (resultCode != ResultCodeSuccess) ) {
+                    noAccountExists();
+                 }
                 if (resultCode == ResultCodeRemoveAccount) {
                     accountSpinner.setSelection(1);
-                    String accountName = getSelectedAccountName();
-                    listToView.setAccountName(accountName);
-                    TriggerSync(false);
+                    if(accounts.length >= 1) RefreshList(accounts[1].name);
                 }
                 if (resultCode == ResultCodeSuccess ) {
-                    EnableAccountsUpdate = true;
                     ListActivity.accountManager.addOnAccountsUpdatedListener(
                             new AccountsUpdateListener(), null, true);
                     if (data != null) {
@@ -873,7 +861,11 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         return null;
     }
 
-    ;
+    private void noAccountExists() {
+        Log.d(TAG, "noAccountExists");
+        Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
+        startActivityForResult(res, ListActivity.ADD_ACCOUNT);
+    }
 
     private void newNote() {
         Intent toNew;
@@ -905,11 +897,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         if ((id == android.widget.AdapterView.INVALID_ROW_ID) || (id >= ListActivity.accountList.size())) {
             this.accountSpinner.setSelection(1);
         }
-
-        if (accounts.length == 0 && ListActivity.accountList.isEmpty()) {
-            Intent res = new Intent(ListActivity.this, AccountConfigurationActivity.class);
-            startActivityForResult(res, ListActivity.ADD_ACCOUNT);
-        }
     }
 
     @Nullable
@@ -926,78 +913,57 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     private class AccountsUpdateListener implements OnAccountsUpdateListener {
 
         @Override
-        public void onAccountsUpdated(@NonNull Account[] accounts) {
+        public void onAccountsUpdated(@NonNull Account[] myAccounts) {
             Log.d(TAG, "onAccountsUpdated");
             List<String> newList;
-            //Integer newListSize = 0;
+
             //invoked when the AccountManager starts up and whenever the account set changes
             ArrayList<Account> newAccounts = new ArrayList<>();
-            for (final Account account : accounts) {
+            for (final Account account : myAccounts) {
                 if (account.type.equals(Utilities.PackageName)) {
                     newAccounts.add(account);
                 }
             }
-            // Hack! accountManager.addOnAccountsUpdatedListener
-            if ((!newAccounts.isEmpty()) && (EnableAccountsUpdate)) {
-                Account[] ImapNotesAccounts = new Account[newAccounts.size()];
-                int i = 0;
-                for (final Account account : newAccounts) {
-                    ImapNotesAccounts[i] = account;
-                    i++;
-                }
-                ListActivity.accounts = ImapNotesAccounts;
+                Account[] tempAccounts  = new Account[newAccounts.size()];
                 newList = new ArrayList<>();
                 newList.add(getString(R.string.all_accounts));
-                for (Account account : ListActivity.accounts) {
+                int i = 0;
+                for (final Account account : newAccounts) {
+                    tempAccounts[i++] = account;
                     newList.add(account.name);
                 }
-                if (newList.size() == 1) return;
-
-                boolean equalLists = true;
-                ListIterator<String> iter = ListActivity.accountList.listIterator();
-                boolean first = true;
-                while (iter.hasNext()) {
+                    accounts = tempAccounts;
+                    boolean equalLists = true;
+                    ListIterator<String> iter = ListActivity.accountList.listIterator();
                     // skip first entry (All)
-                    if (first) iter.next();
-                    first = false;
-                    String s = iter.next();
-
-                    if (!(newList.contains(s))) {
-                        iter.remove();
-                        // Why try here?
-                        try {
-                            FileUtils.deleteDirectory(ImapNotes3.GetAccountDir(s));
-                        } catch (IOException e) {
-                            Log.e(TAG, "deleteDirectory failed:", e);
+                    if (iter.hasNext()) iter.next();
+                    while (iter.hasNext()) {
+                        String s = iter.next();
+                        if (!(newList.contains(s))) {
+                            iter.remove();
+                            // Why try here?
+                            try {
+                                FileUtils.deleteDirectory(ImapNotes3.GetAccountDir(s));
+                            } catch (IOException e) {
+                                Log.e(TAG, "deleteDirectory failed:", e);
+                            }
+                            equalLists = false;
                         }
-                        equalLists = false;
                     }
-                }
-                first = true;
-                for (String accountName : newList) {
-                    if (!(ListActivity.accountList.contains(accountName))) {
-                        ListActivity.accountList.add(accountName);
-                        equalLists = false;
-                        // skip first entry (All)
-                        if (!first)
-                            SyncUtils.CreateLocalDirectories(ImapNotes3.GetAccountDir(accountName));
+                    boolean first = true;
+                    for (String accountName : newList) {
+                        if (!(accountList.contains(accountName))) {
+                            accountList.add(accountName);
+                            equalLists = false;
+                            // skip first entry (All)
+                            if (!first)
+                                SyncUtils.CreateLocalDirectories(ImapNotes3.GetAccountDir(accountName));
+                        }
+                        first = false;
                     }
-                    first = false;
-                }
-                if (equalLists) return;
-                updateAccountSpinner();
-            } else {
-                // Hack! accountManager.addOnAccountsUpdatedListener
-                if (EnableAccountsUpdate) {
-                    File filesDir = ImapNotes3.GetRootDir();
-                    EnableAccountsUpdate = false;
-                    ListActivity.accountManager.removeOnAccountsUpdatedListener(new AccountsUpdateListener());
-                    try {
-                        FileUtils.cleanDirectory(filesDir);
-                    } catch (IOException | Error e) {
-                        Log.e(TAG, "cleanDirectory failed:", e);
-                    }
-                }
+                if (!equalLists) updateAccountSpinner();
+            if (accountList.size() <= 1) {
+                noAccountExists();
             }
         }
     }
