@@ -924,44 +924,46 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                     newAccounts.add(account);
                 }
             }
-                Account[] tempAccounts  = new Account[newAccounts.size()];
-                newList = new ArrayList<>();
-                newList.add(getString(R.string.all_accounts));
-                int i = 0;
-                for (final Account account : newAccounts) {
-                    tempAccounts[i++] = account;
-                    newList.add(account.name);
+            Account[] tempAccounts = new Account[newAccounts.size()];
+            newList = new ArrayList<>();
+            newList.add(getString(R.string.all_accounts));
+            int i = 0;
+            for (final Account account : newAccounts) {
+                tempAccounts[i++] = account;
+                newList.add(account.name);
+            }
+            accounts = tempAccounts;
+            boolean equalLists = true;
+            ListIterator<String> iter = ListActivity.accountList.listIterator();
+            // skip first entry (All)
+            if (iter.hasNext()) iter.next();
+            while (iter.hasNext()) {
+                String s = iter.next();
+                if (!(newList.contains(s))) {
+                    iter.remove();
+                    // Why try here?
+                    try {
+                        FileUtils.deleteDirectory(ImapNotes3.GetAccountDir(s));
+                    } catch (IOException e) {
+                        Log.e(TAG, "deleteDirectory failed:", e);
+                    }
+                    equalLists = false;
                 }
-                    accounts = tempAccounts;
-                    boolean equalLists = true;
-                    ListIterator<String> iter = ListActivity.accountList.listIterator();
+            }
+            boolean first = true;
+            for (String accountName : newList) {
+                if (!(accountList.contains(accountName))) {
+                    accountList.add(accountName);
+                    equalLists = false;
                     // skip first entry (All)
-                    if (iter.hasNext()) iter.next();
-                    while (iter.hasNext()) {
-                        String s = iter.next();
-                        if (!(newList.contains(s))) {
-                            iter.remove();
-                            // Why try here?
-                            try {
-                                FileUtils.deleteDirectory(ImapNotes3.GetAccountDir(s));
-                            } catch (IOException e) {
-                                Log.e(TAG, "deleteDirectory failed:", e);
-                            }
-                            equalLists = false;
-                        }
-                    }
-                    boolean first = true;
-                    for (String accountName : newList) {
-                        if (!(accountList.contains(accountName))) {
-                            accountList.add(accountName);
-                            equalLists = false;
-                            // skip first entry (All)
-                            if (!first)
-                                SyncUtils.CreateLocalDirectories(ImapNotes3.GetAccountDir(accountName));
-                        }
-                        first = false;
-                    }
-                if (!equalLists) updateAccountSpinner();
+                    if (!first)
+                        SyncUtils.CreateLocalDirectories(ImapNotes3.GetAccountDir(accountName));
+                }
+                first = false;
+            }
+            if (!equalLists) {
+                updateAccountSpinner();
+            }
             if (accountList.size() <= 1) {
                 noAccountExists();
             }
