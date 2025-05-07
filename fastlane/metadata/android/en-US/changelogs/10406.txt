@@ -1,0 +1,2 @@
+* build updates (libs, gradle etc.)
+* RichEditor 3.0.4 (fixes for >36)
