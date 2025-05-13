@@ -228,7 +228,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d(TAG, "onNewIntent");
-        Check_Action_Send(intent);
+        setIntent(intent);
     }
 
     /**
@@ -300,8 +300,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             toDetail.putExtra(NoteDetailActivity.selectedNote, (OneNote) parent.getItemAtPosition(selectedNote));
             toDetail.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeEdit);
             startActivityForResult(toDetail, SEE_DETAIL);
-            if (intentActionSend != null)
-                intentActionSend.putExtra(NoteDetailActivity.ActivityTypeProcessed, true);
+            setIntentAsProcessed();
             Log.d(TAG, "onItemClick, back from detail.");
         });
 
@@ -365,6 +364,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
+        Check_Action_Send();
     }
 
     @Override
@@ -575,8 +575,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> newNote());
 
-
-
         return true;
     }
 
@@ -588,26 +586,30 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         return OneNote.DATE + " DESC";
     }
 
-    private void Check_Action_Send(Intent intent) {
+    private void Check_Action_Send() {
         Log.d(TAG, "Check_Action_Send");
         // Get intent, action and MIME type
-        if (intent == null)
-            intent = getIntent();
+        Intent intent = getIntent();
         String action = intent.getAction();
         Log.d(TAG, "Check_Action_Send:" + action);
 
         intentActionSend = null;
+        if (intent.getBooleanExtra(NoteDetailActivity.ActivityTypeProcessed,false)) {
+            Log.d(TAG, "Check_Action_Send: Intent already processed");
+            return;
+        }
+
         if (action.equals(Intent.ACTION_SEND)) {
             intentActionSend = (Intent) intent.clone();
             intentActionSend.setClass(this, NoteDetailActivity.class);
             intentActionSend.setFlags(0);
-            intentActionSend.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, getSelectedAccountName());
             intentActionSend.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAddShare);
 
             ImapNotes3.ShowAction(listview, R.string.insert_as_new_note, R.string.ok, 0,
                     () -> {
+                        intentActionSend.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, getSelectedAccountName());
                         startActivityForResult(intentActionSend, ListActivity.NEW_BUTTON);
-                        intentActionSend = null;
+                        setIntentAsProcessed();
                     });
         } else if (action.equals(Intent.ACTION_SEND_MULTIPLE)) {
             if (intent.getType().equals("message/rfc822")) {
@@ -755,7 +757,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             try {
                 return accounts[(int) pos - 1];
             } catch (Exception e) {
-                Log.e(TAG, "getSelectedAccount wrong pos", e);
+                Log.e(TAG, "getSelectedAccount wrong pos: " + pos, e);
             }
         }
         return null;
@@ -877,9 +879,13 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         toNew.putExtra(NoteDetailActivity.ActivityType, NoteDetailActivity.ActivityTypeAdd);
         toNew.putExtra(ListActivity.EDIT_ITEM_ACCOUNTNAME, getSelectedAccountName());
         startActivityForResult(toNew, ListActivity.NEW_BUTTON);
-        if (intentActionSend != null)
-            intentActionSend.putExtra(NoteDetailActivity.ActivityTypeProcessed, true);
+    }
 
+    public void setIntentAsProcessed() {
+        Intent intent = getIntent();
+        intent.putExtra(NoteDetailActivity.ActivityTypeProcessed, true);
+        if (intentActionSend != null)
+           intentActionSend.putExtra(NoteDetailActivity.ActivityTypeProcessed, true);
     }
 
     private void updateAccountSpinner() {
