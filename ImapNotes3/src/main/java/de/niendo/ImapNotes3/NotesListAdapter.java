@@ -407,7 +407,6 @@ public class NotesListAdapter extends BaseAdapter implements Filterable {
                             // time & date
                             setTxtColor((TextView) v, ColorUtils.blendARGB(txtColor, bgColorNr, 0.5f));
                         }
-                        setBgColor((TextView) v, bgColorNr);
                         setBgColor((RelativeLayout) view, bgColorNr);
 
                     } else if (v instanceof ImageView) {
