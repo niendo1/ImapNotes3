@@ -62,12 +62,34 @@ __Additional Capabilities__
 All of these features are contained in this fully open source app, which has no tracking or
 advertising, and requires only minimal user permissions.
 
+#### Related Tools
+
+* [IOS Imap Notes](https://addons.thunderbird.net/de/thunderbird/addon/ios-imap-notes/) a
+  Thunderbird-Plugin
+  which allows you to edit notes on your desktop.
+
 ### Translation
 
 This app can be translated at: <a href="https://hosted.weblate.org/projects/ImapNotes3/">
 weblate.org</a>.
 Your help is greatly appreciated.
 If your favourite language is missing, just drop me an email.
+
+_Catalan:_ polrojas
+_Chinese:_ sr093906, hamburger2048 (大王叫我来巡山), pyccl, Xue Xuan, bj y
+_Czech:_ LibreTranslate
+_French:_ z97febao, e2jk
+_German:_ niendo1
+_Italian:_ 77nnit
+_Norwegian:_ kwhitefood
+_Portuguese:_ weblate
+_Russian:_ pazengaz
+_Spanish:_ gallegonovato
+
+#### Contributors
+
+nb(enm), N0uri, c0238, Axel Strübing, 7nnit, Poussinou, woheller69, Martin Carpella (carpi),
+cocklemon, john-p-williams, wdl923, Ulli Rainer Heist, Andreas Hotz, midros, ...
 
 ### History
 
