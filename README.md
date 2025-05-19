@@ -74,16 +74,16 @@ weblate.org</a>.
 Your help is greatly appreciated.
 If your favourite language is missing, just drop me an email.
 
-_Catalan:_ polrojas
-_Chinese:_ sr093906, hamburger2048 (大王叫我来巡山), pyccl, Xue Xuan, bj y
-_Czech:_ LibreTranslate
-_French:_ z97febao, e2jk
-_German:_ niendo1
-_Italian:_ 77nnit
-_Norwegian:_ kwhitefood
-_Portuguese:_ weblate
-_Russian:_ pazengaz
-_Spanish:_ gallegonovato
+_Catalan:_ polrojas<br>
+_Chinese:_ sr093906, hamburger2048 (大王叫我来巡山), pyccl, Xue Xuan, bj y<br>
+_Czech:_ LibreTranslate<br>
+_French:_ z97febao, e2jk<br>
+_German:_ niendo1<br>
+_Italian:_ 77nnit<br>
+_Norwegian:_ kwhitefood<br>
+_Portuguese:_ weblate<br>
+_Russian:_ pazengaz<br>
+_Spanish:_ gallegonovato<br>
 
 #### Contributors
 
