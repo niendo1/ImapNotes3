@@ -65,8 +65,7 @@ advertising, and requires only minimal user permissions.
 #### Related Tools
 
 * [IOS Imap Notes](https://addons.thunderbird.net/de/thunderbird/addon/ios-imap-notes/) a
-  Thunderbird-Plugin
-  which allows you to edit notes on your desktop.
+  Thunderbird-Plugin which allows you to edit notes on your desktop.
 
 ### Translation
 
