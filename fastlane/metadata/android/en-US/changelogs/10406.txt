@@ -1,2 +1,2 @@
 * build updates (libs, gradle etc.)
-* RichEditor 3.0.4 (fixes for >36)
+* RichEditor 3.0.4 (fix for Android 16)
