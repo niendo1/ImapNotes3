@@ -1,25 +1,33 @@
 Ein kostenloser und schneller Notizeneditor für Android, der die Synchronisierung mit IMAP-Servern ermöglicht.
 
-__Allgemeine Eigenschaften__
-* kompatibel mit verschiedenen IMAP-Servern (Gmail, Yahoo, AOL, Posteo und Ihrem Server)
-* Sicherheitsoptionen umfassen _Nur-Text_, _SSL/TLS_ oder _STARTTLS_
-* Notizen als Standard-HTML-E-Mails speichern
-* mehrere IMAP-Konten und/oder Notizblöcke verwalten
-* offline arbeiten (mit Hintergrundsynchronisierung)
+<b>Allgemeine Eigenschaften</b>
+<ul>
+<li>kompatibel mit verschiedenen IMAP-Servern (Gmail, Yahoo, AOL, Posteo und Ihrem Server)</li>
+<li>Sicherheitsoptionen umfassen Nur-Text, SSL/TLS oder STARTTLS</li>
+<li>Notizen als Standard-HTML-E-Mails speichern</li>
+<li>mehrere IMAP-Konten und/oder Notizblöcke verwalten</li>
+<li>offline arbeiten (mit Hintergrundsynchronisierung)</li>
+</ul>
 
-__Funktionsreicher HTML-Editor__
-* vielseitige Textformatierung
-* Bildintegration
-* Checklisten erstellen
-* Volltextsuche
-* Schriftfarben und Hintergrundfarben ändern
+<b>Funktionsreicher HTML-Editor</b>
+<ul>
+<li>vielseitige Textformatierung</li>
+<li>Bildintegration</li>
+<li>Checklisten erstellen</li>
+<li>Volltextsuche</li>
+<li>Schriftfarben und Hintergrundfarben ändern</li>
+</ul>
 
-__Zusätzliche Funktionen__
-* kein Tracking oder Werbung
-* Hell- und Dunkelmodus
-* Ihre Notizen nach _#HashTags_ filtern und organisieren
-* Notizen mit anderen Apps teilen (Import/Export)
-* Notizen als lokales Zip-Archiv sichern
-* alle oder nur eine einzelne Notiz aus einem lokalen Archiv wiederherstellen
+<b>Zusätzliche Funktionen</b>
+<ul>
+<li>kein Tracking oder Werbung</li>
+<li>Hell- und Dunkelmodus</li>
+<li>Ihre Notizen nach #HashTags filtern und organisieren</li>
+<li>Notizen mit anderen Apps teilen (Import/Export)</li>
+<li>Notizen als lokales Zip-Archiv sichern</li>
+<li>alle oder nur eine einzelne Notiz aus einem lokalen Archiv wiederherstellen</li>
+</ul>
+
 
 Alle diese Funktionen sind in dieser vollständig Open-Source-App enthalten, die kein Tracking oder keine Werbung enthält und nur minimale Benutzerberechtigungen erfordert.
+

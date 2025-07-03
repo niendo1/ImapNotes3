@@ -1,25 +1,31 @@
 A free and fast notes editor for Android that allows for synchronization with IMAP servers.
 
-__General Attributes__
-* compatible with various IMAP servers (Gmail, Yahoo, AOL, Posteo, and your server)
-* security options include _plain text_, _SSL/TLS_, or _STARTTLS_
- * save notes as standard HTML E-mails
-* manage multiple IMAP accounts and/or notepads
-* works offline (with background synchronization)
+<b>General Attributes</b>
+<ul>
+<li>compatible with various IMAP servers (Gmail, Yahoo, AOL, Posteo, and your server)</li>
+<li>security options include plain text, SSL/TLS, or STARTTLS</li>
+<li>save notes as standard HTML E-mails</li>
+<li>manage multiple IMAP accounts and/or notepads</li>
+<li>works offline (with background synchronization)</li>
+</ul>
 
-__Feature-Rich HTML Editor__
-* versatile text formatting
-* image integration
-* create checklists
-* full-text search
-* individual font and background colors
+<b>Feature-Rich HTML Editor</b>
+<ul>
+<li>versatile text formatting</li>
+<li>image integration</li>
+<li>create checklists</li>
+<li>full-text search</li>
+<li>individual font and background colors</li>
+</ul>
 
-__Additional Capabilities__
-* no tracking or advertising
-* light and dark mode support
-* filter and organize your notes by _#HashTags_
-* note sharing with other apps (import/export)
-* backup notes as local zip archive
-* restore all or just a single note from a local archive
+<b>Additional Capabilities</b>
+<ul>
+<li>no tracking or advertising</li>
+<li>light and dark mode support</li>
+<li>filter and organize your notes by #HashTags</li>
+<li>note sharing with other apps (import/export)</li>
+<li>backup notes as local zip archive</li>
+<li>restore all or just a single note from a local archive</li>
+</ul>
   
 All of these features are contained in this fully open source app, which has no tracking or advertising, and requires only minimal user permissions.
