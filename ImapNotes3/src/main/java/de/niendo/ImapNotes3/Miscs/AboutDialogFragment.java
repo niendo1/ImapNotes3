@@ -79,6 +79,8 @@ public class AboutDialogFragment extends DialogFragment {
         about += d + "pazengaz" + df;
         about += h1 + getString(R.string.spanish) + h1f;
         about += d + "gallegonovato" + df;
+        about += h1 + getString(R.string.Ukrainian) + h1f;
+        about += d + "Maxim Reznik" + df;
         about += "<br>";
         about += h + getString(R.string.contributors) + hf + "<br>";
         about += d + "nb(enm), N0uri, c0238, Axel Strübing, 7nnit, Poussinou, woheller69, Martin Carpella (carpi), cocklemon, john-p-williams, wdl923, ";

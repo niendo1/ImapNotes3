@@ -84,6 +84,7 @@ _Norwegian:_ kwhitefood<br>
 _Portuguese:_ weblate<br>
 _Russian:_ pazengaz<br>
 _Spanish:_ gallegonovato<br>
+_Ukrainian:_ Maxim Reznik<br>
 
 #### Contributors
 

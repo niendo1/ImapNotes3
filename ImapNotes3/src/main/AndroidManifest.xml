@@ -3,7 +3,7 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
     android:versionCode="10406"
-    android:versionName="v1.4-06">
+    android:versionName="v1.4-07-pre">
 
     <dist:module dist:instant="true" />
 
