@@ -129,6 +129,7 @@ public final class Utilities {
         try {
             String[] proj = {MediaStore.Audio.Media.SIZE};
             cursor = context.getContentResolver().query(uri, proj, null, null, null);
+            if (cursor == null) return 0; // don't get file size, zero is OK
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE);
             cursor.moveToFirst();
             return cursor.getInt(column_index);
