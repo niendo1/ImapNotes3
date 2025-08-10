@@ -1,0 +1,5 @@
+*添加使用Weblate的翻译
+*从压缩文件恢复所有或仅一个笔记
+*为 CreateArchive 添加新线程
+*添加西班牙语翻译（感谢 gallegonovato）
+*修改 IMAP 服务器需要重新输入密码
