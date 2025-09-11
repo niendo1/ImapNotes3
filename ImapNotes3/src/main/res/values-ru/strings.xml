@@ -180,4 +180,5 @@
     <string name="extendedAccountSettings">Расширенные настройки</string>
     <string name="save_note_failed">сохранить заметку не удалось по неизвестным причинам</string>
     <string name="copyImapFolderName">Копировать заметки в этой папке перед сохранением или удалением</string>
+    <string name="Ukrainian">Украинский</string>
 </resources>
