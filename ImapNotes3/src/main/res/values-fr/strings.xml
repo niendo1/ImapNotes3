@@ -164,4 +164,21 @@
     <string name="backup">Sauvegarde</string>
     <string name="CreateBackup_sum">Sauvegarder les notes vers un fichier zip.</string>
     <string name="RestoreBackup_sum">Restaurer une ou plusieurs notes à partir d\'un fichier zip.</string>
+    <string name="no_notes_in_file">L\'archive ne contient aucune note valide</string>
+    <string name="copyImapFolderName">Copier les notes dans ce dossier avant d\'enregistrer ou de supprimer</string>
+    <string name="extendedAccountSettings">Paramètres avancés</string>
+    <string name="translation">Traduction</string>
+    <string name="german">Allemand</string>
+    <string name="contributors">Contributeurs</string>
+    <string name="chinese">Chinois</string>
+    <string name="italian">Italien</string>
+    <string name="french">Français</string>
+    <string name="spanish">Espagnol</string>
+    <string name="portuguese">Portugais</string>
+    <string name="russian">Russe</string>
+    <string name="czech">Tchèque</string>
+    <string name="norwegian">Norvégien</string>
+    <string name="catalan">Catalan</string>
+    <string name="save_note_failed">sauver la note a échoué pour des raisons inconnues</string>
+    <string name="Ukrainian">Ukrainien</string>
 </resources>
