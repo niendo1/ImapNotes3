@@ -169,4 +169,18 @@
     <string name="no_notes_in_file">El archivo no contiene notas válidas</string>
     <string name="extendedAccountSettings">Configuraciones extendidas</string>
     <string name="copyImapFolderName">Copie notas a esta carpeta antes de guardarlas o eliminarlas</string>
+    <string name="translation">Traducción</string>
+    <string name="german">Alemán</string>
+    <string name="contributors">Contribuidores</string>
+    <string name="chinese">Chino</string>
+    <string name="italian">italiano</string>
+    <string name="french">Francés</string>
+    <string name="spanish">Castellano</string>
+    <string name="portuguese">Portugués</string>
+    <string name="russian">Ruso</string>
+    <string name="czech">Checo</string>
+    <string name="norwegian">Noruego</string>
+    <string name="catalan">Catalán</string>
+    <string name="save_note_failed">Guardar la nota falló por razones desconocidas</string>
+    <string name="Ukrainian">Ucraniano</string>
 </resources>
