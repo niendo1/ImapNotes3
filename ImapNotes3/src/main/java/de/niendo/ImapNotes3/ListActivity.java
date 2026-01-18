@@ -66,7 +66,6 @@ import android.widget.Spinner;
 
 import de.niendo.ImapNotes3.Data.NotesDb;
 import de.niendo.ImapNotes3.Data.OneNote;
-import de.niendo.ImapNotes3.Data.SyncInterval;
 import de.niendo.ImapNotes3.Miscs.BackupRestore;
 import de.niendo.ImapNotes3.Miscs.HtmlNote;
 import de.niendo.ImapNotes3.Miscs.SyncThread;
@@ -82,9 +81,7 @@ import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.regex.Matcher;
@@ -140,7 +137,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     static String[] hashFilter;
     private static ArrayList<String> hashFilterSelected = new ArrayList<>();
     private ContentObserver mObserver;
-    private int SwipeCount;
     private SwipeRefreshLayout swipeLayout;
     // Ensure that we never have to check for null by initializing reference.
     @NonNull
@@ -313,22 +309,9 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             @Override
             public void onRefresh() {
                 swipeLayout.setRefreshing(false);
-                if (SwipeCount >= 1) {
-                    TriggerSync(true);
-                    SwipeCount = 0;
-                } else {
-                    ImapNotes3.ShowMessage("one more to refresh", accountSpinner, 1);
-                    SwipeCount++;
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            SwipeCount = 0;
-                        }
-                    }, 2000); // Delay in millis
-                }
+                TriggerSync(true);
             }
         });
-
 
         Button editAccountButton = findViewById(R.id.editAccountButton);
         editAccountButton.setOnClickListener(clickListenerEditAccount);
@@ -340,11 +323,11 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                 if (selfChange || ImapNotes3.intent == null) return;
                 String accountName = ImapNotes3.intent.getStringExtra(EDIT_ITEM_ACCOUNTNAME);
                 boolean isChanged = ImapNotes3.intent.getBooleanExtra(CHANGED, false);
-                boolean isSynced = ImapNotes3.intent.getBooleanExtra(SYNCED, false);
+                // boolean isSynced = ImapNotes3.intent.getBooleanExtra(SYNCED, false);
                 String errorMessage = ImapNotes3.intent.getStringExtra(SYNCED_ERR_MSG);
-                SyncInterval syncInterval = SyncInterval.from(ImapNotes3.intent.getStringExtra(SYNCINTERVAL));
+                // SyncInterval syncInterval = SyncInterval.from(ImapNotes3.intent.getStringExtra(SYNCINTERVAL));
                 if (accountName.equals(getSelectedAccountName())) {
-                    Log.v(TAG, "if " + accountName);
+                    /*
                     if (isSynced) {
                         Date date = new Date();
                         String sdate;
@@ -354,9 +337,10 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
                             Log.e(TAG, "getDateTimeInstance failed: " + date, e);
                             sdate = "";
                         }
-                        ImapNotes3.ShowMessage(getText(R.string.Last_sync) + sdate + " (" + getText(syncInterval.textID) + ")", accountSpinner, 2);
+                        //ImapNotes3.ShowMessage(getText(R.string.Last_sync) + sdate + " (" + getText(syncInterval.textID) + ")", accountSpinner, 2);
                     }
-                    if (!errorMessage.isEmpty()) {
+                     */
+                    if ((errorMessage != null) && !errorMessage.isEmpty()) {
                         ImapNotes3.ShowMessage(errorMessage, accountSpinner, 5);
                     }
                 }
@@ -661,7 +645,6 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             return;
         }
         swipeLayout.setRefreshing(true);
-        ImapNotes3.ShowMessage(R.string.syncing, accountSpinner, 2);
         Bundle settingsBundle = new Bundle();
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);

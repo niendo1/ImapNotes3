@@ -2,3 +2,4 @@
 * Weblate: add Ukrainian translation (thanks to Maxim Reznik)
 * Weblate: improve Spanish translation (thanks to z97febao)
 * Weblate: improve French translation (thanks to z97febao)
+* Swipe to refresh
