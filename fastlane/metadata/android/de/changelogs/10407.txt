@@ -1,0 +1,5 @@
+* Build Updates (libs, gradle usw.)
+* Weblate: füge ukrainische Übersetzung hinzu  (Dank an Maxim Reznik)
+* Weblate: verbessere spanische Übersetzung (Dank an z97febao)
+* Weblate: verbessere französische Übersetzung (Dank an z97febao)
+* Swipe zum Abgleichen
