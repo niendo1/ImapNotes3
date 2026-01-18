@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2025 - Peter Korf <peter@niendo.de>
+ * Copyright (C) 2022-2026 - Peter Korf <peter@niendo.de>
  * Copyright (C)      2023 - woheller69
  * Copyright (C)         ? - kwhitefoot
  * Copyright (C)      2016 - Martin Carpella
@@ -45,6 +45,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -139,7 +140,8 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
     static String[] hashFilter;
     private static ArrayList<String> hashFilterSelected = new ArrayList<>();
     private ContentObserver mObserver;
-
+    private int SwipeCount;
+    private SwipeRefreshLayout swipeLayout;
     // Ensure that we never have to check for null by initializing reference.
     @NonNull
     private static Account[] accounts = new Account[0];
@@ -304,12 +306,37 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             Log.d(TAG, "onItemClick, back from detail.");
         });
 
+        // Getting SwipeContainerLayout
+        swipeLayout = findViewById(R.id.swipeContainer);
+        // Adding Listener
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeLayout.setRefreshing(false);
+                if (SwipeCount >= 1) {
+                    TriggerSync(true);
+                    SwipeCount = 0;
+                } else {
+                    ImapNotes3.ShowMessage("one more to refresh", accountSpinner, 1);
+                    SwipeCount++;
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            SwipeCount = 0;
+                        }
+                    }, 2000); // Delay in millis
+                }
+            }
+        });
+
+
         Button editAccountButton = findViewById(R.id.editAccountButton);
         editAccountButton.setOnClickListener(clickListenerEditAccount);
 
         mObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {
             public void onChange(boolean selfChange) {
                 Log.d(TAG, "ContentObserver.OnChange");
+                swipeLayout.setRefreshing(false);
                 if (selfChange || ImapNotes3.intent == null) return;
                 String accountName = ImapNotes3.intent.getStringExtra(EDIT_ITEM_ACCOUNTNAME);
                 boolean isChanged = ImapNotes3.intent.getBooleanExtra(CHANGED, false);
@@ -633,7 +660,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             Log.w(TAG, "TriggerSync: Account==null");
             return;
         }
-
+        swipeLayout.setRefreshing(true);
         ImapNotes3.ShowMessage(R.string.syncing, accountSpinner, 2);
         Bundle settingsBundle = new Bundle();
         settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
