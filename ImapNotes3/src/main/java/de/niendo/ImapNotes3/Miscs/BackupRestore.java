@@ -147,13 +147,13 @@ public class BackupRestore extends DialogFragment implements SimpleDialog.OnDial
         }
 
         File extStorage = GetDocumentDir();
-        boolean dirOK=false;
+        boolean dirOK = true;
         if (!extStorage.exists()) {
-            dirOK=extStorage.mkdir();
+            dirOK = extStorage.mkdir();
         }
         extStorage = new File(extStorage, Utilities.ApplicationName);
         if (!extStorage.exists()) {
-            dirOK=extStorage.mkdir();
+            dirOK = extStorage.mkdir();
         }
 
        if(!dirOK)
