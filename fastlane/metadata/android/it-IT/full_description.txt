@@ -1,4 +1,4 @@
-* Editor per le tue note ricco di funzionalità
+• Editor per le tue note ricco di funzionalità
    - formattazione di base
    - tabelle
    - caselle di controllo
@@ -6,20 +6,20 @@
    - immagini e collegamenti
    - annulla/ripeti
    - e molto altro
-* Sincronizza note HTML tra dispositivi Android e server IMAP
-* Utilizza diversi server IMAP (Gmail, Yahoo, AOL, Posteo e il tuo server)
-* Crea liste di controllo
-* Ricerca testuale completa
-* Filtra e organizza le tue note con #HashTags
-* Supporto per temi chiaro e scuro
-* Personalizza il colore delle tue note
-* Condividi le tue note
-* Effettua il backup delle tue note su di un archivio .zip locale
-* Ripristina il backup completo o anche solo una nota
-* Salva le tue note come normali messaggi email HTML
-* Imposta l'autenticazione in testo semplice, SSL/TLS o STARTTLS
-* Gestisci più account IMAP e più raccolte di note
-* Lavora senza connessione e sincronizza in background
-* Richiede permessi minimi
-* Interamente open source - nessun tracciamento né pubblicità
-* Colori personalizzabili per l'editor
+• Sincronizza note HTML tra dispositivi Android e server IMAP
+• Utilizza diversi server IMAP (Gmail, Yahoo, AOL, Posteo e il tuo server)
+• Crea liste di controllo
+• Ricerca testuale completa
+• Filtra e organizza le tue note con #HashTags
+• Supporto per temi chiaro e scuro
+• Personalizza il colore delle tue note
+• Condividi le tue note
+• Effettua il backup delle tue note su di un archivio .zip locale
+• Ripristina il backup completo o anche solo una nota
+• Salva le tue note come normali messaggi email HTML
+• Imposta l'autenticazione in testo semplice, SSL/TLS o STARTTLS
+• Gestisci più account IMAP e più raccolte di note
+• Lavora senza connessione e sincronizza in background
+• Richiede permessi minimi
+• Interamente open source - nessun tracciamento né pubblicità
+• Colori personalizzabili per l'editor

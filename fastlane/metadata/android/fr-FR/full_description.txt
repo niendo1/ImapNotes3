@@ -1,4 +1,4 @@
-*  Editeur pour vos notes avec de nombreuses fonctionnalités
+•  Editeur pour vos notes avec de nombreuses fonctionnalités
  - attributs de police
  - tableaux
  - cases à cocher
@@ -6,20 +6,19 @@
  - insertion d'images, de liens etc.
    -  annuler / rétablir
  - beaucoup plus
-* synchroniser les notes HTML entre les appareils Android et les serveurs IMAP.
-*
- créer des checklistes
-* recherche plein texte
-* filtrer et organiser vos notes par #HashTags
-* support des modes clair et foncé
-* support des couleurs pour les notes
-* partager vos notes
-* sauvegarder vos notes dans une archive zip locale
-* restaurer toutes les notes ou seulement une note à partir d'une archive locale
-* les notes sont sauvegardées en tant qu'e-mails HTML standard
-* la sécurité peut être en texte brut, SSL/TLS ou STARTTLS
-* plusieurs comptes IMAP et/ou blocs-notes peuvent être gérés
-* fonctionne hors ligne et la synchronisation se fait en arrière-plan
-* seulement un minimum d'autorisations utilisateur requises
-* entièrement open source - pas de tracker ou de publicité
-* couleurs personnalisables pour l'éditeur
+• synchroniser les notes HTML entre les appareils Android et les serveurs IMAP.
+• créer des checklistes
+• recherche plein texte
+• filtrer et organiser vos notes par #HashTags
+• support des modes clair et foncé
+• support des couleurs pour les notes
+• partager vos notes
+• sauvegarder vos notes dans une archive zip locale
+• restaurer toutes les notes ou seulement une note à partir d'une archive locale
+• les notes sont sauvegardées en tant qu'e-mails HTML standard
+• la sécurité peut être en texte brut, SSL/TLS ou STARTTLS
+• plusieurs comptes IMAP et/ou blocs-notes peuvent être gérés
+• fonctionne hors ligne et la synchronisation se fait en arrière-plan
+• seulement un minimum d'autorisations utilisateur requises
+• entièrement open source - pas de tracker ou de publicité
+• couleurs personnalisables pour l'éditeur
