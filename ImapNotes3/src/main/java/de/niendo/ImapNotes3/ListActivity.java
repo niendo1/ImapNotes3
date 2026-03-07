@@ -57,9 +57,9 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -313,7 +313,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
             }
         });
 
-        Button editAccountButton = findViewById(R.id.editAccountButton);
+        ImageButton editAccountButton = findViewById(R.id.editAccountButton);
         editAccountButton.setOnClickListener(clickListenerEditAccount);
 
         mObserver = new ContentObserver(new Handler(Looper.getMainLooper())) {
