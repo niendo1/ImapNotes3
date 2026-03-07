@@ -75,6 +75,7 @@ import de.niendo.ImapNotes3.Miscs.ZipUtils;
 import de.niendo.ImapNotes3.Sync.SyncUtils;
 import eltos.simpledialogfragment.SimpleDialog;
 import eltos.simpledialogfragment.list.SimpleListDialog;
+import org.woheller69.freeDroidWarn.FreeDroidWarn;
 
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
@@ -349,6 +350,7 @@ public class ListActivity extends AppCompatActivity implements BackupRestore.INo
         };
         getContentResolver().registerContentObserver(Uri.parse("content://" + BuildConfig.APPLICATION_ID + "/"), false, mObserver);
 
+        FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE);
     }
 
     void handleSendMultipleImages(Intent intent) {

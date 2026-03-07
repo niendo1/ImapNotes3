@@ -1,2 +1,3 @@
 * build updates (libs, gradle etc.)
 * smaller icon for changing user settings
+* add FreeDroidWarn
