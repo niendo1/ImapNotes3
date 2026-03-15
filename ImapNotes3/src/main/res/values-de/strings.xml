@@ -12,7 +12,7 @@
     <string name="save">Speichern</string>
     <string name="check_and_create_account">Prüfen &amp; Konto anlegen</string>
     <string name="logging_in">Anmelden…</string>
-    <string name="account_already_exists_or_is_null">Konto existiert oder ist ungültig</string>
+    <string name="account_already_exists_or_is_null">Dieses Android Konto/Notizbuch für ImapNotes3 existiert bereits oder ist ungültig</string>
     <string name="account_added">Konto angelegt</string>
     <string name="add_account">Notizbuch/Konto hinzufügen</string>
     <string name="account_name">Name des Notizbuchs bzw. Kontos</string>
