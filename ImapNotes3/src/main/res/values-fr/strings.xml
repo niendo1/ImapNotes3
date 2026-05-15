@@ -14,7 +14,7 @@
     <string name="save">Enregistrer</string>
     <string name="check_and_create_account">Vérifier et créer compte</string>
     <string name="logging_in">Connexion au compte…</string>
-    <string name="account_already_exists_or_is_null">Le compte existe déjà ou est vide</string>
+    <string name="account_already_exists_or_is_null">Ce compte Android ou bloc-notes Imapnotes3 existe déjà ou est invalide</string>
     <string name="account_added">Le compte a été ajouté</string>
     <string name="add_account">Ajouter compte/bloc-notes</string>
     <string name="account_name">Nom du compte ou du bloc-notes</string>
@@ -181,4 +181,5 @@
     <string name="catalan">Catalan</string>
     <string name="save_note_failed">sauver la note a échoué pour des raisons inconnues</string>
     <string name="Ukrainian">Ukrainien</string>
+    <string name="OAUTH2">OAuth2/XOAuth2</string>
 </resources>
