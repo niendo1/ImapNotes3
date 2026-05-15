@@ -12,7 +12,7 @@
     <string name="save">保存</string>
     <string name="check_and_create_account">检查并创建账户</string>
     <string name="logging_in">正在登录到你的账户…</string>
-    <string name="account_already_exists_or_is_null">账户已存在或为空</string>
+    <string name="account_already_exists_or_is_null">这个 Imapnote3 的 安卓账户/笔记本已存在或无效</string>
     <string name="account_added">已添加账户</string>
     <string name="add_account">添加账户、笔记本</string>
     <string name="account_name">账户或笔记本的名称</string>
@@ -184,4 +184,5 @@
     <string name="catalan">加泰罗尼亚语</string>
     <string name="save_note_failed">保存笔记因未知原因失败了</string>
     <string name="Ukrainian">乌克兰语</string>
+    <string name="OAUTH2">OAuth2/XOAuth2</string>
 </resources>
