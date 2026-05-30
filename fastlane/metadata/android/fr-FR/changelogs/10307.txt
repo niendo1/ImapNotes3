@@ -1,0 +1,5 @@
+* ajouter la traduction avec WebLate
+* restaurer tout ou simplement une note d'une archive zip
+* nouveau fil pour CreateArchive
+* traduction espagnole ajoutée (merci à gallegonovato)
+* changer de serveur imap nécessite de retapper le mot de passe

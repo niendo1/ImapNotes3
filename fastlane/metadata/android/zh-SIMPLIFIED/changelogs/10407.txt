@@ -1,0 +1,5 @@
+*编辑更新 (libs, gradle等)
+* Weblate：增加乌克兰语翻译（感谢用户 Maxim Reznik）
+* Weblate：改善西班牙语翻译（感谢用户 z97febao）
+* Weblate：改善法语翻译（感谢用户z97febao）
+*下拉刷新

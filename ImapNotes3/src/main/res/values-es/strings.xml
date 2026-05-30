@@ -12,7 +12,7 @@
     <string name="save">Guardar</string>
     <string name="check_and_create_account">Verificar y crear cuenta</string>
     <string name="logging_in">Iniciando sesión en su cuenta…</string>
-    <string name="account_already_exists_or_is_null">La cuenta ya existe o no es válida</string>
+    <string name="account_already_exists_or_is_null">Esta cuenta Android / libro de notas para Imapnotes3 ya existe o es inválido</string>
     <string name="account_added">Cuenta añadida</string>
     <string name="add_account">Agregar cuenta/Bloc de notas</string>
     <string name="account_name">Nombre para la cuenta o bloc de notas</string>
@@ -183,4 +183,5 @@
     <string name="catalan">Catalán</string>
     <string name="save_note_failed">Guardar la nota falló por razones desconocidas</string>
     <string name="Ukrainian">Ucraniano</string>
+    <string name="OAUTH2">OAuth2/XOAuth2</string>
 </resources>

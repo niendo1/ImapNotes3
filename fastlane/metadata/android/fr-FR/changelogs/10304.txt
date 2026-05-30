@@ -1,0 +1,5 @@
+* supprimer le support collant
+* recherche dans les notes depuis l'éditeur
+* insérer l'URL partagée comme lien
+* améliorer l'insertion d'image
+* mise à jour de la dernière version (3.0.0) de richeditor

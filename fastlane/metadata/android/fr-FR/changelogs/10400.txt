@@ -1,0 +1,11 @@
+* traduction russe ajoutée (merci à weblate)
+* traduction italienne ajoutée (merci à weblate)
+* ajouter un bouton d'action flottant pour une nouvelle note
+* mise à jour pour API 35
+* Personnaliser le texte et la couleur de fond pour les notes
+* simplifier les couleurs
+* remplacer le champ de statut par des mess. toasts
+* mises à jour de gradle et lib
+* corrections de traductions
+* correction de la sélection des couleurs
+* sauvegarde de fichiers vers Documents/ImapNotes3 - rép. créé si non-exist.
