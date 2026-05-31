@@ -1,3 +1,4 @@
 * build updates (libs, gradle etc.)
 * smaller icon for changing user settings
 * add FreeDroidWarn
+* fix utf-8 coding on subjects

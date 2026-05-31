@@ -403,11 +403,11 @@ public class SyncUtils {
         // Hard coding the wrong servers is not possible, as some subjects are correct encoded, and some not
         try {
             String[] rawvalue = notesMessage.getHeader("Subject");
-            if (rawvalue != null && rawvalue[0] != null && (!(rawvalue[0].startsWith("=?")))) {
+            if (rawvalue != null && rawvalue[0] != null && (!(rawvalue[0].contains("=?utf")))) {
                 title = new String(title.getBytes(StandardCharsets.ISO_8859_1));
             }
         } catch (Exception e) {
-            Log.e(TAG, "getHeader failed", e);
+            Log.e(TAG, "subject2title failed", e);
         }
 
         // Get INTERNALDATE
